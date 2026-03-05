@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sitoded Erzurum</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('layout', { user: user, body: '' }) %>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Hoşgeldiniz, <strong><%- user.full_name %></strong></h1>
+
+        <% if (events.length === 0) { %>
+            <div class="alert alert-info" role="alert">
+                <h5>Şu an aktif etkinlik yok</h5>
+                <p>Ekibinize ait etkinlikleri burada göreceğiniz zaman eklenecektir.</p>
+            </div>
+        <% } else { %>
+            <div class="row">
+                <% events.forEach(event => { %>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title"><%- event.title %></h5>
+                                <p class="card-text text-muted"><%- event.team_name %></p>
+                                <p class="card-text"><%- event.description || 'Açıklama yok' %></p>
+                                
+                                <div class="mb-3">
+                                    <small class="text-muted">
+                                        📍 <%- event.location %><br>
+                                        🕐 <%- new Date(event.event_date).toLocaleString('tr-TR') %><br>
+                                        👥 Kontenjan: <%- event.capacity %>
+                                    </small>
+                                </div>
+
+                                <% if (registeredEventIds.includes(event.id)) { %>
+                                    <button type="button" class="btn btn-danger btn-sm w-100" data-bs-toggle="modal" data-bs-target="#unregisterModal" data-event-id="<%- event.id %>" data-event-title="<%- event.title %>">
+                                        Katılmaktan Vazgeç
+                                    </button>
+                                <% } else { %>
+                                    <form action="/event/<%- event.id %>/register" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-success btn-sm w-100">
+                                            Katılıyorum
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <small>Yetkilisi: <%- event.leader_name %></small>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Unregister Modal -->
+    <div class="modal fade" id="unregisterModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Katılmaktan Vazgeç</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Emin misiniz? <strong id="eventTitle"></strong> etkinliğine katılmaktan vazgeçmek istiyor musunuz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <form id="unregisterForm" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Evet, Vazgeç</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const unregisterModal = document.getElementById('unregisterModal');
+        unregisterModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const eventId = button.getAttribute('data-event-id');
+            const eventTitle = button.getAttribute('data-event-title');
+            
+            document.getElementById('eventTitle').textContent = eventTitle;
+            document.getElementById('unregisterForm').action = `/event/${eventId}/unregister`;
+        });
+    </script>
+</body>
+</html>
