@@ -340,6 +340,23 @@ const seedDatabase = async () => {
         capacity: 35,
         team_id: teamIds['Organizasyon ve Sponsor Ekibi'],
         leader_id: userIds['ikbalAtaturk'].id
+      },
+      {
+        title: 'Uzun Açıklamalı Demo Etkinlik',
+        description: 'Bu etkinliğin amacı, dashboard ekranındaki grid düzeninin ve içerik dışa taşmalarının nasıl davrandığını test etmektir. ' +
+                     'Açıklama metni olağanüstü derecede uzundur ve birden fazla satırda gösterilecek şekilde tasarlanmıştır. ' +
+                     'Bu açıklamada etkileşim, planlama, metodoloji, sonuçlar, ileriye dönük adımlar, katılımcı sorumlulukları, ' +
+                     'zaman çizelgesi, kaynak dağılımı, risk yönetimi, iletişim stratejileri ve geri bildirim döngüsü hakkında ayrıntılara girilecektir. ' +
+                     'Bu sadece uzun metin testi için oluşturulmuş dummy bir paragraftır. Amaç: grid kartlarında satır yüksekliği ve taşma etkisini görmek. ' +
+                     'Ayrıca, bu metin rüzgarlı bir günde bir dijital kampüste okunabilirlik testine de katkı sağlar. ' +
+                     'Eğer bu metin tam görünmüyorsa, kart içeriğini kırparak veya bir ek popup penceresi açarak gösterim yapılabilir.',
+        location: 'Sitoded Test Salonu',
+        event_date: nextWeekDay(5), // Cumartesi
+        start_time: '13:00',
+        end_time: '16:00',
+        capacity: 50,
+        team_id: teamIds['Etkinlik ve Sponsorluk'],
+        leader_id: userIds['ikbalAtaturk'].id
       }
       // NOT: Pazar = deadline günü, etkinlik eklenmez
     ];

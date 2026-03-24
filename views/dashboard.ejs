@@ -28,8 +28,8 @@
     .tbtn-logout:hover { background: rgba(239,68,68,.2); }
     .tbtn-create { background: var(--accent); color: white; border-color: transparent; }
     .tbtn-create:hover { background: var(--accent2); }
-    .layout { display: grid; grid-template-columns: 1fr 360px; min-height: calc(100vh - 60px); }
-    .main { padding: 24px; border-right: 1px solid var(--border); }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 520px; min-height: calc(100vh - 60px); }
+    .main { min-width: 0; padding: 24px; border-right: 1px solid var(--border); }
     .main-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
     .main-head h1 { font-size: 21px; font-weight: 700; letter-spacing: -.3px; }
     .main-head p { font-size: 12px; color: var(--muted); margin-top: 3px; }
@@ -39,7 +39,7 @@
     .sinput { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 14px 9px 34px; font-size: 13px; color: var(--text); font-family: inherit; outline: none; transition: border-color .15s; }
     .sinput:focus { border-color: var(--accent); }
     .sinput::placeholder { color: var(--muted); }
-    .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+    .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
     .ecard { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform .15s, border-color .15s; }
     .ecard:hover { transform: translateY(-2px); border-color: var(--border2); }
     .ecard-top { padding: 14px 15px 0; }
@@ -66,26 +66,38 @@
     .empty { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
     .spinner { width: 30px; height: 30px; border: 3px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 50px auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .sidebar { background: var(--surface); overflow-y: auto; position: sticky; top: 60px; height: calc(100vh - 60px); }
+    .sidebar { min-width: 0; background: var(--surface); overflow-y: auto; overflow-x: hidden; position: sticky; top: 60px; max-height: calc(100vh - 60px); }
     .sidebar-head { padding: 16px 18px 10px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
-    .wday { border-bottom: 1px solid var(--border); }
-    .wday-header { display: flex; align-items: center; gap: 8px; padding: 10px 18px 5px; }
-    .dlabel { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); width: 22px; }
-    .dnum { font-size: 17px; font-weight: 700; color: var(--text); font-family: 'DM Mono', monospace; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    /* 2 kolonlu haftalık grid */
+    .week-grid { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--border); }
+    .wday { border-bottom: 1px solid var(--border); padding: 10px 12px 10px; min-height: 80px; }
+    .wday-header { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+    .wday-full { grid-column: 1 / -1; border-right: none; }
+    .dlabel { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .dnum { font-size: 15px; font-weight: 700; color: var(--text); font-family: 'DM Mono', monospace; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
     .dnum.today { background: var(--accent); color: white; }
-    .devents { padding: 0 8px 8px 50px; display: flex; flex-direction: column; gap: 3px; }
+    .devents { display: flex; flex-direction: column; gap: 3px; }
     .drow { display: flex; gap: 3px; }
-    .cev { flex: 1; min-width: 0; padding: 5px 7px; border-radius: 5px; font-size: 11px; line-height: 1.3; border-left: 2px solid; }
+    .cev { flex: 1; min-width: 0; padding: 4px 6px; border-radius: 5px; font-size: 11px; line-height: 1.3; border-left: 2px solid; }
     .cev.none { background: rgba(108,99,255,.08); border-left-color: var(--accent); color: var(--accent2); }
     .cev.joined { background: rgba(34,197,94,.1); border-left-color: var(--green); color: #86efac; }
     .cev-time { font-family: 'DM Mono', monospace; font-size: 10px; opacity: .8; }
     .cev-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dempty { padding: 3px 0 8px 50px; font-size: 11px; color: var(--muted); }
+    .dempty { font-size: 11px; color: var(--muted); padding-top: 2px; }
     #toasts { position: fixed; top: 18px; right: 18px; z-index: 9999; display: flex; flex-direction: column; gap: 7px; }
     .toast { display: flex; align-items: center; gap: 9px; padding: 11px 15px; border-radius: 8px; font-size: 13px; font-weight: 500; min-width: 240px; border: 1px solid; animation: tIn .2s ease; }
     .toast.success { background: rgba(22,101,52,.95); color: #86efac; border-color: rgba(34,197,94,.3); }
     .toast.error { background: rgba(127,29,29,.95); color: #fca5a5; border-color: rgba(239,68,68,.3); }
     .toast.info { background: rgba(30,58,138,.95); color: #93c5fd; border-color: rgba(59,130,246,.3); }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 10000; }
+    .modal-backdrop.show { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; width: min(680px, 95vw); max-height: calc(100vh - 100px); overflow: auto; padding: 20px; }
+    .modal h3 { margin-bottom: 10px; font-size: 18px; }
+    .modal p { margin-bottom: 14px; color: var(--muted); line-height: 1.4; }
+    .modal-small { font-size: 13px; margin-bottom: 12px; }
+    .modal-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; }
+    .modal-actions .btn { padding: 8px 12px; border-radius: 7px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text); cursor: pointer; }
+    .modal-actions .btn-primary { background: var(--accent); border-color: transparent; color: white; }
     @keyframes tIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static; height: auto; } }
   </style>
@@ -133,13 +145,53 @@
   </aside>
 </div>
 
+<div id="event-modal" class="modal-backdrop">
+  <div class="modal">
+    <h3 id="modal-title">Etkinlik detay</h3>
+    <p class="modal-small" id="modal-meta"></p>
+    <p id="modal-description"></p>
+    <label style="display:flex;gap:8px;align-items:center;margin-bottom:10px;"><input type="checkbox" id="modal-confirm"> Okudum ve onaylıyorum</label>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">İptal</button>
+      <button id="modal-join-btn" class="btn btn-primary" onclick="confirmJoin()" disabled>Katıl</button>
+    </div>
+  </div>
+</div>
+
 <div id="toasts"></div>
 
 <script>
   let allEvts = [], regs = {};
+  let pendingJoinId = null;
   const role = '<%= user.role %>';
 
   document.addEventListener('DOMContentLoaded', load);
+
+  function openModal(evt) {
+    pendingJoinId = evt.id;
+    document.getElementById('modal-title').textContent = evt.title;
+    document.getElementById('modal-meta').textContent = evt.team + ' • ' + evt.location + ' • ' + evt.event_date + ' ' + evt.start_time + '-' + evt.end_time;
+    document.getElementById('modal-description').textContent = evt.description;
+    document.getElementById('modal-confirm').checked = false;
+    document.getElementById('modal-join-btn').disabled = true;
+    document.getElementById('event-modal').classList.add('show');
+  }
+
+  function closeModal() {
+    pendingJoinId = null;
+    document.getElementById('event-modal').classList.remove('show');
+  }
+
+  function confirmJoin() {
+    if (!document.getElementById('modal-confirm').checked) return;
+    if (!pendingJoinId) return;
+    closeModal();
+    doJoin(pendingJoinId);
+  }
+
+  document.getElementById('modal-confirm').addEventListener('change', function() {
+    document.getElementById('modal-join-btn').disabled = !this.checked;
+  });
 
   async function load() {
     const r = await fetch('/api/dashboard-data');
@@ -156,10 +208,46 @@
   }
 
   function filterEvts() {
-    var q = document.getElementById('search').value.toLowerCase();
-    renderEvts(q ? allEvts.filter(function(e) {
-      return e.title.toLowerCase().includes(q) || e.team.toLowerCase().includes(q) || e.location.toLowerCase().includes(q);
-    }) : allEvts);
+    var query = document.getElementById('search').value.trim().toLowerCase();
+    if (!query) { renderEvts(allEvts); return; }
+
+    var days = {
+      'pzt': 'pazartesi', 'pazartesi': 'pazartesi',
+      'sal': 'sali', 'sali': 'sali',
+      'car': 'carsamba', 'çar': 'carsamba', 'çarşamba': 'carsamba', 'carsamba': 'carsamba',
+      'per': 'persembe', 'persembe': 'persembe',
+      'cum': 'cuma', 'cuma': 'cuma',
+      'cmt': 'cumartesi', 'cumartesi': 'cumartesi',
+      'paz': 'pazar', 'pazar': 'pazar'
+    };
+
+    var norm = query.replace(/[çğıöşü]/g, function(ch){
+      return {'ç':'c','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u'}[ch] || ch;
+    });
+
+    renderEvts(allEvts.filter(function(e) {
+      var title = e.title.toLowerCase();
+      var team = e.team.toLowerCase();
+      var loc = e.location.toLowerCase();
+      var desc = (e.description||'').toLowerCase();
+      var start = e.start_time.toLowerCase();
+      var end = e.end_time.toLowerCase();
+      var date = e.event_date.toLowerCase();
+      var dateObj = new Date(e.event_date + 'T12:00:00');
+      var weekdays = ['pazar','pazartesi','sali','carsamba','persembe','cuma','cumartesi'];
+      var shortWeek = ['paz','pzt','sal','car','per','cum','cmt'];
+      var week = weekdays[dateObj.getDay()];
+      var short = shortWeek[dateObj.getDay()];
+      var localDate = dateObj.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).toLowerCase();
+      var localDateShort = dateObj.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase();
+      var isDay = days[norm];
+
+      if (title.includes(norm) || team.includes(norm) || loc.includes(norm) || desc.includes(norm) || start.includes(norm) || end.includes(norm)) return true;
+      if (date.includes(norm) || localDate.includes(norm) || localDateShort.includes(norm)) return true;
+      if (week.includes(norm) || short.includes(norm)) return true;
+      if (isDay && week === isDay) return true;
+      return false;
+    }));
   }
 
   function renderEvts(evts) {
@@ -177,12 +265,14 @@
       var ds = dt.toLocaleDateString('tr-TR', {weekday:'short', day:'numeric', month:'short'});
       var btn = '';
       if (canAtt) btn = '<a href="/attendance/'+e.id+'" class="abtn abtn-att">Yoklama</a>';
-      else if (!reg || reg.status === 'CANCELLED') btn = '<button class="abtn abtn-join" onclick="doJoin('+e.id+')">Katil</button>';
+      else if (!reg || reg.status === 'CANCELLED') btn = '<button class="abtn abtn-join" onclick="openModal('+e.id+')">Katil</button>';
       else btn = '<button class="abtn abtn-leave" onclick="doLeave('+e.id+')">Katilma</button>';
+      var shortDesc = e.description ? (e.description.length > 90 ? e.description.substring(0, 90) + '...' : e.description) : '';
       return '<div class="ecard">' +
         '<div class="ecard-top">' +
           '<div class="ecard-badges"><span class="tbadge">'+e.team+'</span>'+(joined ? '<span class="sbadge">Katiliyorum</span>' : '')+'</div>' +
           '<div class="etitle">'+e.title+'</div>' +
+          (shortDesc ? '<div class="emeta-row" style="font-size:12px;color:var(--muted);margin-bottom:8px;">'+shortDesc+'</div>' : '') +
           '<div class="emeta">' +
             '<div class="emeta-row">&#128197; <span>'+ds+'</span></div>' +
             '<div class="emeta-row">&#9200; <span style="font-family:\'DM Mono\',monospace">'+e.start_time.substring(0,5)+' - '+e.end_time.substring(0,5)+'</span></div>' +
@@ -253,7 +343,8 @@
       var isT = lstr(today) === ds;
       var dayEvts = evts.filter(function(e) { return e.event_date === ds; }).sort(function(a,b) { return a.start_time.localeCompare(b.start_time); });
       var groups = groupOverlap(dayEvts);
-      html += '<div class="wday"><div class="wday-header"><span class="dlabel">' + DAYS[i] + '</span><span class="dnum' + (isT ? ' today' : '') + '">' + d.getDate() + '</span></div>';
+      var wdayClass = i === 6 ? 'wday wday-full' : 'wday';
+      html += '<div class="' + wdayClass + '"><div class="wday-header"><span class="dlabel">' + DAYS[i] + '</span><span class="dnum' + (isT ? ' today' : '') + '">' + d.getDate() + '</span></div>';
       if (!groups.length) {
         html += '<div class="dempty">Etkinlik yok</div>';
       } else {
@@ -281,7 +372,7 @@
       }
       html += '</div>';
     }
-    c.innerHTML = html;
+    c.innerHTML = '<div class="week-grid">' + html + '</div>';
   }
 
   function groupOverlap(evts) {
