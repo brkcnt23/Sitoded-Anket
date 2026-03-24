@@ -1,95 +1,316 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sitoded Erzurum</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Sitoded</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0c0c0f; --surface: #131318; --surface2: #1a1a22;
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+      --text: #e8e8f0; --muted: #7070a0; --accent: #6c63ff; --accent2: #8b85ff;
+      --green: #22c55e; --yellow: #eab308; --red: #ef4444;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .topbar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; }
+    .topbar-brand img { height: 28px; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .points-chip { display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); font-size: 14px; font-weight: 700; color: var(--green); font-family: 'DM Mono', monospace; }
+    .user-lbl { font-size: 13px; color: var(--muted); }
+    .tbtn { padding: 7px 13px; border-radius: 7px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; border: 1px solid; text-decoration: none; transition: all .15s; }
+    .tbtn-admin { background: rgba(234,179,8,.12); color: #fde047; border-color: rgba(234,179,8,.2); }
+    .tbtn-admin:hover { background: rgba(234,179,8,.22); }
+    .tbtn-logout { background: rgba(239,68,68,.1); color: #fca5a5; border-color: rgba(239,68,68,.2); }
+    .tbtn-logout:hover { background: rgba(239,68,68,.2); }
+    .tbtn-create { background: var(--accent); color: white; border-color: transparent; }
+    .tbtn-create:hover { background: var(--accent2); }
+    .layout { display: grid; grid-template-columns: 1fr 360px; min-height: calc(100vh - 60px); }
+    .main { padding: 24px; border-right: 1px solid var(--border); }
+    .main-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+    .main-head h1 { font-size: 21px; font-weight: 700; letter-spacing: -.3px; }
+    .main-head p { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .search-row { display: flex; gap: 10px; margin-bottom: 18px; }
+    .search-wrap { flex: 1; position: relative; }
+    .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--muted); }
+    .sinput { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 14px 9px 34px; font-size: 13px; color: var(--text); font-family: inherit; outline: none; transition: border-color .15s; }
+    .sinput:focus { border-color: var(--accent); }
+    .sinput::placeholder { color: var(--muted); }
+    .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+    .ecard { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform .15s, border-color .15s; }
+    .ecard:hover { transform: translateY(-2px); border-color: var(--border2); }
+    .ecard-top { padding: 14px 15px 0; }
+    .ecard-badges { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+    .tbadge { font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; background: rgba(108,99,255,.12); color: var(--accent2); border: 1px solid rgba(108,99,255,.18); }
+    .sbadge { font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 4px; background: rgba(34,197,94,.12); color: #86efac; border: 1px solid rgba(34,197,94,.18); }
+    .etitle { font-size: 14px; font-weight: 600; line-height: 1.35; margin-bottom: 9px; }
+    .emeta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+    .emeta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .ecap { padding: 8px 15px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .ecap-bar { flex: 1; height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+    .ecap-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .3s; }
+    .ecap-fill.over { background: var(--yellow); }
+    .ecap-txt { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--muted); }
+    .ecap-txt.over { color: var(--yellow); }
+    .eactions { padding: 8px 15px 13px; display: flex; gap: 7px; }
+    .abtn { flex: 1; padding: 8px; border-radius: 7px; font-size: 12px; font-weight: 600; font-family: inherit; border: none; cursor: pointer; text-align: center; text-decoration: none; display: block; transition: all .15s; }
+    .abtn-join { background: var(--accent); color: white; }
+    .abtn-join:hover { background: var(--accent2); }
+    .abtn-leave { background: rgba(239,68,68,.1); color: #fca5a5; border: 1px solid rgba(239,68,68,.18); }
+    .abtn-leave:hover { background: rgba(239,68,68,.2); }
+    .abtn-att { background: var(--surface2); color: var(--muted); border: 1px solid var(--border2); }
+    .abtn-att:hover { color: var(--text); background: var(--border); }
+    .empty { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
+    .spinner { width: 30px; height: 30px; border: 3px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 50px auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .sidebar { background: var(--surface); overflow-y: auto; position: sticky; top: 60px; height: calc(100vh - 60px); }
+    .sidebar-head { padding: 16px 18px 10px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+    .wday { border-bottom: 1px solid var(--border); }
+    .wday-header { display: flex; align-items: center; gap: 8px; padding: 10px 18px 5px; }
+    .dlabel { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); width: 22px; }
+    .dnum { font-size: 17px; font-weight: 700; color: var(--text); font-family: 'DM Mono', monospace; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .dnum.today { background: var(--accent); color: white; }
+    .devents { padding: 0 8px 8px 50px; display: flex; flex-direction: column; gap: 3px; }
+    .drow { display: flex; gap: 3px; }
+    .cev { flex: 1; min-width: 0; padding: 5px 7px; border-radius: 5px; font-size: 11px; line-height: 1.3; border-left: 2px solid; }
+    .cev.none { background: rgba(108,99,255,.08); border-left-color: var(--accent); color: var(--accent2); }
+    .cev.joined { background: rgba(34,197,94,.1); border-left-color: var(--green); color: #86efac; }
+    .cev-time { font-family: 'DM Mono', monospace; font-size: 10px; opacity: .8; }
+    .cev-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dempty { padding: 3px 0 8px 50px; font-size: 11px; color: var(--muted); }
+    #toasts { position: fixed; top: 18px; right: 18px; z-index: 9999; display: flex; flex-direction: column; gap: 7px; }
+    .toast { display: flex; align-items: center; gap: 9px; padding: 11px 15px; border-radius: 8px; font-size: 13px; font-weight: 500; min-width: 240px; border: 1px solid; animation: tIn .2s ease; }
+    .toast.success { background: rgba(22,101,52,.95); color: #86efac; border-color: rgba(34,197,94,.3); }
+    .toast.error { background: rgba(127,29,29,.95); color: #fca5a5; border-color: rgba(239,68,68,.3); }
+    .toast.info { background: rgba(30,58,138,.95); color: #93c5fd; border-color: rgba(59,130,246,.3); }
+    @keyframes tIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static; height: auto; } }
+  </style>
 </head>
 <body>
-    <%- include('layout', { user: user, body: '' }) %>
 
-    <div class="container mt-4">
-        <h1 class="mb-4">Hoşgeldiniz, <strong><%- user.full_name %></strong></h1>
+<header class="topbar">
+  <div class="topbar-brand">
+    <img src="/img/sitoded-erzurum-logo.png" alt="Sitoded">
+    Sitoded
+  </div>
+  <div class="topbar-right">
+    <span class="user-lbl" id="uname"></span>
+    <div class="points-chip">&#9733; <span id="upts">0</span></div>
+    <% if (user.role === 'SENIOR' || user.role === 'ADMIN') { %>
+    <a href="/events/create" class="tbtn tbtn-create">+ Etkinlik</a>
+    <% } %>
+    <% if (user.role === 'ADMIN') { %>
+    <a href="/admin" class="tbtn tbtn-admin">&#9881; Yonetim</a>
+    <% } %>
+    <a href="/logout" class="tbtn tbtn-logout">Cikis</a>
+  </div>
+</header>
 
-        <% if (events.length === 0) { %>
-            <div class="alert alert-info" role="alert">
-                <h5>Şu an aktif etkinlik yok</h5>
-                <p>Ekibinize ait etkinlikleri burada göreceğiniz zaman eklenecektir.</p>
-            </div>
-        <% } else { %>
-            <div class="row">
-                <% events.forEach(event => { %>
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title"><%- event.title %></h5>
-                                <p class="card-text text-muted"><%- event.team_name %></p>
-                                <p class="card-text"><%- event.description || 'Açıklama yok' %></p>
-                                
-                                <div class="mb-3">
-                                    <small class="text-muted">
-                                        📍 <%- event.location %><br>
-                                        🕐 <%- new Date(event.event_date).toLocaleString('tr-TR') %><br>
-                                        👥 Kontenjan: <%- event.capacity %>
-                                    </small>
-                                </div>
-
-                                <% if (registeredEventIds.includes(event.id)) { %>
-                                    <button type="button" class="btn btn-danger btn-sm w-100" data-bs-toggle="modal" data-bs-target="#unregisterModal" data-event-id="<%- event.id %>" data-event-title="<%- event.title %>">
-                                        Katılmaktan Vazgeç
-                                    </button>
-                                <% } else { %>
-                                    <form action="/event/<%- event.id %>/register" method="POST" style="display:inline;">
-                                        <button type="submit" class="btn btn-success btn-sm w-100">
-                                            Katılıyorum
-                                        </button>
-                                    </form>
-                                <% } %>
-                            </div>
-                            <div class="card-footer text-muted">
-                                <small>Yetkilisi: <%- event.leader_name %></small>
-                            </div>
-                        </div>
-                    </div>
-                <% }); %>
-            </div>
-        <% } %>
+<div class="layout">
+  <main class="main">
+    <div class="main-head">
+      <div>
+        <h1>Etkinlikler</h1>
+        <p>Gelecek hafta &mdash; deadline bu Pazar 23:59</p>
+      </div>
     </div>
-
-    <!-- Unregister Modal -->
-    <div class="modal fade" id="unregisterModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Katılmaktan Vazgeç</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Emin misiniz? <strong id="eventTitle"></strong> etkinliğine katılmaktan vazgeçmek istiyor musunuz?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <form id="unregisterForm" method="POST" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Evet, Vazgeç</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" class="sinput" placeholder="Etkinlik, ekip veya konum..." id="search" oninput="filterEvts()">
+      </div>
     </div>
+    <div class="events-grid" id="grid"><div class="spinner"></div></div>
+  </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const unregisterModal = document.getElementById('unregisterModal');
-        unregisterModal.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-            const eventId = button.getAttribute('data-event-id');
-            const eventTitle = button.getAttribute('data-event-title');
-            
-            document.getElementById('eventTitle').textContent = eventTitle;
-            document.getElementById('unregisterForm').action = `/event/${eventId}/unregister`;
+  <aside class="sidebar">
+    <div class="sidebar-head">Bu Hafta</div>
+    <div id="cal"></div>
+  </aside>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+  let allEvts = [], regs = {};
+  const role = '<%= user.role %>';
+
+  document.addEventListener('DOMContentLoaded', load);
+
+  async function load() {
+    const r = await fetch('/api/dashboard-data');
+    const j = await r.json();
+    if (!j.success) { toast('Veri yuklenemedi', 'error'); return; }
+    const d = j.data;
+    document.getElementById('upts').textContent = d.user.points;
+    document.getElementById('uname').textContent = d.user.full_name;
+    allEvts = d.events;
+    regs = {};
+    d.events.forEach(function(e) { if (e.user_registration) regs[e.id] = e.user_registration; });
+    renderEvts(allEvts);
+    renderCal(allEvts);
+  }
+
+  function filterEvts() {
+    var q = document.getElementById('search').value.toLowerCase();
+    renderEvts(q ? allEvts.filter(function(e) {
+      return e.title.toLowerCase().includes(q) || e.team.toLowerCase().includes(q) || e.location.toLowerCase().includes(q);
+    }) : allEvts);
+  }
+
+  function renderEvts(evts) {
+    var g = document.getElementById('grid');
+    if (!evts.length) { g.innerHTML = '<div class="empty">Etkinlik bulunamadi</div>'; return; }
+    g.innerHTML = evts.map(function(e) {
+      var reg = regs[e.id];
+      var joined = reg && reg.status === 'CONFIRMED';
+      var cnt = e.confirmed_count;
+      var over = cnt > e.capacity;
+      var pct = Math.min((cnt / e.capacity) * 100, 100);
+      var past = isPast(e.event_date, e.end_time);
+      var canAtt = past && (role === 'SENIOR' || role === 'ADMIN');
+      var dt = new Date(e.event_date + 'T12:00:00');
+      var ds = dt.toLocaleDateString('tr-TR', {weekday:'short', day:'numeric', month:'short'});
+      var btn = '';
+      if (canAtt) btn = '<a href="/attendance/'+e.id+'" class="abtn abtn-att">Yoklama</a>';
+      else if (!reg || reg.status === 'CANCELLED') btn = '<button class="abtn abtn-join" onclick="doJoin('+e.id+')">Katil</button>';
+      else btn = '<button class="abtn abtn-leave" onclick="doLeave('+e.id+')">Katilma</button>';
+      return '<div class="ecard">' +
+        '<div class="ecard-top">' +
+          '<div class="ecard-badges"><span class="tbadge">'+e.team+'</span>'+(joined ? '<span class="sbadge">Katiliyorum</span>' : '')+'</div>' +
+          '<div class="etitle">'+e.title+'</div>' +
+          '<div class="emeta">' +
+            '<div class="emeta-row">&#128197; <span>'+ds+'</span></div>' +
+            '<div class="emeta-row">&#9200; <span style="font-family:\'DM Mono\',monospace">'+e.start_time.substring(0,5)+' - '+e.end_time.substring(0,5)+'</span></div>' +
+            '<div class="emeta-row">&#128205; <span>'+e.location+'</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ecap"><div class="ecap-bar"><div class="ecap-fill'+(over?' over':'')+'" style="width:'+pct+'%"></div></div>' +
+        '<span class="ecap-txt'+(over?' over':'')+'">'+cnt+'/'+e.capacity+(over?' +'+(cnt-e.capacity):'')+'</span></div>' +
+        '<div class="eactions">'+btn+'</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  async function doJoin(id) {
+    var r = await fetch('/api/event/'+id+'/register', {method:'POST', headers:{'Content-Type':'application/json'}});
+    var d = await r.json();
+    toast(d.success ? d.message : d.error, d.success ? 'success' : 'error');
+    if (d.success) load();
+  }
+
+  async function doLeave(id) {
+    if (!confirm('Katilmaktan vazgecmek istediginize emin misiniz?')) return;
+    var r = await fetch('/api/event/'+id+'/unregister', {method:'POST', headers:{'Content-Type':'application/json'}});
+    var d = await r.json();
+    toast(d.success ? d.message + (d.penalty_applied ? ' (-1 puan)' : '') : d.error, d.success ? 'success' : 'error');
+    if (d.success) load();
+  }
+
+  // Saat string -> dakika cevir
+  function toMin(t) {
+    var p = t.substring(0,5).split(':');
+    return parseInt(p[0]) * 60 + parseInt(p[1]);
+  }
+
+  // e icin cakisan bolgenin gradient style'ini hesapla
+  function conflictStyle(e, others) {
+    var as = toMin(e.start_time), ae = toMin(e.end_time), dur = ae - as;
+    if (dur <= 0) return '';
+    var ovS = ae, ovE = as;
+    others.forEach(function(o) {
+      var bs = toMin(o.start_time), be = toMin(o.end_time);
+      var cs = Math.max(as, bs), ce = Math.min(ae, be);
+      if (ce > cs) { ovS = Math.min(ovS, cs); ovE = Math.max(ovE, ce); }
+    });
+    if (ovE <= ovS) return '';
+    var s = Math.round(((ovS - as) / dur) * 100);
+    var en = Math.round(((ovE - as) / dur) * 100);
+    var gr = 'rgba(34,197,94,0.1)', rd = 'rgba(239,68,68,0.28)';
+    var bg;
+    if (s <= 0 && en >= 100) bg = rd;
+    else if (s <= 0) bg = 'linear-gradient(to bottom,' + rd + ' ' + en + '%,' + gr + ' ' + en + '%)';
+    else if (en >= 100) bg = 'linear-gradient(to bottom,' + gr + ' ' + s + '%,' + rd + ' ' + s + '%)';
+    else bg = 'linear-gradient(to bottom,' + gr + ' ' + s + '%,' + rd + ' ' + s + '%,' + rd + ' ' + en + '%,' + gr + ' ' + en + '%)';
+    return 'background:' + bg + ';border-left-color:#ef4444;color:#fca5a5;';
+  }
+
+  function renderCal(evts) {
+    var c = document.getElementById('cal');
+    var today = new Date(); today.setHours(12,0,0,0);
+    var dow = today.getDay();
+    var daysUntil = dow === 0 ? 1 : (8 - dow);
+    var mon = new Date(today); mon.setDate(today.getDate() + daysUntil);
+    var DAYS = ['Pzt','Sal','Car','Per','Cum','Cmt','Paz'];
+    var html = '';
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(mon); d.setDate(mon.getDate() + i);
+      var ds = lstr(d);
+      var isT = lstr(today) === ds;
+      var dayEvts = evts.filter(function(e) { return e.event_date === ds; }).sort(function(a,b) { return a.start_time.localeCompare(b.start_time); });
+      var groups = groupOverlap(dayEvts);
+      html += '<div class="wday"><div class="wday-header"><span class="dlabel">' + DAYS[i] + '</span><span class="dnum' + (isT ? ' today' : '') + '">' + d.getDate() + '</span></div>';
+      if (!groups.length) {
+        html += '<div class="dempty">Etkinlik yok</div>';
+      } else {
+        html += '<div class="devents">';
+        groups.forEach(function(g) {
+          var joinedInGroup = g.filter(function(e) { return regs[e.id] && regs[e.id].status === 'CONFIRMED'; });
+          html += '<div class="drow">';
+          g.forEach(function(e) {
+            var joined = regs[e.id] && regs[e.id].status === 'CONFIRMED';
+            var conflict = joined && joinedInGroup.length > 1;
+            var style = '';
+            if (conflict) {
+              var others = joinedInGroup.filter(function(x) { return x.id !== e.id; });
+              style = conflictStyle(e, others);
+            }
+            var cls = 'cev ' + (joined ? 'joined' : 'none');
+            html += '<div class="' + cls + '" style="' + style + '">' +
+              '<div class="cev-time">' + e.start_time.substring(0,5) + '-' + e.end_time.substring(0,5) + '</div>' +
+              '<div class="cev-title">' + e.title + '</div>' +
+            '</div>';
+          });
+          html += '</div>';
         });
-    </script>
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    c.innerHTML = html;
+  }
+
+  function groupOverlap(evts) {
+    var groups = [], used = new Set();
+    evts.forEach(function(e, i) {
+      if (used.has(i)) return;
+      var g = [e]; used.add(i);
+      evts.forEach(function(e2, j) {
+        if (i === j || used.has(j)) return;
+        if (e.start_time < e2.end_time && e2.start_time < e.end_time) { g.push(e2); used.add(j); }
+      });
+      groups.push(g);
+    });
+    return groups;
+  }
+
+  function lstr(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function isPast(ds, et) { return new Date() > new Date(ds + 'T' + et); }
+
+  function toast(msg, type) {
+    var el = document.createElement('div');
+    el.className = 'toast ' + (type || 'info');
+    el.textContent = msg;
+    document.getElementById('toasts').appendChild(el);
+    setTimeout(function() { el.remove(); }, 3500);
+  }
+</script>
 </body>
 </html>

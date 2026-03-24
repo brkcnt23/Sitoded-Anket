@@ -8,23 +8,28 @@
     "dev": "nodemon server.js",
     "seed": "node seed.js"
   },
-  "keywords": ["volunteer", "event", "management"],
+  "keywords": [
+    "volunteer",
+    "event",
+    "management"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "pg": "^8.10.0",
-    "dotenv": "^16.0.3",
-    "express-session": "^1.17.3",
-    "passport": "^0.6.0",
-    "passport-local": "^1.0.0",
     "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "express-validator": "^7.0.0",
     "helmet": "^7.0.0",
-    "cors": "^2.8.5"
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.14"
   }
 }

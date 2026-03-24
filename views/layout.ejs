@@ -5,13 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%- typeof title !== 'undefined' ? title : 'Sitoded Erzurum - Anket Sistemi' %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .navbar {
+            background: rgba(15, 23, 42, 0.6) !important;
+            backdrop-filter: blur(12px) !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15) !important;
+        }
+
+        .navbar-brand {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover {
+            color: #6366f1 !important;
+        }
+
+        .dropdown-menu {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border: 1px solid rgba(99, 102, 241, 0.25) !important;
+            backdrop-filter: blur(12px);
+        }
+
+        .dropdown-item {
+            color: #cbd5e1 !important;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(99, 102, 241, 0.15) !important;
+            color: #6366f1 !important;
+        }
+
+        .dropdown-divider {
+            border-color: rgba(99, 102, 241, 0.2) !important;
+        }
+
+        .dropdown-item-text {
+            color: #94a3b8 !important;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
             <a class="navbar-brand fw-bold" href="<%- typeof user !== 'undefined' && user ? '/dashboard' : '/login' %>">
-                Sitoded Erzurum
+                <i class="bi bi-calendar2-event"></i> Sitoded
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -20,24 +70,26 @@
                 <ul class="navbar-nav ms-auto">
                     <% if (typeof user !== 'undefined' && user) { %>
                         <li class="nav-item">
-                            <a class="nav-link" href="/dashboard">Etkinlikler</a>
+                            <a class="nav-link" href="/dashboard"><i class="bi bi-calendar"></i> Etkinlikler</a>
                         </li>
                         <% if (['SENIOR', 'ADMIN'].includes(user.role)) { %>
                         <li class="nav-item">
-                            <a class="nav-link" href="/events/create">Etkinlik Oluştur</a>
+                            <a class="nav-link" href="/events/create"><i class="bi bi-plus-circle"></i> Etkinlik Oluştur</a>
                         </li>
                         <% } %>
                         <% if (user.role === 'ADMIN') { %>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin">Yönetim Paneli</a>
+                            <a class="nav-link" href="/admin"><i class="bi bi-gear"></i> Yönetim Paneli</a>
                         </li>
                         <% } %>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <%- user.full_name %> (<%- user.hierarchy_level %>)
+                                <i class="bi bi-person-circle"></i> <%- user.full_name %>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="/logout">Çıkış Yap</a></li>
+                                <li><span class="dropdown-item-text"><%- user.hierarchy_level %></span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</a></li>
                             </ul>
                         </li>
                     <% } %>
@@ -46,28 +98,30 @@
         </div>
     </nav>
 
-    <div class="container-fluid mt-4">
+    <main>
         <% if (typeof message !== 'undefined' && message) { %>
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <%- message %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="container-fluid px-4 pt-4">
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <%- message %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
             </div>
         <% } %>
         
         <% if (typeof error !== 'undefined' && error) { %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%- error %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="container-fluid px-4 pt-4">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%- error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
             </div>
         <% } %>
-    </div>
 
-    <div class="container-fluid mt-2">
         <%- body %>
-    </div>
+    </main>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p>&copy; 2026 Sitoded Erzurum. Tüm hakları saklıdır.</p>
+    <footer class="bg-dark text-white text-center border-top border-secondary">
+        <p class="mb-0 py-4">&copy; 2026 Sitoded Erzurum. Tüm hakları saklıdır.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

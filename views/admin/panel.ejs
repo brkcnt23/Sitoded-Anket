@@ -1,100 +1,881 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yönetim Paneli - Sitoded Erzurum</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yönetim Paneli — Sitoded</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #0c0c0f;
+      --surface:   #131318;
+      --surface2:  #1a1a22;
+      --border:    rgba(255,255,255,0.07);
+      --border2:   rgba(255,255,255,0.12);
+      --text:      #e8e8f0;
+      --muted:     #7070a0;
+      --accent:    #6c63ff;
+      --accent2:   #8b85ff;
+      --green:     #22c55e;
+      --yellow:    #eab308;
+      --red:       #ef4444;
+      --cyan:      #06b6d4;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo img { height: 32px; }
+
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo-text span:first-child {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    .sidebar-logo-text span:last-child {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .sidebar-nav {
+      padding: 20px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 12px 6px;
+      margin-top: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: rgba(108, 99, 255, 0.15); color: var(--accent2); }
+
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .user-chip-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .content {
+      padding: 32px;
+      flex: 1;
+    }
+
+    /* ── PANELS ── */
+    .panel {
+      display: none;
+    }
+    .panel.active { display: block; }
+
+    /* ── STAT CARDS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .stat-card.accent .stat-value { color: var(--accent2); }
+    .stat-card.green .stat-value { color: var(--green); }
+    .stat-card.yellow .stat-value { color: var(--yellow); }
+
+    /* ── SECTION HEADERS ── */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-head h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .section-head p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-body { padding: 24px; }
+
+    /* ── TABLE ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr:last-child td { border-bottom: none; }
+
+    .data-table tbody tr:hover td { background: var(--surface2); }
+
+    /* ── AVATAR ── */
+    .avatar {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-cell-info { display: flex; flex-direction: column; }
+    .user-cell-name { font-size: 13px; font-weight: 600; }
+    .user-cell-sub { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .badge-president { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.2); }
+    .badge-coordinator { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.2); }
+    .badge-senior { background: rgba(108,99,255,0.15); color: #a5b4fc; border: 1px solid rgba(108,99,255,0.2); }
+    .badge-junior { background: rgba(234,179,8,0.15); color: #fde047; border: 1px solid rgba(234,179,8,0.2); }
+    .badge-volunteer { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+    .points-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(34,197,94,0.1);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      border: 1px solid rgba(34,197,94,0.15);
+    }
+
+    /* ── FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.full { grid-template-columns: 1fr; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .form-control {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.12);
+    }
+
+    select.form-control option { background: var(--surface2); }
+
+    .form-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent2); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border2);
+    }
+    .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    /* ── TOAST ── */
+    #toast-root {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      min-width: 280px;
+      animation: slideIn 0.2s ease;
+      border: 1px solid;
+    }
+
+    .toast.success { background: rgba(22,101,52,0.9); color: #86efac; border-color: rgba(34,197,94,0.3); backdrop-filter: blur(8px); }
+    .toast.error { background: rgba(127,29,29,0.9); color: #fca5a5; border-color: rgba(239,68,68,0.3); backdrop-filter: blur(8px); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px; height: 14px;
+      color: var(--muted);
+    }
+
+    .search-wrap input {
+      padding-left: 36px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      padding: 48px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ── DIVIDER ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/dashboard">Sitoded Erzurum</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Etkinlikler</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin">Yönetim Paneli</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Çıkış Yap</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <div class="container mt-4">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <h1>Yönetim Paneli</h1>
-                <a href="/admin/user/new" class="btn btn-primary mt-2">Yeni Hesap Oluştur</a>
-            </div>
-        </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="/img/sitoded-erzurum-logo.png" alt="Sitoded">
+    <div class="sidebar-logo-text">
+      <span>Sitoded</span>
+      <span>Yönetim Paneli</span>
+    </div>
+  </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Kullanıcılar (<%= users.length %>)</h4>
-                <div class="table-responsive">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th>Ad Soyad</th>
-                                <th>Seviye</th>
-                                <th>Rol</th>
-                                <th>Puanlar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% users.forEach(user => { %>
-                                <tr>
-                                    <td><%- user.full_name %></td>
-                                    <td><span class="badge bg-info"><%- user.hierarchy_level %></span></td>
-                                    <td><span class="badge bg-secondary"><%- user.role %></span></td>
-                                    <td><%- user.points %></td>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+  <nav class="sidebar-nav">
+    <span class="nav-label">Genel</span>
+    <button class="nav-item active" onclick="showPanel('overview')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Genel Bakış
+    </button>
+
+    <span class="nav-label">Yönetim</span>
+    <button class="nav-item" onclick="showPanel('users')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Kullanıcılar
+    </button>
+    <button class="nav-item" onclick="showPanel('teams')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Ekipler
+    </button>
+    <button class="nav-item" onclick="showPanel('points')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Puan Yönetimi
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="/dashboard" class="nav-item" style="text-decoration:none; color: var(--muted);">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Dashboard'a Dön
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <span class="topbar-title" id="topbar-title">Genel Bakış</span>
+    <div class="topbar-right">
+      <div class="user-chip">
+        <div class="user-chip-dot"></div>
+        <%= user.full_name %>
+        <span style="color: var(--muted); font-size:11px;">· <%= user.hierarchy_level %></span>
+      </div>
+      <a href="/logout" class="btn btn-ghost btn-sm">Çıkış</a>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ── OVERVIEW PANEL ── -->
+    <div class="panel active" id="panel-overview">
+      <div class="section-head" style="margin-bottom:28px;">
+        <div>
+          <h2>Genel Bakış</h2>
+          <p>Sistemin anlık durumu</p>
+        </div>
+        <a href="/admin/user/new" class="btn btn-primary">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+          Yeni Kullanıcı
+        </a>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card accent">
+          <div class="stat-label">Toplam Kullanıcı</div>
+          <div class="stat-value"><%= users.length %></div>
+          <div class="stat-sub">Kayıtlı üye</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Ekip Sayısı</div>
+          <div class="stat-value"><%= teams.length %></div>
+          <div class="stat-sub">Aktif ekip</div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-label">Admin / Senior</div>
+          <div class="stat-value"><%= users.filter(u => u.role === 'ADMIN' || u.role === 'SENIOR').length %></div>
+          <div class="stat-sub">Yönetici</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Gönüllü</div>
+          <div class="stat-value"><%= users.filter(u => u.role === 'VOLUNTEER').length %></div>
+          <div class="stat-sub">Volunteer</div>
+        </div>
+      </div>
+
+      <!-- Son kullanıcılar -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Son Kayıt Olan Kullanıcılar</h3>
+          <button class="btn btn-ghost btn-sm" onclick="showPanel('users')">Tümünü Gör →</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Kullanıcı</th>
+              <th>Seviye</th>
+              <th>Puan</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.slice(0, 6).forEach((u, i) => {
+              const colors = ['#6c63ff','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
+              const initials = u.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
+            %>
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar" style="background:<%=colors[i%6]%>22; color:<%=colors[i%6]%>"><%= initials %></div>
+                  <div class="user-cell-info">
+                    <span class="user-cell-name"><%= u.full_name %></span>
+                    <span class="user-cell-sub">@<%= u.username %></span>
+                  </div>
                 </div>
-            </div>
-
-            <div class="col-md-6">
-                <h4>Ekipler (<%= teams.length %>)</h4>
-                <div class="table-responsive">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th>Ekip Adı</th>
-                                <th>Lider</th>
-                                <th>Açıklama</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% teams.forEach(team => { %>
-                                <tr>
-                                    <td><%- team.name %></td>
-                                    <td><%- team.leader_id ? 'Atanmış' : 'Atanmamış' %></td>
-                                    <td><small><%- team.description || '-' %></small></td>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+              </td>
+              <td>
+                <span class="badge badge-<%= u.hierarchy_level.toLowerCase() %>"><%= u.hierarchy_level %></span>
+              </td>
+              <td><span class="points-pill"><%= u.points %> p</span></td>
+              <td style="color: var(--muted); font-size: 12px;"><%= u.email %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p>&copy; 2026 Sitoded Erzurum</p>
-    </footer>
+    <!-- ── USERS PANEL ── -->
+    <div class="panel" id="panel-users">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Kullanıcılar</h2>
+          <p><%= users.length %> kayıtlı üye</p>
+        </div>
+        <a href="/admin/user/new" class="btn btn-primary">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+          Yeni Kullanıcı
+        </a>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <div class="card">
+        <div class="card-header">
+          <h3>Tüm Kullanıcılar</h3>
+          <div class="search-wrap" style="width:220px;">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" class="form-control" placeholder="Ara..." id="userSearch" oninput="filterUsers()">
+          </div>
+        </div>
+        <table class="data-table" id="usersTable">
+          <thead>
+            <tr>
+              <th>Kullanıcı</th>
+              <th>Seviye</th>
+              <th>Rol</th>
+              <th>Puan</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach((u, i) => {
+              const colors = ['#6c63ff','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
+              const initials = u.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
+            %>
+            <tr data-name="<%= u.full_name.toLowerCase() %>" data-user="<%= u.username.toLowerCase() %>">
+              <td>
+                <div class="user-cell">
+                  <div class="avatar" style="background:<%=colors[i%6]%>22; color:<%=colors[i%6]%>"><%= initials %></div>
+                  <div class="user-cell-info">
+                    <span class="user-cell-name"><%= u.full_name %></span>
+                    <span class="user-cell-sub">@<%= u.username %></span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-<%= u.hierarchy_level.toLowerCase() %>"><%= u.hierarchy_level %></span></td>
+              <td style="color: var(--muted); font-size: 12px;"><%= u.role %></td>
+              <td><span class="points-pill"><%= u.points %> p</span></td>
+              <td style="color: var(--muted); font-size: 12px;"><%= u.email %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── TEAMS PANEL ── -->
+    <div class="panel" id="panel-teams">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Ekipler</h2>
+          <p><%= teams.length %> aktif ekip</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <% teams.forEach(team => {
+          const leader = users.find(u => u.id === team.leader_id);
+          const memberCount = 0; // server'dan gelmesi lazım, şimdilik 0
+        %>
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <h3><%= team.name %></h3>
+          </div>
+          <div class="card-body" style="padding: 16px 24px;">
+            <div style="font-size: 13px; color: var(--muted); margin-bottom: 12px; line-height: 1.5;">
+              <%= team.description || '—' %>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <% if (leader) { %>
+                <div class="avatar" style="width:24px;height:24px;font-size:10px;background:rgba(108,99,255,0.15);color:var(--accent2);">
+                  <%= leader.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase() %>
+                </div>
+                <span style="font-size: 12px; color: var(--muted);">Lider: <strong style="color: var(--text)"><%= leader.full_name %></strong></span>
+              <% } else { %>
+                <span style="font-size: 12px; color: var(--muted);">Lider atanmamış</span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- ── POINTS PANEL ── -->
+    <div class="panel" id="panel-points">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Puan Yönetimi</h2>
+          <p>Kullanıcı puanlarını manuel düzenle</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 420px 1fr; gap: 24px; align-items: start;">
+        <!-- Form -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-header"><h3>Puan Güncelle</h3></div>
+          <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div class="form-group">
+                <label class="form-label">Kullanıcı</label>
+                <select class="form-control" id="pts-user">
+                  <option value="">Seçin</option>
+                  <% users.forEach(u => { %>
+                  <option value="<%= u.id %>"><%= u.full_name %> · <%= u.hierarchy_level %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Değişim Miktarı</label>
+                <input type="number" class="form-control" id="pts-amount" placeholder="+5 veya -2">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sebep</label>
+                <select class="form-control" id="pts-reason">
+                  <option value="">Seçin</option>
+                  <option value="BONUS">Bonus / Hediye</option>
+                  <option value="MANUAL_CORRECTION">Manuel Düzeltme</option>
+                  <option value="EXTRA_HELP">Ekstra Yardım</option>
+                  <option value="OTHER">Diğer</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="submitPoints()">Güncelle</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-header"><h3>Puan Sıralaması</h3></div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Kullanıcı</th>
+                <th>Seviye</th>
+                <th>Puan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% [...users].sort((a,b) => b.points - a.points).forEach((u, i) => {
+                const colors = ['#6c63ff','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
+                const initials = u.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
+                const rankColors = ['#eab308','#94a3b8','#b45309'];
+              %>
+              <tr>
+                <td style="font-family:'DM Mono',monospace; font-size:12px; color:<%= i < 3 ? rankColors[i] : 'var(--muted)' %>; font-weight:700;">
+                  <%= i < 3 ? ['①','②','③'][i] : i+1 %>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar" style="background:<%=colors[i%6]%>22;color:<%=colors[i%6]%>"><%= initials %></div>
+                    <span class="user-cell-name"><%= u.full_name %></span>
+                  </div>
+                </td>
+                <td><span class="badge badge-<%= u.hierarchy_level.toLowerCase() %>"><%= u.hierarchy_level %></span></td>
+                <td><span class="points-pill"><%= u.points %> p</span></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<div id="toast-root"></div>
+
+<script>
+  const panels = ['overview','users','teams','points'];
+  const titles = { overview:'Genel Bakış', users:'Kullanıcılar', teams:'Ekipler', points:'Puan Yönetimi' };
+
+  function showPanel(name) {
+    panels.forEach(p => {
+      document.getElementById('panel-' + p).classList.toggle('active', p === name);
+    });
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.remove('active');
+      if (el.getAttribute('onclick') === `showPanel('${name}')`) el.classList.add('active');
+    });
+    document.getElementById('topbar-title').textContent = titles[name];
+  }
+
+  function filterUsers() {
+    const q = document.getElementById('userSearch').value.toLowerCase();
+    document.querySelectorAll('#usersTable tbody tr').forEach(row => {
+      const name = row.dataset.name || '';
+      const user = row.dataset.user || '';
+      row.style.display = (!q || name.includes(q) || user.includes(q)) ? '' : 'none';
+    });
+  }
+
+  async function submitPoints() {
+    const userId = document.getElementById('pts-user').value;
+    const amount = parseInt(document.getElementById('pts-amount').value);
+    const reason = document.getElementById('pts-reason').value;
+
+    if (!userId || !amount || !reason) {
+      toast('Tüm alanları doldurun', 'error'); return;
+    }
+
+    try {
+      const res = await fetch('/api/admin/points/adjust', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: parseInt(userId), points_change: amount, reason })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast(`Puan güncellendi → ${data.new_points}`, 'success');
+        document.getElementById('pts-user').value = '';
+        document.getElementById('pts-amount').value = '';
+        document.getElementById('pts-reason').value = '';
+        setTimeout(() => location.reload(), 1800);
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  function toast(msg, type = 'success') {
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    document.getElementById('toast-root').appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+</script>
 </body>
 </html>

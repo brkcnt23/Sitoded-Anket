@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoklama - <%= event.title %></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0a0a0a;
+            --primary-light: #222222;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+            --bg: #1a1a1a;
+            --bg-white: #2a2a2a;
+            --text-dark: #e0e0e0;
+            --text-gray: #b0b0b0;
+            --border: #404040;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+
+        nav {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563EB;
+        }
+
+        .btn-secondary {
+            background-color: var(--border);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #505050;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #DC2626;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .event-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            background-color: var(--bg-white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .warning-box {
+            background-color: #4d3d1d;
+            color: #ffd966;
+            border-left: 4px solid var(--warning);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .error-box {
+            background-color: #4d1d1d;
+            color: #ff8a8a;
+            border-left: 4px solid var(--danger);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success-box {
+            background-color: #1d4d30;
+            color: #5fee9d;
+            border-left: 4px solid var(--success);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--info);
+            display: inline-block;
+        }
+
+        .table-container {
+            background-color: var(--bg-white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: var(--primary-light);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        .checkbox-cell input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .user-username {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-confirmed {
+            background-color: #1d4d30;
+            color: #5fee9d;
+        }
+
+        .badge-waiting {
+            background-color: #4d3d1d;
+            color: #ffd966;
+        }
+
+        .attended-yes {
+            background-color: #1d4d30;
+            color: #5fee9d;
+        }
+
+        .attended-no {
+            background-color: #4d1d1d;
+            color: #ff8a8a;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 300px;
+            animation: toastSlideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast.success {
+            background-color: #1d4d30;
+            color: #5fee9d;
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            background-color: #4d1d1d;
+            color: #ff8a8a;
+            border-left: 4px solid var(--danger);
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .event-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Toast -->
+    <div id="toastContainer"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="brand">
+            <img src="/img/sitoded-erzurum-logo.png" alt="Sitoded" style="height: 35px; width: auto;">
+            Sitoded Anket
+        </div>
+        <div class="nav-actions">
+            <a href="/dashboard" class="btn btn-secondary">← Geri Dön</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="header">
+            <h1><%= event.title %></h1>
+            <p style="color: var(--text-gray); margin-top: 5px;"><%= event.team_name %> Takımı</p>
+        </div>
+
+        <!-- Event Info -->
+        <div class="event-info">
+            <div class="info-item">
+                <span class="info-label">📅 Tarih</span>
+                <span class="info-value"><%= new Date(eventDateStr).toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">⏰ Saat</span>
+                <span class="info-value"><%= event.start_time.substring(0, 5) %> - <%= event.end_time.substring(0, 5) %></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">📍 Yer</span>
+                <span class="info-value"><%= event.location %></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">👥 Kontenjan</span>
+                <span class="info-value"><%= event.capacity %></span>
+            </div>
+        </div>
+
+        <% if (sundayAfterDeadline && !deadlinePassedForEvent) { %>
+            <div class="success-box">
+                ✅ Kayıtlar kapatılmıştır. Yoklama listesi final olmuştur. Katılım ve katılmama seçenekleri devre dışı bırakılmıştır.
+            </div>
+        <% } %>
+
+        <% if (!deadlinePassedForEvent) { %>
+            <div class="warning-box">
+                ⏱️ Etkinlik henüz başlamadı. Başladığında yoklama alabilirsiniz.
+            </div>
+        <% } %>
+
+        <% if (deadlinePassedForEvent && !sundayAfterDeadline) { %>
+            <div class="warning-box">
+                ⚠️ Pazar saat 12:00'den sonra yoklama listesi kesinleşecek ve kayıtlar kapatılacaktır.
+            </div>
+        <% } %>
+
+        <!-- Confirmed List -->
+        <div class="section">
+            <h2 class="section-title">
+                ✅ Katılımcılar (<%= confirmedList.length %>/<%= event.capacity %>)
+            </h2>
+
+            <div class="table-container">
+                <% if (confirmedList.length === 0) { %>
+                    <div class="no-data">Henüz kaydı yoktur</div>
+                <% } else { %>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Sıra</th>
+                                <th>Ad Soyad</th>
+                                <th>Kullanıcı Adı</th>
+                                <th style="width: 120px;">Yoklama</th>
+                                <th style="width: 50px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% confirmedList.forEach((person, idx) => { %>
+                                <tr>
+                                    <td><strong><%= idx + 1 %></strong></td>
+                                    <td>
+                                        <div class="user-name"><%= person.full_name %></div>
+                                        <div class="user-username">@<%= person.username %></div>
+                                    </td>
+                                    <td><span class="badge badge-confirmed">Katılıyor</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: 8px;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" class="attendance-check" data-user-id="<%= person.user_id %>" 
+                                                    <%= person.attended ? 'checked' : '' %} onchange="markAttendance(<%= person.user_id %>, this.checked)">
+                                                <span class="<%= person.attended ? 'attended-yes' : 'attended-no' %>" style="padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                                                    <%= person.attended ? '✅ Katıldı' : '❌ Katılmadı' %>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Waitlist -->
+        <% if (waitlist.length > 0) { %>
+            <div class="section">
+                <h2 class="section-title">
+                    ⏳ Bekleme Listesi (<%= waitlist.length %>)
+                </h2>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Sıra</th>
+                                <th>Ad Soyad</th>
+                                <th>Kullanıcı Adı</th>
+                                <th>Durum</th>
+                                <th style="width: 50px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% waitlist.forEach((person, idx) => { %>
+                                <tr>
+                                    <td><strong><%= confirmedList.length + idx + 1 %></strong></td>
+                                    <td>
+                                        <div class="user-name"><%= person.full_name %></div>
+                                        <div class="user-username">@<%= person.username %></div>
+                                    </td>
+                                    <td><span class="badge badge-waiting">#<%= person.queue_position %></span></td>
+                                    <td>Bekliyorum</td>
+                                    <td></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: '✓', error: '✕' };
+            toast.innerHTML = `<span style="font-size: 18px;">${icons[type]}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'toastSlideOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function markAttendance(userId, attended) {
+            fetch('/api/event/<%= event.id %>/mark-attendance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: userId, attended: attended })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                } else {
+                    showToast('Hata: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('Hata oluştu', 'error');
+            });
+        }
+    </script>
+</body>
+
+</html>
