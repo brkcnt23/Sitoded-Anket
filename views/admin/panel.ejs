@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yönetim Paneli — Sitoded</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -34,45 +35,58 @@
     }
 
     /* ── SIDEBAR ── */
-    .sidebar {
-      width: 240px;
-      min-height: 100vh;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0;
-      z-index: 100;
-    }
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
 
-    .sidebar-logo {
-      padding: 28px 24px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.sidebar-logo {
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px 4px;
+}
 
-    .sidebar-logo img { height: 32px; }
+.panel-sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
+  width: 100%;
+}
 
-    .sidebar-logo-text {
-      display: flex;
-      flex-direction: column;
-    }
+.panel-logo {
+  height: 128px;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: 0;
+}
 
-    .sidebar-logo-text span:first-child {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
+.panel-sidebar-logo-text {
+  margin: -8px 0 0 0;
+  padding: 0;
+  line-height: 1;
+}
 
-    .sidebar-logo-text span:last-child {
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 400;
-    }
+.panel-sidebar-logo-text span {
+  display: block;
+  font-size: 13px;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+}
 
     .sidebar-nav {
       padding: 20px 12px;
@@ -119,7 +133,7 @@
       padding: 16px 12px;
       border-top: 1px solid var(--border);
     }
-
+    
     /* ── MAIN ── */
     .main {
       margin-left: 240px;
@@ -498,17 +512,14 @@
   </style>
 </head>
 <body>
-
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="/img/sitoded-erzurum-logo.png" alt="Sitoded">
-    <div class="sidebar-logo-text">
-      <span>Sitoded</span>
+  <div class="sidebar-logo panel-sidebar-logo">
+    <img src="/img/beyaz-yatay-LOGO.png" alt="Sitoded" class="logo panel-logo">
+    <div class="sidebar-logo-text panel-sidebar-logo-text">
       <span>Yönetim Paneli</span>
     </div>
   </div>
-
   <nav class="sidebar-nav">
     <span class="nav-label">Genel</span>
     <button class="nav-item active" onclick="showPanel('overview')">
@@ -528,6 +539,10 @@
     <button class="nav-item" onclick="showPanel('points')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       Puan Yönetimi
+    </button>
+    <button class="nav-item" onclick="showPanel('attendance')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+      Yoklama Yönetimi
     </button>
   </nav>
 
@@ -603,8 +618,10 @@
             <tr>
               <th>Kullanıcı</th>
               <th>Seviye</th>
+              <th>Rol</th>
               <th>Puan</th>
               <th>Email</th>
+              <th>İşlem</th>
             </tr>
           </thead>
           <tbody>
@@ -663,6 +680,7 @@
               <th>Rol</th>
               <th>Puan</th>
               <th>Email</th>
+              <th>İşlem</th>
             </tr>
           </thead>
           <tbody>
@@ -684,6 +702,19 @@
               <td style="color: var(--muted); font-size: 12px;"><%= u.role %></td>
               <td><span class="points-pill"><%= u.points %> p</span></td>
               <td style="color: var(--muted); font-size: 12px;"><%= u.email %></td>
+              <td>
+              <% if (u.id !== user.id) { %>
+              <form method="POST" action="/admin/user/<%= u.id %>/delete" onsubmit="return confirm('Bu kullanıcıyı silmek istediğine emin misin?')" style="margin:0;">
+                <button type="submit" class="btn btn-ghost btn-sm" style="color:#ef4444; border-color:rgba(239,68,68,.25);">
+                   Sil
+                  </button>
+              </form>
+              <% } else { %>
+              <span style="font-size:12px; color: var(--muted);">Aktif kullanıcı</span>
+            <% } %>
+            </td>
+                <a href="/admin/user/<%= u.id %>/edit" class="btn btn-sm btn-outline-primary">Düzenle</a>
+              </td>
             </tr>
             <% }); %>
           </tbody>
@@ -810,14 +841,45 @@
       </div>
     </div>
 
+    <!-- ── ATTENDANCE PANEL ── -->
+    <div class="panel" id="panel-attendance">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Yoklama Yönetimi</h2>
+          <p>Etkinlik yoklamalarını görüntüle ve yönet</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Yoklama Alınabilecek Etkinlikler</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Etkinlik</th>
+              <th>Tarih</th>
+              <th>Ekip</th>
+              <th>Katılımcı</th>
+              <th>Durum</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="attendance-events">
+            <!-- AJAX ile yüklenecek -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 
 <div id="toast-root"></div>
 
 <script>
-  const panels = ['overview','users','teams','points'];
-  const titles = { overview:'Genel Bakış', users:'Kullanıcılar', teams:'Ekipler', points:'Puan Yönetimi' };
+  const panels = ['overview','users','teams','points','attendance'];
+  const titles = { overview:'Genel Bakış', users:'Kullanıcılar', teams:'Ekipler', points:'Puan Yönetimi', attendance:'Yoklama Yönetimi' };
 
   function showPanel(name) {
     panels.forEach(p => {
@@ -828,6 +890,55 @@
       if (el.getAttribute('onclick') === `showPanel('${name}')`) el.classList.add('active');
     });
     document.getElementById('topbar-title').textContent = titles[name];
+
+    // Yoklama paneli için etkinlikleri yükle
+    if (name === 'attendance') {
+      loadAttendanceEvents();
+    }
+  }
+
+  async function loadAttendanceEvents() {
+    try {
+      const response = await fetch('/api/admin/attendance-events');
+      const data = await response.json();
+
+      if (data.success) {
+        const tbody = document.getElementById('attendance-events');
+        tbody.innerHTML = '';
+
+        if (data.events.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="empty">Yoklama alınabilecek etkinlik bulunamadı</td></tr>';
+          return;
+        }
+
+        data.events.forEach(event => {
+          const row = document.createElement('tr');
+          const eventDate = new Date(event.event_date).toLocaleDateString('tr-TR', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          });
+
+          row.innerHTML = `
+            <td style="font-weight: 600;">${event.title}</td>
+            <td>${eventDate}</td>
+            <td>${event.team_name}</td>
+            <td>${event.confirmed_count}/${event.capacity}</td>
+            <td><span class="badge badge-${event.status === 'COMPLETED' ? 'green' : 'yellow'}">${event.status === 'COMPLETED' ? 'Tamamlandı' : 'Bekliyor'}</span></td>
+            <td>
+              <a href="/attendance/${event.id}" class="btn btn-primary btn-sm">Yoklama Al</a>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } else {
+        showToast('Etkinlikler yüklenemedi: ' + data.error, 'error');
+      }
+    } catch (error) {
+      console.error('Etkinlik yükleme hatası:', error);
+      showToast('Etkinlikler yüklenirken hata oluştu', 'error');
+    }
   }
 
   function filterUsers() {

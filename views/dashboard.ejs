@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Sitoded</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -16,8 +17,16 @@
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     .topbar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
-    .topbar-brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; }
-    .topbar-brand img { height: 28px; }
+    .topbar-brand {
+  display: flex;
+  align-items: center;
+}
+.topbar-logo {
+  height: 128px; /* ihtiyaca göre 56px / 64px yap */
+  width: auto;
+  display: block;
+}
+    .topbar-brand img { height: 128px; }
     .topbar-right { display: flex; align-items: center; gap: 10px; }
     .points-chip { display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); font-size: 14px; font-weight: 700; color: var(--green); font-family: 'DM Mono', monospace; }
     .user-lbl { font-size: 13px; color: var(--muted); }
@@ -105,15 +114,17 @@
 <body>
 
 <header class="topbar">
-  <div class="topbar-brand">
-    <img src="/img/sitoded-erzurum-logo.png" alt="Sitoded">
-    Sitoded
-  </div>
+<div class="topbar-brand">
+  <img src="/img/beyaz-yatay-logo.png" alt="Sitoded" class="topbar-logo">
+</div>
   <div class="topbar-right">
     <span class="user-lbl" id="uname"></span>
     <div class="points-chip">&#9733; <span id="upts">0</span></div>
     <% if (user.role === 'SENIOR' || user.role === 'ADMIN') { %>
     <a href="/events/create" class="tbtn tbtn-create">+ Etkinlik</a>
+    <% } %>
+    <% if (user.role === 'SENIOR') { %>
+    <button onclick="openAttendanceModal()" class="tbtn" style="background: rgba(34,197,94,.12); color: #86efac; border-color: rgba(34,197,94,.2);">📋 Yoklama Al</button>
     <% } %>
     <% if (user.role === 'ADMIN') { %>
     <a href="/admin" class="tbtn tbtn-admin">&#9881; Yonetim</a>
@@ -150,10 +161,22 @@
     <h3 id="modal-title">Etkinlik detay</h3>
     <p class="modal-small" id="modal-meta"></p>
     <p id="modal-description"></p>
+    <input type="hidden" id="modal-event-id" value="" />
     <label style="display:flex;gap:8px;align-items:center;margin-bottom:10px;"><input type="checkbox" id="modal-confirm"> Okudum ve onaylıyorum</label>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal()">İptal</button>
       <button id="modal-join-btn" class="btn btn-primary" onclick="confirmJoin()" disabled>Katıl</button>
+    </div>
+  </div>
+</div>
+
+<div id="attendance-modal" class="modal-backdrop">
+  <div class="modal">
+    <h3>Yoklama Al</h3>
+    <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Geçmiş etkinliklerinizden birini seçin</p>
+    <div id="attendance-list" style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px;"></div>
+    <div class="modal-actions" style="margin-top: 15px;">
+      <button class="btn" onclick="closeAttendanceModal()">İptal</button>
     </div>
   </div>
 </div>
@@ -167,8 +190,11 @@
 
   document.addEventListener('DOMContentLoaded', load);
 
-  function openModal(evt) {
-    pendingJoinId = evt.id;
+  function openModal(eventId) {
+    var evt = allEvts.find(function(x) { return x.id === eventId; });
+    if (!evt) return;
+    pendingJoinId = eventId;
+    document.getElementById('modal-event-id').value = eventId;
     document.getElementById('modal-title').textContent = evt.title;
     document.getElementById('modal-meta').textContent = evt.team + ' • ' + evt.location + ' • ' + evt.event_date + ' ' + evt.start_time + '-' + evt.end_time;
     document.getElementById('modal-description').textContent = evt.description;
@@ -184,9 +210,13 @@
 
   function confirmJoin() {
     if (!document.getElementById('modal-confirm').checked) return;
-    if (!pendingJoinId) return;
+    var eventId = pendingJoinId || document.getElementById('modal-event-id').value;
+    if (!eventId) {
+      toast('Etkinlik id eksik, tekrar deneyin', 'error');
+      return;
+    }
     closeModal();
-    doJoin(pendingJoinId);
+    doJoin(eventId);
   }
 
   document.getElementById('modal-confirm').addEventListener('change', function() {
@@ -264,13 +294,13 @@
       var dt = new Date(e.event_date + 'T12:00:00');
       var ds = dt.toLocaleDateString('tr-TR', {weekday:'short', day:'numeric', month:'short'});
       var btn = '';
-      if (canAtt) btn = '<a href="/attendance/'+e.id+'" class="abtn abtn-att">Yoklama</a>';
+      if (canAtt) btn = '<button class="abtn abtn-att" onclick="goToAttendance('+e.id+', \''+e.title.replace(/'/g, '\\\'')+'\')">Yoklama</button>';
       else if (!reg || reg.status === 'CANCELLED') btn = '<button class="abtn abtn-join" onclick="openModal('+e.id+')">Katil</button>';
       else btn = '<button class="abtn abtn-leave" onclick="doLeave('+e.id+')">Katilma</button>';
       var shortDesc = e.description ? (e.description.length > 90 ? e.description.substring(0, 90) + '...' : e.description) : '';
       return '<div class="ecard">' +
         '<div class="ecard-top">' +
-          '<div class="ecard-badges"><span class="tbadge">'+e.team+'</span>'+(joined ? '<span class="sbadge">Katiliyorum</span>' : '')+'</div>' +
+          '<div class="ecard-badges"><span class="tbadge">'+e.team+'</span>'+(joined ? '<span class="sbadge">Katiliyorum</span>' : '')+(canAtt ? '<span class="sbadge" style="background: rgba(239,68,68,.12); color: #fca5a5; border-color: rgba(239,68,68,.18);">Yoklama Alınabilir</span>' : '')+'</div>' +
           '<div class="etitle">'+e.title+'</div>' +
           (shortDesc ? '<div class="emeta-row" style="font-size:12px;color:var(--muted);margin-bottom:8px;">'+shortDesc+'</div>' : '') +
           '<div class="emeta">' +
@@ -286,7 +316,17 @@
     }).join('');
   }
 
+  function goToAttendance(eventId, eventTitle) {
+    if (confirm('"' + eventTitle + '" etkinliğinin yoklama sayfasına gitmek istiyor musunuz?')) {
+      window.location.href = '/attendance/' + eventId;
+    }
+  }
+
   async function doJoin(id) {
+    if (!id) {
+      toast('Etkinlik ID eksik. Lütfen tekrar deneyin.', 'error');
+      return;
+    }
     var r = await fetch('/api/event/'+id+'/register', {method:'POST', headers:{'Content-Type':'application/json'}});
     var d = await r.json();
     toast(d.success ? d.message : d.error, d.success ? 'success' : 'error');
@@ -401,6 +441,51 @@
     el.textContent = msg;
     document.getElementById('toasts').appendChild(el);
     setTimeout(function() { el.remove(); }, 3500);
+  }
+
+  async function openAttendanceModal() {
+    try {
+      const r = await fetch('/api/admin/attendance-events');
+      const d = await r.json();
+      if (!d.success) {
+        toast('Etkinlikler yüklenemedi', 'error');
+        return;
+      }
+      const events = d.events || [];
+      const listEl = document.getElementById('attendance-list');
+      if (events.length === 0) {
+        listEl.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--muted);">Yoklama alınabilecek etkinlik bulunamadı</div>';
+      } else {
+        listEl.innerHTML = events.map(e => {
+          const eventDate = e.event_date ? e.event_date.trim() : '';
+          const startTime = e.start_time ? e.start_time.substring(0, 5) : '--:--';
+          const endTime = e.end_time ? e.end_time.substring(0, 5) : '--:--';
+          const dt = eventDate ? new Date(eventDate) : null;
+          const ds = dt ? dt.toLocaleDateString('tr-TR', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) : 'Tarih bilinmiyor';
+          const regCount = e.registered_count || 0;
+          return '<div style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">' +
+            '<div>' +
+              '<div style="font-weight: 500; color: var(--text-dark);">' + e.title + '</div>' +
+              '<div style="font-size: 12px; color: var(--text-gray);">' + ds + ' • ' + startTime + ' - ' + endTime + ' • ' + regCount + ' kişi</div>' +
+            '</div>' +
+            '<button class="btn btn-primary" style="padding: 6px 12px; font-size: 13px;" onclick="goToAttendance(' + e.id + ', \'' + e.title.replace(/'/g, "\\'") + '\')">Aç</button>' +
+            '</div>';
+        }).join('');
+      }
+      document.getElementById('attendance-modal').classList.add('show');
+    } catch (err) {
+      console.error(err);
+      toast('Hata oluştu', 'error');
+    }
+  }
+
+  function closeAttendanceModal() {
+    document.getElementById('attendance-modal').classList.remove('show');
+  }
+
+  function goToAttendance(eventId, eventTitle) {
+    closeAttendanceModal();
+    window.location.href = '/attendance/' + eventId;
   }
 </script>
 </body>

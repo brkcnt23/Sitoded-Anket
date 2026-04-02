@@ -134,6 +134,97 @@ const seedDatabase = async () => {
         hierarchy_level: 'VOLUNTEER',
         role: 'VOLUNTEER',
         teams: []
+      },
+      // 10 yeni kullanıcı ekleme
+      {
+        username: 'mehmet_senior_2',
+        email: 'mehmet2@sitoded.org',
+        full_name: 'Mehmet Yıldız',
+        password: 'asd123',
+        hierarchy_level: 'SENIOR',
+        role: 'SENIOR',
+        teams: ['Tarih Ekibi', 'Mental Sağlık Ekibi']
+      },
+      {
+        username: 'aylin_senior_3',
+        email: 'aylin3@sitoded.org',
+        full_name: 'Aylin Güneş',
+        password: 'asd123',
+        hierarchy_level: 'SENIOR',
+        role: 'SENIOR',
+        teams: ['Dergi Ekibi', 'Spor Ekibi']
+      },
+      {
+        username: 'burak_junior_5',
+        email: 'burak5@sitoded.org',
+        full_name: 'Burak Aydın',
+        password: 'asd123',
+        hierarchy_level: 'JUNIOR',
+        role: 'JUNIOR',
+        teams: ['Türkçe Eğitim Ekibi']
+      },
+      {
+        username: 'deniz_junior_6',
+        email: 'deniz6@sitoded.org',
+        full_name: 'Deniz Akdeniz',
+        password: 'asd123',
+        hierarchy_level: 'JUNIOR',
+        role: 'JUNIOR',
+        teams: ['İngilizce Eğitim Ekibi']
+      },
+      {
+        username: 'elif_junior_7',
+        email: 'elif7@sitoded.org',
+        full_name: 'Elif Yıldırım',
+        password: 'asd123',
+        hierarchy_level: 'JUNIOR',
+        role: 'JUNIOR',
+        teams: ['Sosyal Medya Ekibi']
+      },
+      {
+        username: 'fatih_junior_8',
+        email: 'fatih8@sitoded.org',
+        full_name: 'Fatih Kara',
+        password: 'asd123',
+        hierarchy_level: 'JUNIOR',
+        role: 'JUNIOR',
+        teams: ['Kültür Sanat Ekibi']
+      },
+      {
+        username: 'gizem_volunteer_2',
+        email: 'gizem2@sitoded.org',
+        full_name: 'Gizem Beyaz',
+        password: 'asd123',
+        hierarchy_level: 'VOLUNTEER',
+        role: 'VOLUNTEER',
+        teams: ['Tarih Ekibi']
+      },
+      {
+        username: 'hakan_volunteer_3',
+        email: 'hakan3@sitoded.org',
+        full_name: 'Hakan Yeşil',
+        password: 'asd123',
+        hierarchy_level: 'VOLUNTEER',
+        role: 'VOLUNTEER',
+        teams: ['Mental Sağlık Ekibi']
+      },
+      {
+        username: 'irem_volunteer_4',
+        email: 'irem4@sitoded.org',
+        full_name: 'İrem Mavi',
+        password: 'asd123',
+        hierarchy_level: 'VOLUNTEER',
+        role: 'VOLUNTEER',
+        teams: ['Dergi Ekibi']
+      },
+      {
+        username: 'jale_volunteer_5',
+        email: 'jale5@sitoded.org',
+        full_name: 'Jale Kırmızı',
+        password: 'asd123',
+        hierarchy_level: 'VOLUNTEER',
+        role: 'VOLUNTEER',
+        teams: ['Spor Ekibi']
       }
     ];
 
@@ -357,19 +448,58 @@ const seedDatabase = async () => {
         capacity: 50,
         team_id: teamIds['Etkinlik ve Sponsorluk'],
         leader_id: userIds['ikbalAtaturk'].id
+      },
+      // Geçmiş etkinlik: 24 Mart Salı 19:00 - Yoklama testi için
+      {
+        title: 'Yoklama Test Etkinliği',
+        description: 'Bu etkinlik yoklama sistemi test edilmesi için oluşturulmuştur. Tüm katılımcılar önceden kayıt yaptırmış ve etkinlik gerçekleşmiştir.',
+        location: 'Sitoded Ana Salon',
+        event_date: new Date('2026-03-24'), // Bugün: 24 Mart 2026 Salı
+        start_time: '19:00',
+        end_time: '21:00',
+        capacity: 25,
+        team_id: teamIds['Organizasyon ve Sponsor Ekibi'],
+        leader_id: userIds['burakcan'].id // burakcan tarafından oluşturulmuş
       }
       // NOT: Pazar = deadline günü, etkinlik eklenmez
     ];
 
+    const eventIds = [];
     for (const event of events) {
-      await pool.query(
+      const result = await pool.query(
         `INSERT INTO events (title, description, location, event_date, start_time, end_time, capacity, leader_id, team_id, registration_deadline, status)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'ACTIVE')`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'ACTIVE')
+         RETURNING id`,
         [event.title, event.description, event.location, event.event_date,
          event.start_time, event.end_time, event.capacity,
          event.leader_id, event.team_id, thisSunday]
       );
+      eventIds.push(result.rows[0].id);
       console.log(`  ✓ ${event.title}`);
+    }
+
+    // ===== KATILIMCILAR EKLEME =====
+    console.log('\n👥 Adding participants to past event...');
+    const pastEventId = eventIds[eventIds.length - 1]; // Son etkinlik: Yoklama Test Etkinliği
+
+    // İlk 20 kullanıcıyı al (10 eski + 10 yeni)
+    const participantUsernames = [
+      'burakcan', 'ikbalAtaturk', 'ayberk_oksuz', 'bugrahann_enes',
+      'mehmet_junior_1', 'ayse_junior_2', 'ahmet_junior_3', 'zeynep_junior_4',
+      'Can_volunteer', 'fatma_volunteer', 'ali_volunteer',
+      'mehmet_senior_2', 'aylin_senior_3', 'burak_junior_5', 'deniz_junior_6',
+      'elif_junior_7', 'fatih_junior_8', 'gizem_volunteer_2', 'hakan_volunteer_3',
+      'irem_volunteer_4', 'jale_volunteer_5'
+    ].slice(0, 20); // 20 kullanıcı
+
+    for (const username of participantUsernames) {
+      const userId = userIds[username].id;
+      await pool.query(
+        `INSERT INTO event_registrations (event_id, user_id, status, registered_at)
+         VALUES ($1, $2, 'CONFIRMED', NOW())`,
+        [pastEventId, userId]
+      );
+      console.log(`  ✓ ${userIds[username].full_name} registered for past event`);
     }
 
     console.log('\n✅ Seed tamamlandı!\n');

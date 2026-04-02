@@ -275,6 +275,52 @@
             color: #ff8a8a;
         }
 
+        .attendance-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .attendance-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .attendance-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .attendance-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+            color: white;
+        }
+
+        .attendance-btn.yes.active {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+
+        .attendance-btn.no.active {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .attendance-btn.disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
         .no-data {
             text-align: center;
             padding: 30px;
@@ -366,7 +412,7 @@
     <!-- Navigation -->
     <nav>
         <div class="brand">
-            <img src="/img/sitoded-erzurum-logo.png" alt="Sitoded" style="height: 35px; width: auto;">
+            <img src="/img/beyaz-yatay-logo.png" alt="Sitoded" style="height: 45px; width: auto;">
             Sitoded Anket
         </div>
         <div class="nav-actions">
@@ -408,8 +454,8 @@
         <% } %>
 
         <% if (!deadlinePassedForEvent) { %>
-            <div class="warning-box">
-                ⏱️ Etkinlik henüz başlamadı. Başladığında yoklama alabilirsiniz.
+            <div class="success-box">
+                ✅ Bu etkinlik için yoklama alınabilir. Katılımcıların katılım durumunu işaretleyip "Yoklama Al" butonuna basın.
             </div>
         <% } %>
 
@@ -441,7 +487,7 @@
                         </thead>
                         <tbody>
                             <% confirmedList.forEach((person, idx) => { %>
-                                <tr>
+                                <tr class="attendance-row" data-user-id="<%= person.user_id %>">
                                     <td><strong><%= idx + 1 %></strong></td>
                                     <td>
                                         <div class="user-name"><%= person.full_name %></div>
@@ -449,14 +495,11 @@
                                     </td>
                                     <td><span class="badge badge-confirmed">Katılıyor</span></td>
                                     <td>
-                                        <div style="display: flex; gap: 8px;">
-                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                                <input type="checkbox" class="attendance-check" data-user-id="<%= person.user_id %>" 
-                                                    <%= person.attended ? 'checked' : '' %} onchange="markAttendance(<%= person.user_id %>, this.checked)">
-                                                <span class="<%= person.attended ? 'attended-yes' : 'attended-no' %>" style="padding: 4px 8px; border-radius: 4px; font-size: 12px;">
-                                                    <%= person.attended ? '✅ Katıldı' : '❌ Katılmadı' %>
-                                                </span>
-                                            </label>
+                                        <div class="attendance-actions">
+                                            <button type="button" class="attendance-btn yes <%= person.attended ? 'active' : '' %>" 
+                                                    onclick="setAttendance(<%= person.user_id %>, true, this)">✓</button>
+                                            <button type="button" class="attendance-btn no <%= person.attended === false && person.attended !== null ? 'active' : '' %>" 
+                                                    onclick="setAttendance(<%= person.user_id %>, false, this)">✕</button>
                                         </div>
                                     </td>
                                     <td></td>
@@ -504,6 +547,18 @@
                 </div>
             </div>
         <% } %>
+
+        <!-- Actions -->
+        <div class="actions">
+            <% if (deadlinePassedForEvent) { %>
+                <button id="takeAttendanceBtn" class="btn btn-primary" onclick="takeAttendance()">
+                    📝 Yoklama Al
+                </button>
+                <button id="finishAttendanceBtn" class="btn btn-success" onclick="finishAttendance()" style="display: none;">
+                    ✅ Yoklamayı Bitir
+                </button>
+            <% } %>
+        </div>
     </div>
 
     <script>
@@ -520,7 +575,28 @@
             }, 3000);
         }
 
-        function markAttendance(userId, attended) {
+        function updateAttendanceButtons(userId, attended) {
+            const row = document.querySelector(`.attendance-row[data-user-id="${userId}"]`);
+            if (!row) return;
+            const yesBtn = row.querySelector('.attendance-btn.yes');
+            const noBtn = row.querySelector('.attendance-btn.no');
+            if (attended) {
+                yesBtn.classList.add('active');
+                noBtn.classList.remove('active');
+            } else {
+                noBtn.classList.add('active');
+                yesBtn.classList.remove('active');
+            }
+        }
+
+        function setAttendance(userId, attended, button) {
+            const row = button.closest('.attendance-row');
+            const yesBtn = row.querySelector('.attendance-btn.yes');
+            const noBtn = row.querySelector('.attendance-btn.no');
+
+            yesBtn.classList.add('disabled');
+            noBtn.classList.add('disabled');
+
             fetch('/api/event/<%= event.id %>/mark-attendance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -528,8 +604,47 @@
             })
             .then(res => res.json())
             .then(data => {
+                yesBtn.classList.remove('disabled');
+                noBtn.classList.remove('disabled');
                 if (data.success) {
+                    updateAttendanceButtons(userId, attended);
                     showToast(data.message, 'success');
+                } else {
+                    showToast('Hata: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                yesBtn.classList.remove('disabled');
+                noBtn.classList.remove('disabled');
+                console.error(err);
+                showToast('Hata oluştu', 'error');
+            });
+        }
+
+        function takeAttendance() {
+            if (!confirm('Tüm katılımcılar için yoklama alacak ve puanları dağıtacaksınız. Devam etmek istiyor musunuz?')) return;
+
+            // Tüm confirmed katılımcılar için yoklama al
+            const attendances = [];
+            document.querySelectorAll('.attendance-row').forEach(row => {
+                const userId = parseInt(row.getAttribute('data-user-id'));
+                const attended = row.querySelector('.attendance-btn.yes').classList.contains('active');
+                attendances.push({ userId, attended });
+            });
+
+            fetch('/api/event/<%= event.id %>/attendance/batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ attendances })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Yoklama alındı ve puanlar dağıtıldı!', 'success');
+                    document.getElementById('takeAttendanceBtn').style.display = 'none';
+                    document.getElementById('finishAttendanceBtn').style.display = 'inline-block';
+                    // Checkbox'ları disable et
+                    document.querySelectorAll('.attendance-check').forEach(cb => cb.disabled = true);
                 } else {
                     showToast('Hata: ' + data.error, 'error');
                 }
@@ -538,6 +653,16 @@
                 console.error(err);
                 showToast('Hata oluştu', 'error');
             });
+        }
+
+        function finishAttendance() {
+            if (!confirm('Yoklamayı bitirmek istediğinizden emin misiniz? Artık değişiklik yapamayacaksınız.')) return;
+            
+            showToast('Yoklama başarıyla tamamlandı!', 'success');
+            // Burada ek işlem yapabiliriz, şimdilik sadece mesaj göster
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 2000);
         }
     </script>
 </body>

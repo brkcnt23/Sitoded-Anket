@@ -18,7 +18,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
       scriptSrcAttr: ["'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'", "https://cdn.jsdelivr.net"]
     }
@@ -117,6 +117,44 @@ const isSenior = (req, res, next) => {
     return next();
   }
   res.status(403).render('errors/forbidden', { message: 'Yetkilendirme hatası' });
+};
+
+const isAdminOrEventLeader = async (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).render('errors/forbidden', { message: 'Giriş yapmanız gerekiyor' });
+  }
+
+  // Admin her zaman erişebilir
+  if (req.user.role === 'ADMIN') {
+    return next();
+  }
+
+  // Senior her zaman erişebilir
+  if (req.user.role === 'SENIOR') {
+    return next();
+  }
+
+  // Event ID'yi al
+  const eventId = req.params.eventId || req.params.id;
+
+  try {
+    // Event'i çek ve leader_id'yi kontrol et
+    const eventResult = await pool.query('SELECT leader_id FROM events WHERE id = $1', [eventId]);
+    if (eventResult.rows.length === 0) {
+      return res.status(404).render('errors/404');
+    }
+
+    const event = eventResult.rows[0];
+    if (event.leader_id === req.user.id) {
+      return next();
+    }
+
+    // Yetki yok
+    res.status(403).render('errors/forbidden', { message: 'Bu etkinliğin yoklamasını alma yetkiniz yok' });
+  } catch (err) {
+    console.error('Yetkilendirme hatası:', err);
+    res.status(500).render('errors/500', { message: 'Yetkilendirme hatası' });
+  }
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -564,7 +602,7 @@ app.post('/api/event/:id/attendance/mark', isSenior, async (req, res) => {
 });
 
 // ===== MARK ATTENDANCE (BATCH) =====
-app.post('/api/event/:id/attendance/batch', isSenior, async (req, res) => {
+app.post('/api/event/:id/attendance/batch', isAdminOrEventLeader, async (req, res) => {
   try {
     const eventId = req.params.id;
     const { attendances } = req.body;
@@ -610,20 +648,19 @@ app.post('/api/event/:id/attendance/batch', isSenior, async (req, res) => {
         );
 
         // Update points
-        if (attended) {
-          const pointsCheck = await pool.query(
-            'SELECT id FROM point_transactions WHERE event_id = $1 AND user_id = $2 AND reason = $3',
-            [eventId, user_id, 'ATTENDANCE']
-          );
+        const pointsChange = attended ? 5 : -10;
+        const pointsCheck = await pool.query(
+          'SELECT id FROM point_transactions WHERE event_id = $1 AND user_id = $2 AND reason = $3',
+          [eventId, user_id, 'ATTENDANCE']
+        );
 
-          if (pointsCheck.rows.length === 0) {
-            await pool.query('UPDATE users SET points = points + 1 WHERE id = $1', [user_id]);
-            await pool.query(
-              `INSERT INTO point_transactions (user_id, event_id, points_change, reason, edited_by)
-               VALUES ($1, $2, $3, $4, $5)`,
-              [user_id, eventId, 1, 'ATTENDANCE', req.user.id]
-            );
-          }
+        if (pointsCheck.rows.length === 0) {
+          await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [pointsChange, user_id]);
+          await pool.query(
+            `INSERT INTO point_transactions (user_id, event_id, points_change, reason, edited_by)
+             VALUES ($1, $2, $3, $4, $5)`,
+            [user_id, eventId, pointsChange, 'ATTENDANCE', req.user.id]
+          );
         }
 
         results.push({ user_id, success: true });
@@ -862,7 +899,7 @@ const isSundayAfterDeadline = () => {
 };
 
 // GET /attendance/:eventId - Yoklama sayfası
-app.get('/attendance/:eventId', isSenior, async (req, res) => {
+app.get('/attendance/:eventId', isAdminOrEventLeader, async (req, res) => {
   try {
     const eventId = req.params.eventId;
 
@@ -921,7 +958,7 @@ app.get('/attendance/:eventId', isSenior, async (req, res) => {
 });
 
 // POST /api/event/:id/mark-attendance - Yoklama işaretle
-app.post('/api/event/:eventId/mark-attendance', isSenior, async (req, res) => {
+app.post('/api/event/:eventId/mark-attendance', isAdminOrEventLeader, async (req, res) => {
   try {
     const { eventId } = req.params;
     const { userId, attended } = req.body;
@@ -949,21 +986,84 @@ app.post('/api/event/:eventId/mark-attendance', isSenior, async (req, res) => {
       [eventId, userId, req.user.id, attended]
     );
 
-    // Eğer attended=true ise point ekle (1 puan)
-    if (attended) {
-      await pool.query(
-        `UPDATE users SET points = points + 1 WHERE id = $1`,
-        [userId]
-      );
+    // Update points based on attendance
+    const pointsChange = attended ? 5 : -10;
+    
+    // Önceki puan işlemini kontrol et ve geri al
+    const existingTransaction = await pool.query(
+      'SELECT points_change FROM point_transactions WHERE event_id = $1 AND user_id = $2 AND reason = $3',
+      [eventId, userId, 'ATTENDANCE']
+    );
 
-      await pool.query(
-        `INSERT INTO point_transactions (user_id, event_id, points_change, reason, edited_by)
-         VALUES ($1, $2, 1, 'ATTENDANCE', $3)`,
-        [userId, eventId, req.user.id]
-      );
+    if (existingTransaction.rows.length > 0) {
+      // Önceki puanı geri al
+      const oldPoints = existingTransaction.rows[0].points_change;
+      await pool.query('UPDATE users SET points = points - $1 WHERE id = $2', [oldPoints, userId]);
+      // Transaction'ı sil
+      await pool.query('DELETE FROM point_transactions WHERE event_id = $1 AND user_id = $2 AND reason = $3', 
+                      [eventId, userId, 'ATTENDANCE']);
     }
 
-    res.json({ success: true, message: attended ? 'Katılım işaretlendi' : 'Katılım silindi' });
+    // Yeni puan işlemini yap
+    await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [pointsChange, userId]);
+
+    await pool.query(
+      `INSERT INTO point_transactions (user_id, event_id, points_change, reason, edited_by)
+       VALUES ($1, $2, $3, 'ATTENDANCE', $4)`,
+      [userId, eventId, pointsChange, req.user.id]
+    );
+
+    res.json({ success: true, message: attended ? 'Katılım işaretlendi (+5 puan)' : 'Katılmadı işaretlendi (-10 puan)' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Bir hata oluştu' });
+  }
+});
+
+// ===== GET ATTENDANCE EVENTS FOR ADMIN PANEL =====
+app.get('/api/admin/attendance-events', isSenior, async (req, res) => {
+  try {
+    let query;
+    let params;
+
+    if (req.user.role === 'ADMIN') {
+      // Admin tüm etkinlikleri görebilir
+      query = `
+        SELECT e.id, e.title, e.event_date, e.start_time, e.capacity,
+               t.name as team_name, u.full_name as leader_name,
+               COUNT(er.id) as registered_count
+        FROM events e
+        JOIN teams t ON e.team_id = t.id
+        JOIN users u ON e.leader_id = u.id
+        LEFT JOIN event_registrations er ON e.id = er.event_id AND er.status IN ('CONFIRMED', 'REGISTERED')
+        WHERE e.event_date <= CURRENT_DATE
+        GROUP BY e.id, e.title, e.event_date, e.start_time, e.capacity, t.name, u.full_name
+        ORDER BY e.event_date DESC, e.start_time DESC
+      `;
+      params = [];
+    } else {
+      // Diğer kullanıcılar sadece kendi oluşturduklarını görebilir
+      query = `
+        SELECT e.id, e.title, e.event_date, e.start_time, e.capacity,
+               t.name as team_name, u.full_name as leader_name,
+               COUNT(er.id) as registered_count
+        FROM events e
+        JOIN teams t ON e.team_id = t.id
+        JOIN users u ON e.leader_id = u.id
+        LEFT JOIN event_registrations er ON e.id = er.event_id AND er.status IN ('CONFIRMED', 'REGISTERED')
+        WHERE e.leader_id = $1 AND e.event_date <= CURRENT_DATE
+        GROUP BY e.id, e.title, e.event_date, e.start_time, e.capacity, t.name, u.full_name
+        ORDER BY e.event_date DESC, e.start_time DESC
+      `;
+      params = [req.user.id];
+    }
+
+    const result = await pool.query(query, params);
+
+    res.json({
+      success: true,
+      events: result.rows
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: 'Bir hata oluştu' });
