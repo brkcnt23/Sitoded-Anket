@@ -184,6 +184,9 @@
         </select>
       </div>
       <textarea id="fb-message" rows="3" maxlength="3000" placeholder="Ne düşünüyorsun? (en az 5 karakter)" style="width:100%; background:var(--surface2); color:var(--text); border:1px solid var(--border2); border-radius:8px; padding:10px 12px; font-family:inherit; font-size:13px; resize:vertical;"></textarea>
+      <label style="display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; cursor:pointer; color:var(--muted);">
+        <input type="checkbox" id="fb-anon" style="accent-color:var(--accent);"> Anonim gönder (adım görünmesin)
+      </label>
       <button class="tbtn" style="margin-top:8px; background:var(--accent); color:var(--on-accent); border-color:transparent;" onclick="sendFeedback()">Gönder</button>
     </div>
   </main>
@@ -311,12 +314,13 @@
   async function sendFeedback() {
     const kind = document.getElementById('fb-kind').value;
     const message = document.getElementById('fb-message').value.trim();
+    const anonim = document.getElementById('fb-anon').checked;
     if (message.length < 5) { toast('Mesaj en az 5 karakter olmalı', 'error'); return; }
     try {
       const res = await fetch('/api/user/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ kind, message })
+        body: JSON.stringify({ kind, message, anonim })
       });
       const data = await res.json();
       if (data.success) {

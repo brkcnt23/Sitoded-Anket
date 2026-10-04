@@ -953,7 +953,7 @@ app.get('/admin/user/new', isAdmin, async (req, res) => {
 app.post('/admin/user/new', isAdmin, async (req, res) => {
   try {
     const { username, email, full_name, password, hierarchy_level, teams: teamIds, body_for,
-            member_since, resigned_at, birth_date, gender, disadvantaged,
+            member_since, resigned_at, birth_date, gender, disadvantaged, disadvantaged_note,
             passport_no, passport_expiry, visa_status, phone } = req.body;
 
     // Check if username exists
@@ -987,13 +987,13 @@ app.post('/admin/user/new', isAdmin, async (req, res) => {
     // Insert user
     const userResult = await pool.query(
       `INSERT INTO users (username, email, full_name, password_hash, hierarchy_level, role, body_for,
-                          member_since, resigned_at, birth_date, gender, disadvantaged,
+                          member_since, resigned_at, birth_date, gender, disadvantaged, disadvantaged_note,
                           passport_no, passport_expiry, visa_status, phone)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
        RETURNING id`,
       [username, email, full_name, hashedPassword, hierarchy_level, role, body_for || null,
        orNull(member_since), orNull(resigned_at), orNull(birth_date),
-       orNull(gender), disadvantaged ? true : false,
+       orNull(gender), disadvantaged ? true : false, orNull(disadvantaged_note),
        orNull(passport_no), orNull(passport_expiry), orNull(visa_status), orNull(phone)]
     );
 
@@ -1048,7 +1048,7 @@ app.post('/admin/user/:id/edit', isAdmin, async (req, res) => {
   try {
     const targetId = parseInt(req.params.id);
     const { full_name, email, password, hierarchy_level, teams: teamIds, body_for, points_delta,
-            member_since, resigned_at, birth_date, gender, disadvantaged,
+            member_since, resigned_at, birth_date, gender, disadvantaged, disadvantaged_note,
             passport_no, passport_expiry, visa_status, phone } = req.body;
 
     const renderEditError = async (errorMsg) => {
@@ -1093,10 +1093,12 @@ app.post('/admin/user/:id/edit', isAdmin, async (req, res) => {
       await client.query(
         `UPDATE users SET full_name = $1, email = $2, hierarchy_level = $3, role = $4, body_for = $5,
            member_since = $6, resigned_at = $7, birth_date = $8, gender = $9, disadvantaged = $10,
-           passport_no = $11, passport_expiry = $12, visa_status = $13, phone = $14,
-           updated_at = CURRENT_TIMESTAMP WHERE id = $15`,
+           disadvantaged_note = $11,
+           passport_no = $12, passport_expiry = $13, visa_status = $14, phone = $15,
+           updated_at = CURRENT_TIMESTAMP WHERE id = $16`,
         [full_name, email, hierarchy_level, role, bodyFor,
          orNull(member_since), orNull(resigned_at), orNull(birth_date), orNull(gender), disadvantaged ? true : false,
+         orNull(disadvantaged_note),
          orNull(passport_no), orNull(passport_expiry), orNull(visa_status), orNull(phone), targetId]
       );
 
@@ -1532,7 +1534,7 @@ app.get('/api/user/my-events', isAuthenticated, async (req, res) => {
 // ===== ŞİKAYET & ÖNERİ (üye gönderimi) =====
 app.post('/api/user/feedback', isAuthenticated, async (req, res) => {
   try {
-    const { kind, message } = req.body;
+    const { kind, message, anonim } = req.body;
     if (!['SIKAYET', 'ONERI'].includes(kind)) {
       return res.status(400).json({ success: false, error: 'Tür seçin' });
     }
@@ -1544,8 +1546,8 @@ app.post('/api/user/feedback', isAuthenticated, async (req, res) => {
       return res.status(400).json({ success: false, error: 'Mesaj çok uzun (en fazla 3000 karakter)' });
     }
     await pool.query(
-      'INSERT INTO feedback (user_id, kind, message) VALUES ($1, $2, $3)',
-      [req.user.id, kind, msg]
+      'INSERT INTO feedback (user_id, kind, message, is_anonymous) VALUES ($1, $2, $3, $4)',
+      [req.user.id, kind, msg, anonim === true || anonim === 'true']
     );
     res.json({ success: true, message: 'Gönderildi, teşekkürler! Admin ekibi inceleyecek.' });
   } catch (err) {
