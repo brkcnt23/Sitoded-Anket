@@ -2,9 +2,16 @@ node_modules
 npm-debug.log
 .git
 .gitignore
+.env
 .env.local
 .env.*.local
 .DS_Store
-*.png
+# *.png  ← kaldırıldı, logo için gerekli
 .vscode
 .idea
+uploads/
+tests/
+test-results/
+assets/
+
+content/source-cache/

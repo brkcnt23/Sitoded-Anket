@@ -1,6 +1,6 @@
 /* Global Styles */
 :root {
-    --primary-color: #0d6efd;
+    --primary-color: var(--accent);
     --secondary-color: #6c757d;
     --success-color: #198754;
     --danger-color: #dc3545;

@@ -3,28 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
   <title>Yönetim Paneli — Sitoded</title>
-  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="/img/site/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:        #0c0c0f;
-      --surface:   #131318;
-      --surface2:  #1a1a22;
-      --border:    rgba(255,255,255,0.07);
-      --border2:   rgba(255,255,255,0.12);
-      --text:      #e8e8f0;
-      --muted:     #7070a0;
-      --accent:    #6c63ff;
-      --accent2:   #8b85ff;
-      --green:     #22c55e;
-      --yellow:    #eab308;
-      --red:       #ef4444;
-      --cyan:      #06b6d4;
-    }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -106,6 +91,22 @@
       margin-top: 8px;
     }
 
+    .menu-toggle {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .menu-toggle:hover { border-color: var(--accent); color: var(--accent2); }
+
     .nav-item {
       display: flex;
       align-items: center;
@@ -125,7 +126,7 @@
     }
 
     .nav-item:hover { background: var(--surface2); color: var(--text); }
-    .nav-item.active { background: rgba(108, 99, 255, 0.15); color: var(--accent2); }
+    .nav-item.active { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent2); }
 
     .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
 
@@ -133,7 +134,7 @@
       padding: 16px 12px;
       border-top: 1px solid var(--border);
     }
-    
+
     /* ── MAIN ── */
     .main {
       margin-left: 240px;
@@ -199,7 +200,7 @@
     /* ── STAT CARDS ── */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 16px;
       margin-bottom: 32px;
     }
@@ -352,7 +353,7 @@
 
     .badge-president { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.2); }
     .badge-coordinator { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.2); }
-    .badge-senior { background: rgba(108,99,255,0.15); color: #a5b4fc; border: 1px solid rgba(108,99,255,0.2); }
+    .badge-senior { background: color-mix(in srgb, var(--accent) 15%, transparent); color: #a5b4fc; border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent); }
     .badge-junior { background: rgba(234,179,8,0.15); color: #fde047; border: 1px solid rgba(234,179,8,0.2); }
     .badge-volunteer { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
 
@@ -409,7 +410,7 @@
 
     .form-control:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(108,99,255,0.12);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
     }
 
     select.form-control option { background: var(--surface2); }
@@ -438,7 +439,7 @@
       white-space: nowrap;
     }
 
-    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary { background: var(--accent); color: var(--on-accent); }
     .btn-primary:hover { background: var(--accent2); }
 
     .btn-ghost {
@@ -509,18 +510,101 @@
 
     /* ── DIVIDER ── */
     hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* ── SURVEYS ── */
+    .survey-create-row {
+      display: flex;
+      gap: 10px;
+      padding: 16px 20px;
+      flex-wrap: wrap;
+    }
+    .survey-create-row .form-control { flex: 1 1 220px; min-width: 0; }
+    .survey-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .survey-row:last-child { border-bottom: none; }
+    .survey-row-info { flex: 1 1 200px; min-width: 0; }
+    .survey-row-title {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .survey-row-meta {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      margin-top: 2px;
+    }
+    .survey-row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .sidebar { width: 200px; }
+      .main { margin-left: 200px; }
+    }
+
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      .sidebar {
+        position: static;
+        width: 100%;
+        min-height: auto;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 8px 12px;
+        gap: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .sidebar-logo {
+        border-bottom: none;
+        padding: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .panel-logo { height: 40px; }
+      .panel-sidebar-logo-text { display: none; }
+      .menu-toggle { display: flex; }
+      .sidebar-nav { display: none; flex-direction: column; padding: 8px 0 4px; overflow: visible; }
+      .sidebar.menu-open .sidebar-nav { display: flex; }
+      .nav-label { display: block; }
+      .nav-item { padding: 12px 12px; white-space: normal; width: 100%; }
+      .sidebar-footer { display: none; }
+      .sidebar.menu-open .sidebar-footer { display: block; border-top: none; padding: 0 0 6px; }
+      .main { margin-left: 0; }
+      .topbar { padding: 0 16px; }
+      .content { padding: 20px 16px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .card { overflow-x: auto; }
+    }
   </style>
-</head>
-<body>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-admin">
+<% const _now = new Date(); const thisMonth = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}`; const thisDay = `${thisMonth}-${String(_now.getDate()).padStart(2,'0')}`; %>
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-logo panel-sidebar-logo">
-    <img src="/img/beyaz-yatay-LOGO.png" alt="Sitoded" class="logo panel-logo">
+    <a href="/" class="workspace-brand"><%- include('../public/brand') %></a>
     <div class="sidebar-logo-text panel-sidebar-logo-text">
       <span>Yönetim Paneli</span>
     </div>
+    <button class="menu-toggle" id="menuToggle" aria-controls="adminNav" aria-expanded="false" onclick="toggleMenu()">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      Menü
+    </button>
   </div>
-  <nav class="sidebar-nav">
+  <nav class="sidebar-nav" id="adminNav" aria-label="Yönetim menüsü">
     <span class="nav-label">Genel</span>
     <button class="nav-item active" onclick="showPanel('overview')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -536,6 +620,10 @@
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       Ekipler
     </button>
+    <button class="nav-item" onclick="showPanel('events')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Etkinlikler
+    </button>
     <button class="nav-item" onclick="showPanel('points')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       Puan Yönetimi
@@ -544,12 +632,24 @@
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
       Yoklama Yönetimi
     </button>
+    <button class="nav-item" onclick="showPanel('surveys')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2"/><path d="M9 12h6M9 16h6"/></svg>
+      Anketler
+    </button>
+    <button class="nav-item" onclick="showPanel('reports')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 17v-4M13 17V9M17 17v-6"/></svg>
+      Raporlar
+    </button>
+    <button class="nav-item" onclick="showPanel('feedback')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Şikayet &amp; Öneri
+    </button>
   </nav>
 
   <div class="sidebar-footer">
     <a href="/dashboard" class="nav-item" style="text-decoration:none; color: var(--muted);">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      Dashboard'a Dön
+      Üye paneline dön
     </a>
   </div>
 </aside>
@@ -572,7 +672,7 @@
   <div class="content">
 
     <!-- ── OVERVIEW PANEL ── -->
-    <div class="panel active" id="panel-overview">
+    <div class="panel active" id="panel-overview"><section class="workspace-welcome admin-welcome"><div><span class="workspace-eyebrow">SİTODED / YÖNETİM MERKEZİ</span><h1>Topluluğun çalışmalarını<br>tek yerden yönetin.</h1><p>Üyeler, ekipler, etkinlikler ve geri bildirimler.</p><div class="welcome-actions"><button class="btn btn-primary" onclick="showPanel('events')">Etkinlikleri yönet</button><button class="btn btn-ghost" onclick="showPanel('surveys')">Anketlere git ↗</button></div></div><img src="/img/editorial/culture-640.webp" width="300" height="200" alt=""></section>
       <div class="section-head" style="margin-bottom:28px;">
         <div>
           <h2>Genel Bakış</h2>
@@ -605,28 +705,52 @@
           <div class="stat-value"><%= users.filter(u => u.role === 'VOLUNTEER').length %></div>
           <div class="stat-sub">Volunteer</div>
         </div>
+        <div class="stat-card accent">
+          <div class="stat-label">Toplam Etkinlik</div>
+          <div class="stat-value"><%= eventStats.total_events %></div>
+          <div class="stat-sub"><%= eventStats.active_events %> aktif</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Açık Başvuru</div>
+          <div class="stat-value"><%= eventStats.open_events %></div>
+          <div class="stat-sub">Şu an başvuruya açık</div>
+        </div>
+      </div>
+
+      <!-- Değerlendirme anketi bekleyen etkinlikler -->
+      <div class="card" id="eval-pending-card" style="display:none; margin-top:20px;">
+        <div class="card-header">
+          <h3> Değerlendirme Anketi Bekleyen Etkinlikler</h3>
+        </div>
+        <div id="eval-pending-list"></div>
+      </div>
+
+      <!-- Ayın en aktifleri -->
+      <div class="card" style="margin-top:20px;">
+        <div class="card-header">
+          <h3> Ayın En Aktif 5 Gönüllüsü</h3>
+        </div>
+        <div id="monthly-active-list" style="padding:12px 20px; color:var(--muted); font-size:13px;">Yükleniyor…</div>
       </div>
 
       <!-- Son kullanıcılar -->
-      <div class="card">
+      <div class="card" style="margin-top:20px;">
         <div class="card-header">
           <h3>Son Kayıt Olan Kullanıcılar</h3>
           <button class="btn btn-ghost btn-sm" onclick="showPanel('users')">Tümünü Gör →</button>
         </div>
-        <table class="data-table">
+        <div class="table-wrap"><table class="data-table">
           <thead>
             <tr>
               <th>Kullanıcı</th>
               <th>Seviye</th>
-              <th>Rol</th>
               <th>Puan</th>
               <th>Email</th>
-              <th>İşlem</th>
             </tr>
           </thead>
           <tbody>
             <% users.slice(0, 6).forEach((u, i) => {
-              const colors = ['#6c63ff','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
+              const colors = ['var(--accent)','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
               const initials = u.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
             %>
             <tr>
@@ -647,7 +771,7 @@
             </tr>
             <% }); %>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
 
@@ -679,13 +803,14 @@
               <th>Seviye</th>
               <th>Rol</th>
               <th>Puan</th>
+              <th>Profil</th>
               <th>Email</th>
               <th>İşlem</th>
             </tr>
           </thead>
           <tbody>
             <% users.forEach((u, i) => {
-              const colors = ['#6c63ff','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
+              const colors = ['var(--accent)','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
               const initials = u.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
             %>
             <tr data-name="<%= u.full_name.toLowerCase() %>" data-user="<%= u.username.toLowerCase() %>">
@@ -701,19 +826,21 @@
               <td><span class="badge badge-<%= u.hierarchy_level.toLowerCase() %>"><%= u.hierarchy_level %></span></td>
               <td style="color: var(--muted); font-size: 12px;"><%= u.role %></td>
               <td><span class="points-pill"><%= u.points %> p</span></td>
+              <td><%- u.profile_completed_at
+                ? '<span class="badge" style="background: rgba(34,197,94,.12); color: var(--green); border: 1px solid rgba(34,197,94,.25);">Tamamlandı</span>'
+                : '<span class="badge" style="background: rgba(234,179,8,.12); color: var(--yellow); border: 1px solid rgba(234,179,8,.25);">Bekliyor</span>' %></td>
               <td style="color: var(--muted); font-size: 12px;"><%= u.email %></td>
               <td>
               <% if (u.id !== user.id) { %>
-              <form method="POST" action="/admin/user/<%= u.id %>/delete" onsubmit="return confirm('Bu kullanıcıyı silmek istediğine emin misin?')" style="margin:0;">
-                <button type="submit" class="btn btn-ghost btn-sm" style="color:#ef4444; border-color:rgba(239,68,68,.25);">
-                   Sil
-                  </button>
-              </form>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <form method="POST" action="/admin/user/<%= u.id %>/delete" onsubmit="return confirm('Bu kullanıcıyı silmek istediğine emin misin?')" style="margin:0;">
+                  <button type="submit" class="btn btn-ghost btn-sm" style="color:#ef4444; border-color:rgba(239,68,68,.25);">Sil</button>
+                </form>
+                <a href="/admin/user/<%= u.id %>/edit" class="btn btn-ghost btn-sm">Düzenle</a>
+              </div>
               <% } else { %>
               <span style="font-size:12px; color: var(--muted);">Aktif kullanıcı</span>
-            <% } %>
-            </td>
-                <a href="/admin/user/<%= u.id %>/edit" class="btn btn-sm btn-outline-primary">Düzenle</a>
+              <% } %>
               </td>
             </tr>
             <% }); %>
@@ -731,14 +858,14 @@
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+      <div class="teams-grid">
         <% teams.forEach(team => {
           const leader = users.find(u => u.id === team.leader_id);
-          const memberCount = 0; // server'dan gelmesi lazım, şimdilik 0
         %>
         <div class="card" style="margin-bottom:0;">
           <div class="card-header">
             <h3><%= team.name %></h3>
+            <span style="font-size:12px; color: var(--muted);"><%= teamMemberCounts[team.id] || 0 %> üye</span>
           </div>
           <div class="card-body" style="padding: 16px 24px;">
             <div style="font-size: 13px; color: var(--muted); margin-bottom: 12px; line-height: 1.5;">
@@ -746,7 +873,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <% if (leader) { %>
-                <div class="avatar" style="width:24px;height:24px;font-size:10px;background:rgba(108,99,255,0.15);color:var(--accent2);">
+                <div class="avatar" style="width:24px;height:24px;font-size:10px;background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent2);">
                   <%= leader.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase() %>
                 </div>
                 <span style="font-size: 12px; color: var(--muted);">Lider: <strong style="color: var(--text)"><%= leader.full_name %></strong></span>
@@ -769,7 +896,7 @@
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 420px 1fr; gap: 24px; align-items: start;">
+      <div class="points-grid">
         <!-- Form -->
         <div class="card" style="margin-bottom: 0;">
           <div class="card-header"><h3>Puan Güncelle</h3></div>
@@ -779,7 +906,7 @@
                 <label class="form-label">Kullanıcı</label>
                 <select class="form-control" id="pts-user">
                   <option value="">Seçin</option>
-                  <% users.forEach(u => { %>
+                  <% users.filter(u => u.role !== 'ADMIN').forEach(u => { %>
                   <option value="<%= u.id %>"><%= u.full_name %> · <%= u.hierarchy_level %></option>
                   <% }); %>
                 </select>
@@ -806,7 +933,7 @@
         <!-- Leaderboard -->
         <div class="card" style="margin-bottom: 0;">
           <div class="card-header"><h3>Puan Sıralaması</h3></div>
-          <table class="data-table">
+          <div class="table-wrap"><table class="data-table">
             <thead>
               <tr>
                 <th>#</th>
@@ -817,7 +944,7 @@
             </thead>
             <tbody>
               <% [...users].sort((a,b) => b.points - a.points).forEach((u, i) => {
-                const colors = ['#6c63ff','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
+                const colors = ['var(--accent)','#22c55e','#06b6d4','#eab308','#f43f5e','#8b5cf6'];
                 const initials = u.full_name.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
                 const rankColors = ['#eab308','#94a3b8','#b45309'];
               %>
@@ -836,7 +963,7 @@
               </tr>
               <% }); %>
             </tbody>
-          </table>
+          </table></div>
         </div>
       </div>
     </div>
@@ -854,7 +981,7 @@
         <div class="card-header">
           <h3>Yoklama Alınabilecek Etkinlikler</h3>
         </div>
-        <table class="data-table">
+        <div class="table-wrap"><table class="data-table">
           <thead>
             <tr>
               <th>Etkinlik</th>
@@ -868,8 +995,162 @@
           <tbody id="attendance-events">
             <!-- AJAX ile yüklenecek -->
           </tbody>
-        </table>
+        </table></div>
       </div>
+    </div>
+
+    <!-- ── EVENTS PANEL ── -->
+    <div class="panel" id="panel-events">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Etkinlikler</h2>
+          <p>Tüm etkinlikler, açılış zamanları ve durumları</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Tüm Etkinlikler</h3>
+          <span style="font-size:12px; color: var(--muted);">Başvurular Pazar 12:00 veya 19:00'da otomatik açılır (5 saat)</span>
+        </div>
+        <div class="table-wrap"><table class="data-table">
+          <thead>
+            <tr>
+              <th>Etkinlik</th>
+              <th>Tarih</th>
+              <th>Ekip</th>
+              <th>Lider</th>
+              <th>Doluluk</th>
+              <th>Açılış</th>
+              <th>Durum</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="events-table">
+            <!-- AJAX ile yüklenecek -->
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ── SURVEYS PANEL ── -->
+    <div class="panel" id="panel-surveys">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Anketler</h2>
+          <p>Anket oluştur, link paylaş, yanıtları topla</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3>Yeni Anket</h3></div>
+        <div class="survey-create-row">
+          <input type="text" id="survey-title" placeholder="Anket başlığı (örn. Üyelik Başvuru Formu)" maxlength="200" class="form-control">
+          <input type="text" id="survey-desc" placeholder="Açıklama (opsiyonel)" class="form-control">
+          <button class="btn btn-primary" onclick="createSurvey()">Oluştur</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Tüm Anketler</h3></div>
+        <div id="surveys-list">
+          <!-- AJAX ile yüklenecek -->
+          <div class="empty" style="padding:24px; text-align:center; color:var(--muted);">Yükleniyor…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REPORTS PANEL ── -->
+    <div class="panel" id="panel-reports">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Raporlar</h2>
+          <p>Excel indirmeleri — beyanname, etkinlik, gönüllü ve ekip raporları</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> Aylık Etkinlik Raporu</h3></div>
+        <div class="survey-create-row">
+          <input type="month" id="rp-month" class="form-control" value="<%= thisMonth %>">
+          <button class="btn btn-ghost" onclick="viewMonthly()"> Sitede Görüntüle</button>
+          <button class="btn btn-primary" onclick="downloadMonthly()">Excel İndir</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> Gönüllü Karnesi</h3></div>
+        <div class="survey-create-row">
+          <select id="rp-user" class="form-control">
+            <option value="">Tüm gönüllüler (tek dosya)</option>
+            <% users.forEach(u => { %>
+            <option value="<%= u.id %>"><%= u.full_name %> (@<%= u.username %>)</option>
+            <% }); %>
+          </select>
+          <button class="btn btn-ghost" onclick="viewVolunteer()"> Sitede Görüntüle</button>
+          <button class="btn btn-primary" onclick="downloadVolunteer()">Excel İndir</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> Ekip Raporu</h3></div>
+        <div class="survey-create-row">
+          <a class="btn btn-ghost" href="/api/admin/reports/teams?format=html" target="_blank"> Sitede Görüntüle</a>
+          <a class="btn btn-primary" href="/api/admin/reports/teams">Excel İndir</a>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> DERBİS — Üye Hareketleri (45 gün kuralı)</h3></div>
+        <div class="survey-create-row">
+          <input type="date" id="drp-from" class="form-control" value="<%= thisMonth %>-01">
+          <input type="date" id="drp-to" class="form-control" value="<%= thisDay %>">
+          <button class="btn btn-ghost" onclick="viewDerbis('movements')"> Sitede Görüntüle</button>
+          <button class="btn btn-primary" onclick="downloadDerbis('movements')">Excel İndir</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> Pasaport / Vize Uyarıları (6 ay kuralı)</h3></div>
+        <div class="survey-create-row">
+          <button class="btn btn-ghost" onclick="viewDerbis('warnings')"> Sitede Görüntüle</button>
+          <button class="btn btn-primary" onclick="downloadDerbis('warnings')">Excel İndir</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> Hibe Başvuru İstatistikleri</h3></div>
+        <div class="survey-create-row">
+          <button class="btn btn-ghost" onclick="viewDerbis('grant-stats')"> Sitede Görüntüle</button>
+          <button class="btn btn-primary" onclick="downloadDerbis('grant-stats')">Excel İndir</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header"><h3> Yıllık Beyanname Paketi (EK-21 yardımcısı)</h3></div>
+        <div class="survey-create-row">
+          <input type="number" id="rp-year" class="form-control" placeholder="Yıl (örn. 2026)" min="2020" max="2100" value="<%= _now.getFullYear() %>">
+          <button class="btn btn-ghost" onclick="viewAnnual()"> Sitede Görüntüle</button>
+          <button class="btn btn-primary" onclick="downloadAnnual()">Excel İndir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FEEDBACK PANEL ── -->
+    <div class="panel" id="panel-feedback">
+      <div class="section-head" style="margin-bottom:24px;">
+        <div>
+          <h2>Şikayet &amp; Öneri</h2>
+          <p>Üyelerin gönderdiği mesajlar — okundu/tamamlandı olarak işaretleyebilirsin</p>
+        </div>
+      </div>
+      <div class="survey-create-row" style="padding:0; margin-bottom:16px; display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" id="fb-filter-all" style="border-color: var(--accent); color: var(--accent);" onclick="setFbFilter('')">Tümü</button>
+        <button class="btn btn-ghost btn-sm" id="fb-filter-NEW" onclick="setFbFilter('NEW')">Yeni</button>
+        <button class="btn btn-ghost btn-sm" id="fb-filter-READ" onclick="setFbFilter('READ')">Okundu</button>
+        <button class="btn btn-ghost btn-sm" id="fb-filter-DONE" onclick="setFbFilter('DONE')">Tamamlandı</button>
+      </div>
+      <div id="feedback-list"></div>
     </div>
 
   </div><!-- /content -->
@@ -878,24 +1159,146 @@
 <div id="toast-root"></div>
 
 <script>
-  const panels = ['overview','users','teams','points','attendance'];
-  const titles = { overview:'Genel Bakış', users:'Kullanıcılar', teams:'Ekipler', points:'Puan Yönetimi', attendance:'Yoklama Yönetimi' };
+  const panels = ['overview','users','teams','events','points','attendance','surveys','reports','feedback'];
+  const titles = { overview:'Genel Bakış', users:'Kullanıcılar', teams:'Ekipler', events:'Etkinlikler', points:'Puan Yönetimi', attendance:'Yoklama Yönetimi', surveys:'Anketler', reports:'Raporlar', feedback:'Şikayet & Öneri' };
+
+  document.addEventListener('DOMContentLoaded',()=>{const requested=new URLSearchParams(location.search).get('panel');if(panels.includes(requested))showPanel(requested);});
+
+  function toggleMenu() {
+    const open=document.getElementById('sidebar').classList.toggle('menu-open');
+    document.getElementById('menuToggle').setAttribute('aria-expanded',String(open));
+  }
 
   function showPanel(name) {
+    if(!panels.includes(name))return;
+    const locationUrl=new URL(location.href);locationUrl.searchParams.set('panel',name);history.replaceState(null,'',locationUrl);
+    document.getElementById('menuToggle').setAttribute('aria-expanded','false');
     panels.forEach(p => {
       document.getElementById('panel-' + p).classList.toggle('active', p === name);
     });
     document.querySelectorAll('.nav-item').forEach(el => {
-      el.classList.remove('active');
-      if (el.getAttribute('onclick') === `showPanel('${name}')`) el.classList.add('active');
+      el.classList.remove('active');el.removeAttribute('aria-current');
+      if (el.getAttribute('onclick') === `showPanel('${name}')`) {el.classList.add('active');el.setAttribute('aria-current','page');}
     });
+    // Mobilde menüden seçim yapınca menüyü kapat
+    const sb = document.getElementById('sidebar');
+    if (sb) sb.classList.remove('menu-open');
     document.getElementById('topbar-title').textContent = titles[name];
 
     // Yoklama paneli için etkinlikleri yükle
     if (name === 'attendance') {
       loadAttendanceEvents();
     }
+    // Etkinlikler paneli için etkinlikleri yükle
+    if (name === 'events') {
+      loadEvents();
+    }
+    // Anketler paneli için anketleri yükle
+    if (name === 'surveys') {
+      loadSurveys();
+    }
+    // Genel bakış kartları
+    if (name === 'overview') {
+      loadPendingEvaluations();
+      loadMonthlyActive();
+    }
+    // Şikayet & Öneri
+    if (name === 'feedback') {
+      loadFeedback();
+    }
   }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  const STATUS_BADGES = {
+    BEKLIYOR: '<span class="badge badge-senior">Bekliyor</span>',
+    ACIK: '<span class="badge" style="background: rgba(34,197,94,.15); color: #86efac; border: 1px solid rgba(34,197,94,.2);">Açık</span>',
+    KAPANDI: '<span class="badge badge-volunteer">Kapandı</span>',
+    GECMIS: '<span class="badge" style="background: rgba(6,182,212,.15); color: #22d3ee; border: 1px solid rgba(6,182,212,.2);">Geçmiş</span>',
+    IPTAL: '<span class="badge" style="background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.2);">İptal</span>'
+  };
+
+  async function loadEvents() {
+    try {
+      const response = await fetch('/api/admin/events');
+      const data = await response.json();
+
+      if (!data.success) {
+        showToast('Etkinlikler yüklenemedi: ' + data.error, 'error');
+        return;
+      }
+
+      const tbody = document.getElementById('events-table');
+      if (!data.events.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty">Hiç etkinlik yok</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.events.map(event => {
+        const evDate = event.event_date
+          ? new Date(event.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })
+          : '—';
+        const openStr = event.registration_open
+          ? new Date(event.registration_open).toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short' }) + ' ' +
+            new Date(event.registration_open).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+          : '—';
+        const toggleBtn = event.computed_status === 'IPTAL'
+          ? '<button class="btn btn-ghost btn-sm" onclick="toggleEventStatus(' + event.id + ', \'ACTIVE\')">Aktifleştir</button>'
+          : '<button class="btn btn-ghost btn-sm" style="color:#ef4444;border-color:rgba(239,68,68,.25);" onclick="toggleEventStatus(' + event.id + ', \'CANCELLED\')">İptal</button>';
+
+        return '<tr>' +
+          '<td style="font-weight:600;">' + escapeHtml(event.title) + '</td>' +
+          '<td>' + evDate + '<div style="font-size:11px;color:var(--muted);font-family:\'DM Mono\',monospace;">' + String(event.start_time || '').substring(0,5) + ' - ' + String(event.end_time || '').substring(0,5) + '</div></td>' +
+          '<td>' + escapeHtml(event.team_name || '—') + '</td>' +
+          '<td>' + escapeHtml(event.leader_name || '—') + '</td>' +
+          '<td>' + event.confirmed_count + '/' + event.capacity + (parseInt(event.queued_count) > 0 ? ' <span style="color:var(--yellow);font-size:11px;">(+' + event.queued_count + ' sıra)</span>' : '') + '</td>' +
+          '<td style="font-size:12px;">' + openStr + '</td>' +
+          '<td>' + (STATUS_BADGES[event.computed_status] || escapeHtml(event.computed_status)) + '</td>' +
+          '<td style="white-space:nowrap;">' +
+            '<a href="/event/' + event.id + '/registrations" class="btn btn-ghost btn-sm">Kayıtlar</a> ' +
+            '<a href="/attendance/' + event.id + '" class="btn btn-ghost btn-sm">Yoklama</a> ' +
+            toggleBtn +
+          '</td>' +
+        '</tr>';
+      }).join('');
+    } catch (error) {
+      console.error('Etkinlik yükleme hatası:', error);
+      showToast('Etkinlikler yüklenirken hata oluştu', 'error');
+    }
+  }
+
+  async function toggleEventStatus(id, status) {
+    try {
+      const res = await fetch('/api/admin/event/' + id + '/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, 'success');
+        loadEvents();
+      } else {
+        showToast(data.error, 'error');
+      }
+    } catch (e) {
+      showToast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  // URL parametrelerinden bildirim göster (yönlendirmeler için)
+  document.addEventListener('DOMContentLoaded', () => {
+    const qp = new URLSearchParams(window.location.search);
+    const msg = qp.get('msg');
+    const err = qp.get('err');
+    if (msg) toast(msg, 'success');
+    if (err) toast(err, 'error');
+    if (msg || err) history.replaceState(null, '', '/admin');
+  });
 
   async function loadAttendanceEvents() {
     try {
@@ -980,6 +1383,279 @@
     }
   }
 
+  // ===== ANKETLER =====
+  async function loadSurveys() {
+    const container = document.getElementById('surveys-list');
+    try {
+      const res = await fetch('/api/admin/surveys');
+      const data = await res.json();
+      if (!data.success) {
+        container.innerHTML = '<div class="empty" style="padding:24px; text-align:center; color:var(--muted);">' + escapeHtml(data.error) + '</div>';
+        return;
+      }
+      if (!data.surveys.length) {
+        container.innerHTML = '<div class="empty" style="padding:24px; text-align:center; color:var(--muted);">Henüz anket yok. Yukarıdan ilk anketini oluştur.</div>';
+        return;
+      }
+      container.innerHTML = data.surveys.map(s => {
+        const isOpen = s.status === 'OPEN';
+        const badge = isOpen
+          ? '<span class="badge" style="background: rgba(34,197,94,.15); color:var(--green); border:1px solid rgba(34,197,94,.2);">Açık</span>'
+          : '<span class="badge badge-volunteer">Kapalı</span>';
+        const created = s.created_at ? new Date(s.created_at).toLocaleDateString('tr-TR', { day:'numeric', month:'short', year:'numeric' }) : '—';
+        return '<div class="survey-row">' +
+          '<div class="survey-row-info">' +
+            '<div class="survey-row-title">' + escapeHtml(s.title) + '</div>' +
+            '<div class="survey-row-meta">/a/' + escapeHtml(s.slug) + ' · ' + s.question_count + ' soru · ' + s.response_count + ' yanıt · ' + created + '</div>' +
+          '</div>' +
+          badge +
+          '<div class="survey-row-actions">' +
+            '<a class="btn btn-ghost btn-sm" href="/admin/surveys/' + s.id + '">Düzenle</a>' +
+            '<a class="btn btn-ghost btn-sm" href="/admin/surveys/' + s.id + '/responses">Yanıtlar</a>' +
+            '<button class="btn btn-ghost btn-sm" onclick="toggleSurvey(' + s.id + ', ' + !isOpen + ')">' + (isOpen ? 'Kapat' : 'Aç') + '</button>' +
+            '<button class="btn btn-ghost btn-sm" style="color:#ef4444;border-color:rgba(239,68,68,.25);" onclick="deleteSurvey(' + s.id + ', \'' + escapeHtml(s.title) + '\')">Sil</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } catch (e) {
+      container.innerHTML = '<div class="empty" style="padding:24px; text-align:center; color:var(--muted);">Anketler yüklenirken hata oluştu</div>';
+    }
+  }
+
+  async function createSurvey() {
+    const title = document.getElementById('survey-title').value.trim();
+    const description = document.getElementById('survey-desc').value.trim();
+    if (!title) { toast('Anket başlığı zorunludur', 'error'); return; }
+    try {
+      const res = await fetch('/api/admin/surveys', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast('Anket oluşturuldu — şimdi soruları ekle', 'success');
+        document.getElementById('survey-title').value = '';
+        document.getElementById('survey-desc').value = '';
+        loadSurveys();
+        setTimeout(() => { window.location.href = '/admin/surveys/' + data.data.id; }, 900);
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  async function toggleSurvey(id, isOpen) {
+    try {
+      const res = await fetch('/api/admin/surveys/' + id + '/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_open: isOpen })
+      });
+      const data = await res.json();
+      if (data.success) { toast(data.message, 'success'); loadSurveys(); }
+      else toast(data.error, 'error');
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  async function deleteSurvey(id, title) {
+    if (!confirm('"' + title + '" anketi ve TÜM yanıtları silinecek. Emin misin?')) return;
+    try {
+      const res = await fetch('/api/admin/surveys/' + id + '/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (data.success) { toast(data.message, 'success'); loadSurveys(); }
+      else toast(data.error, 'error');
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  // ===== RAPORLAR =====
+  function monthlyParams() {
+    const m = document.getElementById('rp-month').value;
+    if (!m) { toast('Ay seçin', 'error'); return null; }
+    return '?month=' + encodeURIComponent(m);
+  }
+  function volunteerParams() {
+    const uid = document.getElementById('rp-user').value;
+    return uid ? '?user_id=' + uid : '';
+  }
+  function derbisParams(kind) {
+    let q = '?x=1';
+    if (kind === 'movements') {
+      const f = document.getElementById('drp-from').value;
+      const t = document.getElementById('drp-to').value;
+      q += (f ? '&from=' + f : '') + (t ? '&to=' + t : '');
+    }
+    return q;
+  }
+  function annualParams() {
+    const y = document.getElementById('rp-year').value;
+    if (!y) { toast('Yıl girin', 'error'); return null; }
+    return '?year=' + encodeURIComponent(y);
+  }
+  function openReport(url) { if (url) window.open(url, '_blank'); }
+  function downloadMonthly() { const p = monthlyParams(); if (p) window.location.href = '/api/admin/reports/events-monthly' + p; }
+  function viewMonthly() { const p = monthlyParams(); openReport(p && ('/api/admin/reports/events-monthly' + p + '&format=html')); }
+  function downloadVolunteer() { window.location.href = '/api/admin/reports/volunteer' + volunteerParams(); }
+  function viewVolunteer() { openReport('/api/admin/reports/volunteer' + volunteerParams() + (volunteerParams() ? '&' : '?') + 'format=html'); }
+  function downloadDerbis(kind) { window.location.href = '/api/admin/reports/derbis/' + kind + derbisParams(kind); }
+  function viewDerbis(kind) { openReport('/api/admin/reports/derbis/' + kind + derbisParams(kind) + '&format=html'); }
+  function downloadAnnual() { const p = annualParams(); if (p) window.location.href = '/api/admin/reports/derbis/annual' + p; }
+  function viewAnnual() { const p = annualParams(); openReport(p && ('/api/admin/reports/derbis/annual' + p + '&format=html')); }
+
+  // ===== DEĞERLENDİRME ANKETİ BEKLEYENLER =====
+  async function loadPendingEvaluations() {
+    const card = document.getElementById('eval-pending-card');
+    const list = document.getElementById('eval-pending-list');
+    try {
+      const res = await fetch('/api/admin/pending-evaluations');
+      const data = await res.json();
+      if (!data.success || !data.events.length) { card.style.display = 'none'; return; }
+      card.style.display = '';
+      list.innerHTML = data.events.map(e => {
+        const d = e.event_date ? new Date(e.event_date).toLocaleDateString('tr-TR', { day:'numeric', month:'short', year:'numeric' }) : '';
+        return '<div class="survey-row">' +
+          '<div class="survey-row-info">' +
+            '<div class="survey-row-title">' + escapeHtml(e.title) + '</div>' +
+            '<div class="survey-row-meta">' + d + ' · ' + escapeHtml(e.team_name) + ' · ' + e.confirmed_count + ' katılımcı</div>' +
+          '</div>' +
+          '<div class="survey-row-actions">' +
+            '<button class="btn btn-ghost btn-sm" onclick="createEvalSurvey(' + e.id + ', this)"> Anket Oluştur</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } catch (e) {
+      card.style.display = 'none';
+    }
+  }
+
+  async function createEvalSurvey(eventId, btn) {
+    btn.disabled = true; btn.textContent = 'Oluşturuluyor…';
+    try {
+      const res = await fetch('/api/admin/surveys/from-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_id: eventId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast(data.message + ' — anketi açmayı unutma', 'success');
+        loadPendingEvaluations();
+        setTimeout(() => { window.location.href = '/admin/surveys/' + data.data.id; }, 900);
+      } else {
+        toast(data.error, 'error');
+        btn.disabled = false; btn.textContent = ' Anket Oluştur';
+      }
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+      btn.disabled = false; btn.textContent = ' Anket Oluştur';
+    }
+  }
+
+  // ===== AYIN EN AKTİFLERİ =====
+  async function loadMonthlyActive() {
+    const box = document.getElementById('monthly-active-list');
+    try {
+      const res = await fetch('/api/admin/stats/monthly-active');
+      const data = await res.json();
+      if (!data.success) { box.textContent = 'Yüklenemedi'; return; }
+      if (!data.users.length) { box.textContent = 'Bu ay henüz yoklama işaretlenmedi.'; return; }
+      const medals = ['1.', '2.', '3.', '4.', '5.'];
+      box.innerHTML = data.users.map((u, i) =>
+        '<div class="survey-row" style="padding:8px 0;">' +
+          '<span style="font-size:16px;">' + (medals[i] || (i + 1) + '.') + '</span>' +
+          '<div class="survey-row-info"><div class="survey-row-title">' + escapeHtml(u.full_name) + '</div></div>' +
+          '<span style="color:var(--accent2);font-weight:700;font-size:13px;">' + u.attended_count + ' etkinlik</span>' +
+        '</div>'
+      ).join('');
+    } catch (e) {
+      box.textContent = 'Yüklenemedi';
+    }
+  }
+
+  // İlk açılışta overview kartlarını yükle
+  document.addEventListener('DOMContentLoaded', () => {
+    loadPendingEvaluations();
+    loadMonthlyActive();
+  });
+
+  // ===== ŞİKAYET & ÖNERİ =====
+  let fbFilter = '';
+  async function loadFeedback() {
+    const box = document.getElementById('feedback-list');
+    try {
+      const res = await fetch('/api/admin/feedback' + (fbFilter ? '?status=' + fbFilter : ''));
+      const data = await res.json();
+      if (!data.success) { box.innerHTML = '<div class="empty" style="padding:24px;text-align:center;color:var(--muted);">Yüklenemedi</div>'; return; }
+      if (!data.feedback.length) {
+        box.innerHTML = '<div class="empty" style="padding:24px;text-align:center;color:var(--muted);">Bu filtrede mesaj yok.</div>';
+        return;
+      }
+      const STATUS_BADGE = {
+        NEW: '<span class="badge" style="background: rgba(234,179,8,.12); color: var(--yellow); border: 1px solid rgba(234,179,8,.25);">Yeni</span>',
+        READ: '<span class="badge" style="background: rgba(6,182,212,.12); color: var(--cyan); border: 1px solid rgba(6,182,212,.25);">Okundu</span>',
+        DONE: '<span class="badge" style="background: rgba(34,197,94,.12); color: var(--green); border: 1px solid rgba(34,197,94,.25);">Tamamlandı</span>'
+      };
+      box.innerHTML = data.feedback.map(f => {
+        const d = new Date(f.created_at).toLocaleString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const kindBadge = f.kind === 'SIKAYET'
+          ? '<span class="badge" style="background: rgba(239,68,68,.12); color: var(--red); border: 1px solid rgba(239,68,68,.25);"> Şikayet</span>'
+          : '<span class="badge" style="background: rgba(108,99,255,0); color: var(--accent); border: 1px solid var(--border2);"> Öneri</span>';
+        const actions = [];
+        if (f.status !== 'READ') actions.push('<button class="btn btn-ghost btn-sm" onclick="setFeedbackStatus(' + f.id + ', \'READ\')">Okundu</button>');
+        if (f.status !== 'DONE') actions.push('<button class="btn btn-ghost btn-sm" onclick="setFeedbackStatus(' + f.id + ', \'DONE\')">Tamamlandı</button>');
+        actions.push('<button class="btn btn-ghost btn-sm" style="color:var(--red);border-color:rgba(239,68,68,.3);" onclick="deleteFeedback(' + f.id + ')">Sil</button>');
+        return '<div class="survey-row" style="align-items:flex-start;">' +
+          '<div class="survey-row-info" style="flex:1;min-width:0;">' +
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:4px;">' + kindBadge + STATUS_BADGE[f.status] +
+              '<span style="font-size:11px;color:var(--muted);font-family:\'DM Mono\',monospace;">' + d + '</span></div>' +
+            '<div style="font-size:12px;color:var(--muted);margin-bottom:4px;"> ' + escapeHtml(f.full_name || 'Anonim') + (f.username ? ' (@' + escapeHtml(f.username) + ')' : '') + '</div>' +
+            '<div style="font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word;">' + escapeHtml(f.message) + '</div>' +
+          '</div>' +
+          '<div class="survey-row-actions">' + actions.join(' ') + '</div>' +
+        '</div>';
+      }).join('');
+    } catch (e) {
+      box.innerHTML = '<div class="empty" style="padding:24px;text-align:center;color:var(--muted);">Yüklenemedi</div>';
+    }
+  }
+  function setFbFilter(status) {
+    fbFilter = status;
+    document.querySelectorAll('[id^="fb-filter-"]').forEach(b => { b.style.cssText = ''; });
+    const active = document.getElementById('fb-filter-' + (status || 'all'));
+    if (active) active.style.cssText = 'border-color: var(--accent); color: var(--accent);';
+    loadFeedback();
+  }
+  async function setFeedbackStatus(id, status) {
+    try {
+      const res = await fetch('/api/admin/feedback/' + id + '/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      const data = await res.json();
+      if (data.success) { toast(data.message, 'success'); loadFeedback(); }
+      else toast(data.error, 'error');
+    } catch (e) { toast('Hata: ' + e.message, 'error'); }
+  }
+  async function deleteFeedback(id) {
+    if (!confirm('Bu mesaj silinecek. Emin misin?')) return;
+    try {
+      const res = await fetch('/api/admin/feedback/' + id + '/delete', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) { toast(data.message, 'success'); loadFeedback(); }
+      else toast(data.error, 'error');
+    } catch (e) { toast('Hata: ' + e.message, 'error'); }
+  }
+
   function toast(msg, type = 'success') {
     const el = document.createElement('div');
     el.className = 'toast ' + type;
@@ -987,6 +1663,9 @@
     document.getElementById('toast-root').appendChild(el);
     setTimeout(() => el.remove(), 3500);
   }
+
+  // Eski çağrılar için takma ad (loadAttendanceEvents'te showToast kullanılıyordu)
+  const showToast = toast;
 </script>
 </body>
 </html>

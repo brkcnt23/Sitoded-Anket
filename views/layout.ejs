@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/site/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/img/site/pwa-192.png">
     <title><%- typeof title !== 'undefined' ? title : 'Sitoded Erzurum - Anket Sistemi' %></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="/vendor/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/style.css">
     <style>
         .navbar {
@@ -17,7 +20,7 @@
 
         .navbar-brand {
             font-size: 1.4rem;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
+            background: var(--hero-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -30,7 +33,7 @@
         }
 
         .nav-link:hover {
-            color: #6366f1 !important;
+            color: var(--accent) !important;
         }
 
         .dropdown-menu {
@@ -46,7 +49,7 @@
 
         .dropdown-item:hover {
             background: rgba(99, 102, 241, 0.15) !important;
-            color: #6366f1 !important;
+            color: var(--accent) !important;
         }
 
         .dropdown-divider {
@@ -56,11 +59,36 @@
         .dropdown-item-text {
             color: #94a3b8 !important;
         }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding-top: 0.35rem;
+                padding-bottom: 0.35rem;
+            }
+            .navbar .container-fluid {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+            .navbar-brand {
+                font-size: 1.15rem;
+            }
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.5rem 0.75rem;
+            }
+            .dropdown-menu {
+                font-size: 0.9rem;
+                min-width: 180px;
+            }
+        }
     </style>
-</head>
-<body>
+<link rel="stylesheet" href="/css/theme.css?v=20260921"><link rel="stylesheet" href="/css/platform.css?v=20260921"><link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body class="workspace ws-layout" data-theme="light">
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid px-4">
+            <button type="button" class="btn btn-sm btn-outline-light me-2 app-back-btn" onclick="history.back()" aria-label="Geri dön" title="Geri">
+                <i class="bi bi-arrow-left"></i> Geri
+            </button>
             <a class="navbar-brand fw-bold" href="<%- typeof user !== 'undefined' && user ? '/dashboard' : '/login' %>">
                 <i class="bi bi-calendar2-event"></i> Sitoded
             </a>
@@ -70,6 +98,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/"><i class="bi bi-house"></i> Site</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/dashboard"><i class="bi bi-calendar"></i> Etkinlikler</a>
                         </li>
@@ -90,6 +121,7 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><span class="dropdown-item-text"><%- user.hierarchy_level %></span></li>
                                 <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/profile"><i class="bi bi-person-gear"></i> Profil & Şifre</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</a></li>
                             </ul>
                         </li>
@@ -108,7 +140,7 @@
                 </div>
             </div>
         <% } %>
-        
+
         <% if (typeof error !== 'undefined' && error) { %>
             <div class="container-fluid px-4 pt-4">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -125,6 +157,13 @@
         <p class="mb-0 py-4">&copy; 2026 Sitoded Erzurum. Tüm hakları saklıdır.</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/bootstrap.bundle.min.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+      }
+    </script>
 </body>
 </html>

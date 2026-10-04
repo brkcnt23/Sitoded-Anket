@@ -1,5 +1,9 @@
 FROM node:18-alpine
 
+# Türkiye saat dilimi (tüm zaman hesapları TR duvar saatiyle çalışır)
+ENV TZ=Europe/Istanbul
+RUN apk add --no-cache tzdata
+
 WORKDIR /app
 
 COPY package*.json ./

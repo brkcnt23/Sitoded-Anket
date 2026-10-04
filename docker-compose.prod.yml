@@ -1,0 +1,68 @@
+# Sitoded-Anket — Production Docker Compose
+# sitoded.jamcontest.com
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: sitoded_postgres
+    command: ["postgres", "-c", "timezone=Europe/Istanbul", "-c", "log_timezone=Europe/Istanbul"]
+    environment:
+      POSTGRES_USER: sitoded_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: sitoded_anket
+      TZ: Europe/Istanbul
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - sitoded_postgres_data:/var/lib/postgresql/data
+      - ./database.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sitoded_user -d sitoded_anket"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: "3"
+        max-size: "10m"
+    networks:
+      - sitoded_network
+
+  app:
+    build: .
+    container_name: sitoded_app
+    environment:
+      NODE_ENV: production
+      PORT: 3075
+      TZ: Europe/Istanbul
+      DB_HOST: sitoded_postgres
+      DB_PORT: 5432
+      DB_NAME: sitoded_anket
+      DB_USER: sitoded_user
+      DB_PASSWORD: ${DB_PASSWORD}
+      SESSION_SECRET: ${SESSION_SECRET}
+    ports:
+      - "127.0.0.1:3075:3075"
+    volumes:
+      - sitoded_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: "3"
+        max-size: "10m"
+    networks:
+      - sitoded_network
+
+volumes:
+  sitoded_postgres_data:
+  sitoded_uploads:
+
+networks:
+  sitoded_network:
+    driver: bridge

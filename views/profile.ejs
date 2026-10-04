@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
+    <title>Profil - Sitoded Erzurum</title>
+    <link href="/vendor/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --primary: var(--accent);
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .navbar {
+            background: rgba(15, 23, 42, 0.92) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+            padding: 0.5rem 0;
+        }
+        .navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .profile-card {
+            border-radius: 16px;
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid var(--border);
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+        .btn-primary {
+            background: var(--hero-grad);
+            border: none;
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.35); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-outline-secondary {
+            border-radius: 10px;
+            padding: 0.65rem 1rem;
+        }
+
+        @media (max-width: 576px) {
+            .profile-card { border-radius: 12px; }
+            .card-body { padding: 1.25rem !important; }
+            h3 { font-size: 1.35rem; }
+            .form-control { font-size: 1rem; padding: 0.75rem 0.85rem; }
+            .btn-primary, .btn-outline-secondary { padding: 0.75rem; font-size: 1rem; }
+            .container { padding-left: 1rem; padding-right: 1rem; }
+        }
+    </style>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-profile theme-bootstrap">
+    <% const fmtDate = (d) => d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` : '—'; %>
+    <nav class="navbar navbar-dark sticky-top">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand" href="/dashboard"><%- include('public/brand') %></a>
+            <div class="d-flex align-items-center gap-1">
+                <span class="d-none d-sm-inline text-light small me-2"><%= user.full_name %></span>
+                <a href="/dashboard" class="btn btn-sm text-white-50 px-1" title="Dashboard">
+                    <i class="bi bi-grid fs-5"></i>
+                </a>
+                <a href="/logout" class="btn btn-sm text-white-50 px-1" title="Çıkış">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4 py-md-5"><div class="profile-page-head"><span class="workspace-eyebrow">SİTODED / ÜYE PROFİLİ</span><h1>Sizi daha yakından tanıyalım.</h1><p>İlgi alanlarınız ve deneyiminiz, birlikte yapacağımız çalışmaların başlangıcı.</p></div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-9 col-xl-8">
+                <div class="profile-card">
+                    <div class="card-body p-3 p-md-4">
+                        <div class="profile-summary d-flex align-items-center gap-3 mb-4">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                 style="width:48px;height:48px;background:var(--hero-grad);color:white;font-weight:700;font-size:1.2rem;">
+                                <%= user.full_name.charAt(0).toUpperCase() %>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="fw-bold mb-0" style="font-size:1.2rem;"><%= user.full_name %></h3>
+                                <p class="text-muted small mb-0 text-truncate">@<%= user.username %> · <%= user.hierarchy_level %></p>
+                            </div>
+                        </div>
+
+                        <% if (message) { %>
+                            <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3">
+                                <i class="bi bi-check-circle-fill"></i> <%= message %>
+                            </div>
+                        <% } %>
+                        <% if (error) { %>
+                            <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3">
+                                <i class="bi bi-exclamation-triangle-fill"></i> <%= error %>
+                            </div>
+                        <% } %>
+
+                        <!-- ROZETLER -->
+                        <div class="mb-4">
+                            <h5 class="fw-semibold mb-2" style="font-size:1rem;"> Rozetlerim</h5>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge rounded-pill <%= badges.silver ? 'text-bg-warning' : 'text-bg-secondary' %> py-2 px-3">
+                                     Gümüş Rozet <% if (!badges.silver) { %><span class="fw-normal">(5 katılım)</span><% } %>
+                                </span>
+                                <span class="badge rounded-pill <%= badges.gold ? 'text-bg-warning' : 'text-bg-secondary' %> py-2 px-3">
+                                     Altın Rozet <% if (!badges.gold) { %><span class="fw-normal">(10 katılım)</span><% } %>
+                                </span>
+                            </div>
+                            <p class="text-muted small mt-2 mb-0"><i class="bi bi-calendar-check"></i> Toplam <strong><%= badges.attended_count %></strong> etkinliğe katıldın.</p>
+                        </div>
+
+                        <!-- PROFİL BİLGİLERİM (üye doldurur) -->
+                        <% const ints = Array.isArray(user.interests) ? user.interests : [];
+                           const tals = Array.isArray(user.talents) ? user.talents : [];
+                           const INTEREST_OPTS = ['Gençlik','Çocuklar','Engelliler','Kadınlar','Kültür-Turizm','Spor','Çevre','Sosyal Girişimcilik','Mental Sağlık','Gençlik ve Haklar','Dijitalleşme','Sürdürülebilir Kalkınma'];
+                           const TALENT_OPTS = ['Tasarım / Grafik','Fotoğrafçılık','Video Prodüksiyon','Yazı / Editörlük','Sosyal Medya','Müzik','Tiyatro / Drama','Spor','Eğitmenlik / Sunum','Çeviri','Kodlama','Organizasyon','Diğer']; %>
+                        <% if (user.profile_completed_at) { %>
+                            <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-3">
+                                <i class="bi bi-check-circle-fill"></i> Profilin tamamlandı — bilgilerini istediğin zaman güncelleyebilirsin.
+                            </div>
+                        <% } else { %>
+                            <div class="alert alert-warning d-flex align-items-center gap-2 py-2 px-3 mb-3">
+                                <i class="bi bi-pencil-square"></i> Profilini tamamla — etkinliklere katılmadan önce bilgilerini doldur.
+                            </div>
+                        <% } %>
+                        <form method="POST" action="/profile/update" class="mb-4">
+                            <h5 class="fw-semibold mb-3" style="font-size:1rem;"> Profil Bilgilerim</h5>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Ad Soyad *</label>
+                                    <input type="text" name="full_name" class="form-control" required value="<%= user.full_name %>">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">E-posta *</label>
+                                    <input type="email" name="email" class="form-control" required value="<%= user.email %>">
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Telefon</label>
+                                    <input type="tel" name="phone" class="form-control" placeholder="05xx xxx xx xx" value="<%= user.phone || '' %>">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Doğum Tarihi</label>
+                                    <input type="date" name="birth_date" class="form-control" value="<%= fmtDate(user.birth_date) %>">
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Cinsiyet</label>
+                                    <select name="gender" class="form-control">
+                                        <option value="">Belirtilmedi</option>
+                                        <option value="kadin" <%= user.gender === 'kadin' ? 'selected' : '' %>>Kadın</option>
+                                        <option value="erkek" <%= user.gender === 'erkek' ? 'selected' : '' %>>Erkek</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Yaşadığınız Şehir</label>
+                                    <input type="text" name="city" class="form-control" placeholder="Erzurum" value="<%= user.city || '' %>">
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Okul</label>
+                                    <input type="text" name="school" class="form-control" placeholder="Okul / üniversite" value="<%= user.school || '' %>">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Bölüm - Sınıf</label>
+                                    <input type="text" name="department_grade" class="form-control" placeholder="Örn: Tarih - 2" value="<%= user.department_grade || '' %>">
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Meslek</label>
+                                    <input type="text" name="occupation" class="form-control" placeholder="Öğrenci / Mühendis..." value="<%= user.occupation || '' %>">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Yabancı Dil (Dil - Seviye)</label>
+                                    <input type="text" name="languages" class="form-control" placeholder="Örn: İngilizce - B2" value="<%= user.languages || '' %>">
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small fw-medium text-muted mb-1">Hobiler</label>
+                                <input type="text" name="hobbies" class="form-control" placeholder="Örn: kitap okumak, dağ yürüyüşü, satranç" value="<%= user.hobbies || '' %>">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small fw-medium text-muted mb-1">İlgi Alanları</label>
+                                <div class="row g-1">
+                                    <% INTEREST_OPTS.forEach(o => { %>
+                                    <div class="col-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="interests" value="<%= o %>" id="int_<%= o %>" <%= ints.includes(o) ? 'checked' : '' %>>
+                                            <label class="form-check-label small" for="int_<%= o %>"><%= o %></label>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small fw-medium text-muted mb-1">Yetenekler</label>
+                                <div class="row g-1">
+                                    <% TALENT_OPTS.forEach(o => { %>
+                                    <div class="col-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="talents" value="<%= o %>" id="tal_<%= o %>" <%= tals.includes(o) ? 'checked' : '' %>>
+                                            <label class="form-check-label small" for="tal_<%= o %>"><%= o %></label>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label small fw-medium text-muted mb-1">Pasaport No</label>
+                                    <input type="text" name="passport_no" class="form-control" placeholder="U1234567" value="<%= user.passport_no || '' %>">
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label small fw-medium text-muted mb-1">Pasaport Rengi</label>
+                                    <select name="passport_color" class="form-control">
+                                        <option value="">Yok / Seçilmedi</option>
+                                        <% ['Bordo','Yeşil','Gri','Siyah'].forEach(c => { %>
+                                        <option value="<%= c %>" <%= user.passport_color === c ? 'selected' : '' %>><%= c %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label small fw-medium text-muted mb-1">Pasaport Geçerlilik</label>
+                                    <input type="date" name="passport_expiry" class="form-control" value="<%= fmtDate(user.passport_expiry) %>">
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-medium text-muted mb-1">Vize Durumu</label>
+                                    <input type="text" name="visa_status" class="form-control" placeholder="Örn: Schengen - 2027'ye kadar geçerli" value="<%= user.visa_status || '' %>">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-medium text-muted mb-1">Gönüllülük Deneyimi</label>
+                                <textarea name="volunteer_experience" class="form-control" rows="2" placeholder="Daha önce gönüllülük yaptıysan kısaca anlat"><%= user.volunteer_experience || '' %></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-save"></i> Profili Kaydet
+                            </button>
+                        </form>
+
+                        <!-- YOUTHPASS ÖĞRENME ÇIKTILARI -->
+                        <div class="mb-4">
+                            <h5 class="fw-semibold mb-2" style="font-size:1rem;"> Youthpass Öğrenme Çıktıları</h5>
+                            <p class="text-muted small">Yurt dışı projelerine katıldıysan, kazandığın becerileri 8 anahtar yeterlik çerçevesinde yaz. Admin bu metinlerden PDF sertifikanı üretir.</p>
+                            <div id="yp-form" class="d-flex flex-column gap-2">
+                                <div class="text-muted small">Yükleniyor…</div>
+                            </div>
+                            <button class="btn btn-primary w-100 mt-2" onclick="saveYouthpass()"><i class="bi bi-save"></i> Kaydet</button>
+                            <div id="yp-toast" class="mt-2"></div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <form method="POST" action="/profile/change-password">
+                            <h5 class="fw-semibold mb-3" style="font-size:1rem;"> Şifre Değiştir</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-medium text-muted">Mevcut Şifre</label>
+                                <input type="password" name="currentPassword" class="form-control" required
+                                       placeholder="••••••••" autocomplete="current-password">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-medium text-muted">Yeni Şifre</label>
+                                <input type="password" name="newPassword" class="form-control" required minlength="6"
+                                       placeholder="En az 6 karakter" autocomplete="new-password">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-medium text-muted">Yeni Şifre (Tekrar)</label>
+                                <input type="password" name="confirmPassword" class="form-control" required minlength="6"
+                                       placeholder="Tekrar yazın" autocomplete="new-password">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-shield-check"></i> Şifreyi Güncelle
+                            </button>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <a href="/dashboard" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-left"></i> Üye paneline dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/vendor/bootstrap.bundle.min.js"></script>
+    <script>
+    async function loadYouthpass() {
+      const box = document.getElementById('yp-form');
+      try {
+        const res = await fetch('/api/user/youthpass');
+        const data = await res.json();
+        if (!data.success) { box.innerHTML = '<div class="text-danger small">Yüklenemedi</div>'; return; }
+        box.innerHTML = data.data.competences.map(c => {
+          return '<div class="form-group">' +
+            '<label class="form-label small fw-medium text-muted mb-1">' + c.label + '</label>' +
+            '<textarea class="form-control yp-text" rows="2" data-key="' + c.key + '" placeholder="Bu yeterlikte ne öğrendin?">' +
+            (data.data.outcomes[c.key] || '').replace(/</g, '&lt;') +
+            '</textarea></div>';
+        }).join('');
+      } catch (e) {
+        box.innerHTML = '<div class="text-danger small">Yüklenemedi: ' + e.message + '</div>';
+      }
+    }
+    async function saveYouthpass() {
+      const outcomes = {};
+      document.querySelectorAll('.yp-text').forEach(el => { outcomes[el.dataset.key] = el.value; });
+      const toast = document.getElementById('yp-toast');
+      try {
+        const res = await fetch('/api/user/youthpass', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ outcomes })
+        });
+        const data = await res.json();
+        toast.innerHTML = data.success
+          ? '<div class="alert alert-success py-2 px-3 mb-0">' + data.message + '</div>'
+          : '<div class="alert alert-danger py-2 px-3 mb-0">' + data.error + '</div>';
+        setTimeout(() => { toast.innerHTML = ''; }, 3500);
+      } catch (e) {
+        toast.innerHTML = '<div class="alert alert-danger py-2 px-3 mb-0">Hata: ' + e.message + '</div>';
+      }
+    }
+    loadYouthpass();
+    </script>
+</body>
+</html>

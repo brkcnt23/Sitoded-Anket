@@ -3,17 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yeni Kullanici - Sitoded</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
+  <title>Yeni Kullanıcı - Sitoded</title>
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --bg: #0c0c0f; --surface: #131318; --surface2: #1a1a22;
-      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-      --text: #e8e8f0; --muted: #7070a0; --accent: #6c63ff; --accent2: #8b85ff;
-      --green: #22c55e; --red: #ef4444; --yellow: #eab308;
-    }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* TOPBAR */
@@ -26,7 +21,7 @@
     .tbtn { padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1px solid; text-decoration: none; transition: all .15s; }
     .tbtn-ghost { background: transparent; color: var(--muted); border-color: var(--border2); }
     .tbtn-ghost:hover { background: var(--surface2); color: var(--text); }
-    .tbtn-primary { background: var(--accent); color: white; border-color: transparent; }
+    .tbtn-primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
     .tbtn-primary:hover { background: var(--accent2); }
 
     /* PAGE */
@@ -58,7 +53,7 @@
       background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px;
       padding: 10px 13px; font-size: 13px; color: var(--text); font-family: inherit; outline: none; transition: border-color .15s; width: 100%;
     }
-    .finput:focus, .fselect:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,.12); }
+    .finput:focus, .fselect:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
     .finput::placeholder { color: var(--muted); }
     .fhint { font-size: 11px; color: var(--muted); }
 
@@ -72,7 +67,7 @@
     }
     .level-lbl .licon { font-size: 18px; }
     .level-lbl .lname { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
-    .level-opt:checked + .level-lbl { border-color: var(--accent); background: rgba(108,99,255,.12); }
+    .level-opt:checked + .level-lbl { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
     .level-opt:checked + .level-lbl .lname { color: var(--accent2); }
 
     /* TEAM CHECKBOXES */
@@ -83,12 +78,22 @@
       border-radius: 7px; border: 1px solid var(--border2); cursor: pointer; transition: all .15s; font-size: 12px; font-weight: 500;
     }
     .team-lbl:hover { background: var(--surface2); }
-    .team-opt:checked + .team-lbl { border-color: var(--accent); background: rgba(108,99,255,.1); color: var(--accent2); }
+    .team-opt:checked + .team-lbl { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent2); }
     .team-cb { width: 14px; height: 14px; accent-color: var(--accent); flex-shrink: 0; }
 
     /* PASSWORD STRENGTH */
     .pw-bar { height: 3px; border-radius: 2px; margin-top: 6px; background: var(--surface2); overflow: hidden; }
     .pw-fill { height: 100%; border-radius: 2px; transition: all .3s; width: 0; }
+
+    /* TOGGLE SWITCH */
+    .switch-row { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border: 1px solid var(--border2); border-radius: 8px; background: var(--surface2); }
+    .switch-row input { display: none; }
+    .switch-track { width: 40px; height: 22px; border-radius: 11px; background: var(--surface); border: 1px solid var(--border2); position: relative; transition: all .2s; flex-shrink: 0; }
+    .switch-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); transition: all .2s; }
+    .switch-row input:checked + .switch-track { background: color-mix(in srgb, var(--accent) 25%, transparent); border-color: var(--accent); }
+    .switch-row input:checked + .switch-track::after { left: 20px; background: var(--accent2); }
+    .switch-label { font-size: 13px; font-weight: 500; }
+    .switch-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
     /* ACTIONS */
     .form-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 4px; padding-top: 4px; }
@@ -96,16 +101,19 @@
 
     @media (max-width: 680px) { .form-layout { grid-template-columns: 1fr; } .span2 { grid-column: 1; } .level-grid { grid-template-columns: repeat(3, 1fr); } .team-grid { grid-template-columns: 1fr; } .fg-row { grid-template-columns: 1fr; } }
   </style>
-</head>
-<body>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-user-form">
 
 <header class="topbar">
   <div class="topbar-left">
     <a href="/admin" class="back-btn">
       <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      Admin
+      Yönetim
     </a>
-    <span class="topbar-title">Yeni Kullanici</span>
+    <span class="logo-img" role="img" aria-label="SİTODED" style="height:30px;width:30px;flex-shrink:0;"></span>
+    <span class="topbar-title">Yeni Kullanıcı</span>
   </div>
   <div class="topbar-right">
     <span style="font-size:13px;color:var(--muted)">Ekleyen: <strong style="color:var(--text)"><%= user.full_name %></strong></span>
@@ -113,77 +121,132 @@
 </header>
 
 <div class="page">
-  <div class="page-head">
-    <h1>Yeni Kullanici Olustur</h1>
-    <p>Sisteme yeni bir uye ekle. Tum zorunlu alanlari doldur.</p>
+  <div class="page-head"><span class="workspace-eyebrow">SİTODED / ÜYE YÖNETİMİ</span>
+    <% if (typeof mode !== 'undefined' && mode === 'edit') { %>
+    <h1>Kullanıcı Düzenle</h1>
+    <p><strong><%= edit_user.full_name %></strong> (@<%= edit_user.username %>) bilgilerini guncelle.</p>
+    <% } else { %>
+    <h1>Yeni Kullanıcı Oluştur</h1>
+    <p>Sisteme yeni bir üye ekleyin. Tüm zorunlu alanları doldurun.</p>
+    <% } %>
   </div>
 
   <% if (typeof error !== 'undefined' && error) { %>
   <div class="alert-err">&#9888; <%= error %></div>
   <% } %>
 
-  <form method="POST" action="/admin/user/new" id="createForm">
+  <% const isEdit = (typeof mode !== 'undefined' && mode === 'edit');
+     const fmtD = (d) => d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` : ''; %>
+  <form method="POST" action="<%= isEdit ? '/admin/user/' + edit_user.id + '/edit' : '/admin/user/new' %>" id="createForm">
     <div class="form-layout">
 
-      <!-- SOL: Kimlik Bilgileri -->
+      <!-- SOL: Üye bilgileri -->
       <div style="display:flex;flex-direction:column;gap:16px;">
         <div class="card">
           <div class="card-header">
-            <div class="card-icon" style="background:rgba(108,99,255,.15)">&#128100;</div>
-            <h3>Kimlik Bilgileri</h3>
+            <div class="card-icon" style="background:color-mix(in srgb, var(--accent) 15%, transparent)"><%- include('../shared/icon',{name:'people'}) %></div>
+            <h3>Üye bilgileri</h3>
           </div>
           <div class="card-body">
             <div class="fg">
               <label class="flabel">Ad Soyad <span class="required">*</span></label>
-              <input type="text" name="full_name" class="finput" placeholder="Ornek: Ahmet Yilmaz" required>
+              <input type="text" name="full_name" class="finput" placeholder="Örnek: Ahmet Yılmaz" value="<%= isEdit ? edit_user.full_name : '' %>" required>
             </div>
             <div class="fg-row">
               <div class="fg">
-                <label class="flabel">Kullanici Adi <span class="required">*</span></label>
+                <label class="flabel">Kullanıcı Adı <span class="required">*</span></label>
+                <% if (isEdit) { %>
+                <input type="text" class="finput" value="<%= edit_user.username %>" disabled style="opacity:.6;">
+                <span class="fhint">Kullanıcı adı değiştirilemez (giriş kimliği)</span>
+                <% } else { %>
                 <input type="text" name="username" class="finput" placeholder="ahmet_yilmaz" required autocomplete="off">
+                <% } %>
               </div>
               <div class="fg">
                 <label class="flabel">E-posta <span class="required">*</span></label>
-                <input type="email" name="email" class="finput" placeholder="ahmet@sitoded.org" required>
+                <input type="email" name="email" class="finput" placeholder="ahmet@sitoded.org" value="<%= isEdit ? edit_user.email : '' %>" required>
               </div>
             </div>
             <div class="fg">
-              <label class="flabel">Sifre <span class="required">*</span></label>
-              <input type="password" name="password" id="pwInput" class="finput" placeholder="Min. 6 karakter" required oninput="checkPw(this.value)">
+              <label class="flabel">Şifre <% if (!isEdit) { %><span class="required">*</span><% } %></label>
+              <input type="password" name="password" id="pwInput" class="finput" placeholder="<%= isEdit ? 'Boş bırakılırsa değiştirilmez' : 'Min. 6 karakter' %>" <% if (!isEdit) { %>required<% } %> oninput="checkPw(this.value)">
               <div class="pw-bar"><div class="pw-fill" id="pwFill"></div></div>
-              <span class="fhint" id="pwHint">Sifre guc gostergesi</span>
+              <span class="fhint" id="pwHint"><%= isEdit ? 'Şifreyi değiştirmek istemiyorsanız boş bırakın' : 'Şifre gücü göstergesi' %></span>
+            </div>
+            <% if (isEdit) { %>
+            <div class="fg">
+              <label class="flabel">Puan Degisimi (opsiyonel)</label>
+              <input type="number" name="points_delta" class="finput" placeholder="+5 veya -2">
+              <span class="fhint">Mevcut puan: <strong><%= edit_user.points %></strong>. Girilen deger eklenir/cikarilir.</span>
+            </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(234,179,8,.12)"><%- include('../shared/icon',{name:'spark'}) %></div>
+            <h3>Hiyerarsı Seviyesi <span class="required" style="font-size:10px">*</span></h3>
+          </div>
+          <div class="card-body">
+            <div class="level-grid">
+              <% const curLevel = isEdit ? edit_user.hierarchy_level : 'VOLUNTEER'; %>
+              <div>
+                <input type="radio" name="hierarchy_level" value="VOLUNTEER" id="lvVol" class="level-opt" <%= curLevel === 'VOLUNTEER' ? 'checked' : '' %>>
+                <label for="lvVol" class="level-lbl"><span class="licon"><%- include('../shared/icon',{name:'people'}) %></span><span class="lname">Gönüllü</span></label>
+              </div>
+              <div>
+                <input type="radio" name="hierarchy_level" value="JUNIOR" id="lvJun" class="level-opt" <%= curLevel === 'JUNIOR' ? 'checked' : '' %>>
+                <label for="lvJun" class="level-lbl"><span class="licon"><%- include('../shared/icon',{name:'leaf'}) %></span><span class="lname">Junior</span></label>
+              </div>
+              <div>
+                <input type="radio" name="hierarchy_level" value="SENIOR" id="lvSen" class="level-opt" <%= curLevel === 'SENIOR' ? 'checked' : '' %>>
+                <label for="lvSen" class="level-lbl"><span class="licon"><%- include('../shared/icon',{name:'spark'}) %></span><span class="lname">Senior</span></label>
+              </div>
+              <div>
+                <input type="radio" name="hierarchy_level" value="COORDINATOR" id="lvCoo" class="level-opt" <%= curLevel === 'COORDINATOR' ? 'checked' : '' %>>
+                <label for="lvCoo" class="level-lbl"><span class="licon"><%- include('../shared/icon',{name:'globe'}) %></span><span class="lname">Koordinatör</span></label>
+              </div>
+              <div>
+                <input type="radio" name="hierarchy_level" value="PRESIDENT" id="lvPre" class="level-opt" <%= curLevel === 'PRESIDENT' ? 'checked' : '' %>>
+                <label for="lvPre" class="level-lbl"><span class="licon"><%- include('../shared/icon',{name:'shield'}) %></span><span class="lname">Başkan</span></label>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <div class="card-icon" style="background:rgba(234,179,8,.12)">&#127775;</div>
-            <h3>Hiyerarsı Seviyesi <span class="required" style="font-size:10px">*</span></h3>
+            <div class="card-icon" style="background:rgba(6,182,212,.12)"><%- include('../shared/icon',{name:'calendar'}) %></div>
+            <h3>Kisisel Bilgiler</h3>
           </div>
           <div class="card-body">
-            <div class="level-grid">
-              <div>
-                <input type="radio" name="hierarchy_level" value="VOLUNTEER" id="lvVol" class="level-opt" checked>
-                <label for="lvVol" class="level-lbl"><span class="licon">&#129309;</span><span class="lname">Gonullu</span></label>
+            <div class="fg-row">
+              <div class="fg">
+                <label class="flabel">Dogum Tarihi</label>
+                <input type="date" name="birth_date" class="finput" value="<%= isEdit ? fmtD(edit_user.birth_date) : '' %>">
               </div>
-              <div>
-                <input type="radio" name="hierarchy_level" value="JUNIOR" id="lvJun" class="level-opt">
-                <label for="lvJun" class="level-lbl"><span class="licon">&#127807;</span><span class="lname">Junior</span></label>
-              </div>
-              <div>
-                <input type="radio" name="hierarchy_level" value="SENIOR" id="lvSen" class="level-opt">
-                <label for="lvSen" class="level-lbl"><span class="licon">&#11088;</span><span class="lname">Senior</span></label>
-              </div>
-              <div>
-                <input type="radio" name="hierarchy_level" value="COORDINATOR" id="lvCoo" class="level-opt">
-                <label for="lvCoo" class="level-lbl"><span class="licon">&#127381;</span><span class="lname">Koordinator</span></label>
-              </div>
-              <div>
-                <input type="radio" name="hierarchy_level" value="PRESIDENT" id="lvPre" class="level-opt">
-                <label for="lvPre" class="level-lbl"><span class="licon">&#128081;</span><span class="lname">Baskan</span></label>
+              <div class="fg">
+                <label class="flabel">Cinsiyet</label>
+                <select name="gender" class="fselect">
+                  <option value="">Belirtilmedi</option>
+                  <option value="kadin" <%= isEdit && edit_user.gender === 'kadin' ? 'selected' : '' %>>Kadin</option>
+                  <option value="erkek" <%= isEdit && edit_user.gender === 'erkek' ? 'selected' : '' %>>Erkek</option>
+                </select>
               </div>
             </div>
+            <div class="fg">
+              <label class="flabel">Telefon</label>
+              <input type="tel" name="phone" class="finput" placeholder="05xx xxx xx xx" value="<%= isEdit ? (edit_user.phone || '') : '' %>">
+            </div>
+            <label class="switch-row" style="cursor:pointer;">
+              <input type="checkbox" name="disadvantaged" id="disadv" <%= isEdit && edit_user.disadvantaged ? 'checked' : '' %> style="display:none;">
+              <span class="switch-track"></span>
+              <span>
+                <span class="switch-label">Dezavantajli katilimci (fewer opportunities)</span>
+                <div class="switch-sub">Hibe basvuru istatistiklerinde kullanilir</div>
+              </span>
+            </label>
           </div>
         </div>
       </div>
@@ -192,7 +255,7 @@
       <div style="display:flex;flex-direction:column;gap:16px;">
         <div class="card">
           <div class="card-header">
-            <div class="card-icon" style="background:rgba(34,197,94,.12)">&#127959;</div>
+            <div class="card-icon" style="background:rgba(34,197,94,.12)"><%- include('../shared/icon',{name:'people'}) %></div>
             <h3>Ekip Atamalari</h3>
           </div>
           <div class="card-body">
@@ -201,7 +264,7 @@
               <div class="team-grid">
                 <% teams.forEach(function(team) { %>
                 <div>
-                  <input type="checkbox" name="teams" value="<%= team.id %>" id="team_<%= team.id %>" class="team-opt">
+                  <input type="checkbox" name="teams" value="<%= team.id %>" id="team_<%= team.id %>" class="team-opt" <%= isEdit && edit_user_team_ids.includes(team.id) ? 'checked' : '' %>>
                   <label for="team_<%= team.id %>" class="team-lbl">
                     <input type="checkbox" class="team-cb" style="display:none">
                     <%= team.name %>
@@ -216,7 +279,7 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="card-icon" style="background:rgba(6,182,212,.12)">&#128279;</div>
+            <div class="card-icon" style="background:rgba(6,182,212,.12)"><%- include('../shared/icon',{name:'globe'}) %></div>
             <h3>Body Atamasi</h3>
           </div>
           <div class="card-body">
@@ -225,7 +288,7 @@
               <select name="body_for" class="fselect">
                 <option value="">Yok / Secim yapilmadi</option>
                 <% juniors.forEach(function(j) { %>
-                <option value="<%= j.id %>"><%= j.full_name %></option>
+                <option value="<%= j.id %>" <%= isEdit && edit_user.body_for === j.id ? 'selected' : '' %>><%= j.full_name %></option>
                 <% }); %>
               </select>
               <span class="fhint">Sadece Junior seviyesi icin gecerlidir</span>
@@ -237,7 +300,7 @@
               <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
                 <div style="display:flex;justify-content:space-between;">
                   <span style="color:var(--muted)">Seviye</span>
-                  <span id="sumLevel" style="font-weight:600;color:var(--accent2)">Gonullu</span>
+                  <span id="sumLevel" style="font-weight:600;color:var(--accent2)">Gönüllü</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;">
                   <span style="color:var(--muted)">Ekip sayisi</span>
@@ -251,13 +314,49 @@
             </div>
           </div>
         </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(239,68,68,.12)"><%- include('../shared/icon',{name:'pin'}) %></div>
+            <h3>DERBIS / Yurt Disi</h3>
+          </div>
+          <div class="card-body">
+            <div class="fg-row">
+              <div class="fg">
+                <label class="flabel">Uyelik Baslangici</label>
+                <input type="date" name="member_since" class="finput" value="<%= isEdit ? fmtD(edit_user.member_since) : '' %>">
+                <span class="fhint">DERBIS uyelik bildirimi icin (45 gun kurali)</span>
+              </div>
+              <div class="fg">
+                <label class="flabel">Istifa / Ayrilis Tarihi</label>
+                <input type="date" name="resigned_at" class="finput" value="<%= isEdit ? fmtD(edit_user.resigned_at) : '' %>">
+                <span class="fhint">Doldurulursa uye pasif sayilir</span>
+              </div>
+            </div>
+            <div class="fg-row">
+              <div class="fg">
+                <label class="flabel">Pasaport No</label>
+                <input type="text" name="passport_no" class="finput" placeholder="U1234567" value="<%= isEdit ? (edit_user.passport_no || '') : '' %>">
+              </div>
+              <div class="fg">
+                <label class="flabel">Pasaport Bitis Tarihi</label>
+                <input type="date" name="passport_expiry" class="finput" value="<%= isEdit ? fmtD(edit_user.passport_expiry) : '' %>">
+                <span class="fhint">6 ay kurali: bitise kala uyari verilir</span>
+              </div>
+            </div>
+            <div class="fg">
+              <label class="flabel">Vize Durumu</label>
+              <input type="text" name="visa_status" class="finput" placeholder="Ornek: Schengen 2027'ye kadar gecerli" value="<%= isEdit ? (edit_user.visa_status || '') : '' %>">
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ACTIONS -->
       <div class="span2 form-actions">
         <span class="actions-hint">* zorunlu alanlar</span>
         <a href="/admin" class="tbtn tbtn-ghost">Iptal</a>
-        <button type="submit" class="tbtn tbtn-primary">Kullanici Olustur</button>
+        <button type="submit" class="tbtn tbtn-primary"><%= isEdit ? 'Kullaniciyi Guncelle' : 'Kullanici Olustur' %></button>
       </div>
 
     </div>
@@ -265,7 +364,7 @@
 </div>
 
 <script>
-  // Sifre guc kontrolu
+  // Şifre guc kontrolu
   function checkPw(v) {
     var fill = document.getElementById('pwFill');
     var hint = document.getElementById('pwHint');
@@ -281,12 +380,12 @@
     else if (score <= 2) { fill.style.background = '#eab308'; hint.textContent = 'Zayif'; }
     else if (score <= 3) { fill.style.background = '#f97316'; hint.textContent = 'Orta'; }
     else if (score <= 4) { fill.style.background = '#22c55e'; hint.textContent = 'Iyi'; }
-    else { fill.style.background = '#10b981'; hint.textContent = 'Cok iyi'; }
+    else { fill.style.background = '#10b981'; hint.textContent = 'Çok iyi'; }
   }
 
   // Ozet guncelle
   var ROLE_MAP = {VOLUNTEER:'VOLUNTEER', JUNIOR:'JUNIOR', SENIOR:'SENIOR', COORDINATOR:'SENIOR', PRESIDENT:'ADMIN'};
-  var LEVEL_TR = {VOLUNTEER:'Gonullu', JUNIOR:'Junior', SENIOR:'Senior', COORDINATOR:'Koordinator', PRESIDENT:'Baskan'};
+  var LEVEL_TR = {VOLUNTEER:'Gönüllü', JUNIOR:'Junior', SENIOR:'Senior', COORDINATOR:'Koordinatör', PRESIDENT:'Başkan'};
 
   function updateSummary() {
     var lvl = document.querySelector('input[name="hierarchy_level"]:checked');

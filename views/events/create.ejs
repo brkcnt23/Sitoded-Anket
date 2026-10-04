@@ -3,25 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
   <title>Etkinlik Oluştur — Sitoded</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:       #0c0c0f;
-      --surface:  #131318;
-      --surface2: #1a1a22;
-      --border:   rgba(255,255,255,0.07);
-      --border2:  rgba(255,255,255,0.12);
-      --text:     #e8e8f0;
-      --muted:    #7070a0;
-      --accent:   #6c63ff;
-      --accent2:  #8b85ff;
-      --green:    #22c55e;
-      --red:      #ef4444;
-    }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -185,11 +172,11 @@
 
     .form-control:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(108,99,255,0.12);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
     }
 
     .form-control::placeholder { color: var(--muted); }
-    select.form-control option { background: #1a1a22; }
+    select.form-control option { background: #fff; }
 
     textarea.form-control {
       resize: vertical;
@@ -221,8 +208,8 @@
       align-items: center;
       gap: 8px;
       padding: 10px 14px;
-      background: rgba(108,99,255,0.08);
-      border: 1px solid rgba(108,99,255,0.15);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
       border-radius: 9px;
       font-size: 13px;
       color: var(--accent2);
@@ -235,7 +222,7 @@
       border-radius: 9px;
       background: rgba(239,68,68,0.1);
       border: 1px solid rgba(239,68,68,0.25);
-      color: #fca5a5;
+      color: var(--red);
       font-size: 13px;
       margin-bottom: 20px;
     }
@@ -257,7 +244,7 @@
       text-decoration: none;
     }
 
-    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary { background: var(--accent); color: var(--on-accent); }
     .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
     .btn-primary:active { transform: translateY(0); }
 
@@ -286,14 +273,20 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 720px) {
+      .topbar { padding: 0 12px; height: 50px; }
+      .topbar-left { gap: 8px; }
+      .topbar-title { font-size: 13px; }
+      .back-btn { font-size: 12px; padding: 4px 8px; }
       .form-layout { grid-template-columns: 1fr; }
       .submit-row { grid-column: 1; }
-      .page { margin: 20px auto; }
+      .page { margin: 20px auto; padding: 0 12px; }
       .page-header h1 { font-size: 20px; }
     }
   </style>
-</head>
-<body>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-event-form">
 
 <header class="topbar">
   <div class="topbar-left">
@@ -311,11 +304,11 @@
 <div class="page">
   <div class="page-header">
     <h1>Etkinlik Oluştur</h1>
-    <p>Gelecek hafta için yeni bir etkinlik planla. Kayıt deadline'ı bu Pazar 23:59.</p>
+    <p>Gelecek hafta için yeni bir etkinlik planla. Başvurular Pazar günü otomatik açılır.</p>
   </div>
 
   <% if (typeof error !== 'undefined' && error) { %>
-  <div class="alert-error">⚠ <%= error %></div>
+  <div class="alert-error"> <%= error %></div>
   <% } %>
 
   <form method="POST" action="/events/create" id="eventForm">
@@ -326,7 +319,7 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="card-header-icon" style="background:rgba(108,99,255,0.15);">📝</div>
+            <div class="card-header-icon" style="background:color-mix(in srgb, var(--accent) 15%, transparent);"></div>
             <h3>Temel Bilgiler</h3>
           </div>
           <div class="card-body">
@@ -347,7 +340,7 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="card-header-icon" style="background:rgba(34,197,94,0.12);">👥</div>
+            <div class="card-header-icon" style="background:rgba(34,197,94,0.12);"></div>
             <h3>Etkinlik Detayları</h3>
           </div>
           <div class="card-body">
@@ -379,7 +372,7 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="card-header-icon" style="background:rgba(234,179,8,0.12);">📅</div>
+            <div class="card-header-icon" style="background:rgba(234,179,8,0.12);"></div>
             <h3>Tarih & Saat</h3>
           </div>
           <div class="card-body">
@@ -404,11 +397,12 @@
               <span class="form-hint">Bitiş saati başlangıçtan sonra olmalı</span>
             </div>
 
-            <!-- Deadline info -->
+            <!-- Başvuru açılışı bilgisi -->
             <div style="padding:14px;background:rgba(234,179,8,0.06);border:1px solid rgba(234,179,8,0.15);border-radius:9px;">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#eab308;margin-bottom:6px;">Kayıt Deadline</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#eab308;margin-bottom:6px;">Başvuru Açılışı</div>
               <div style="font-size:13px;color:var(--text);" id="deadlineText">Hesaplanıyor...</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Bu Pazar gece 23:59'da kapanır</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Saat sistem tarafından rastgele seçilir: 12:00 veya 19:00</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;">Başvurular 5 saat açık kalır; açılışa kadar kullanıcılar etkinliği görmez.</div>
             </div>
           </div>
         </div>
@@ -476,12 +470,18 @@
   dateInput.max = toDateStr(nextSunday);
   dateInput.value = toDateStr(nextMonday);
 
-  // Deadline hesapla
-  const daysUntilThisSunday = day === 0 ? 0 : (7 - day);
-  const thisSunday = new Date(today);
-  thisSunday.setDate(today.getDate() + daysUntilThisSunday);
-  document.getElementById('deadlineText').textContent =
-    thisSunday.toLocaleDateString('tr-TR', { weekday:'long', day:'numeric', month:'long' }) + ' 23:59';
+  // Açılış Pazarını hesapla: etkinlik tarihinden önceki son Pazar
+  function updateOpeningText() {
+    const d = dateInput.value;
+    if (!d) return;
+    const ev = new Date(d + 'T12:00:00');
+    const back = (ev.getDay() + 7) % 7; // 0=Pazar
+    const sunday = new Date(ev);
+    sunday.setDate(ev.getDate() - (back === 0 ? 7 : back));
+    document.getElementById('deadlineText').textContent =
+      sunday.toLocaleDateString('tr-TR', { weekday:'long', day:'numeric', month:'long' }) + ', 12:00 veya 19:00';
+  }
+  updateOpeningText();
 
   // Özet güncelle
   function updateSummary() {
@@ -505,7 +505,7 @@
     updateSummary();
   }
 
-  dateInput.addEventListener('input', updateSummary);
+  dateInput.addEventListener('input', () => { updateSummary(); updateOpeningText(); });
   document.getElementById('startTime').addEventListener('change', updateSummary);
   document.getElementById('endTime').addEventListener('change', updateSummary);
   updateSummary();

@@ -1,0 +1,123 @@
+[
+  {
+    "name": "hero",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-947d5119-0207-4f1d-b498-db00a67492e3.png",
+    "prompt": "Edit target: the supplied illustration. Change ONLY the central seated woman's hair styling and sweater: replace the green head covering with visible shoulder-length wavy chestnut hair and a muted ochre crew-neck sweater. Keep her face, pose and all other people, architecture, objects, artwork style, palette, lighting and composition exactly unchanged. No text.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/hero.png",
+    "web_paths": [
+      "/img/editorial/hero-640.webp",
+      "/img/editorial/hero-1200.webp"
+    ]
+  },
+  {
+    "name": "sofia",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-a410dd68-4e27-4d40-b306-aa4ebe2ddbd9.png",
+    "prompt": "Use case: illustration-story. Create ONE landscape 3:2 editorial website illustration. Use the supplied reference ONLY for the refined warm hand-painted paper texture, natural proportions and muted forest green, ochre, terracotta and sky-blue palette; compose a completely different scene for the subject. Light sunlit atmosphere, warm ivory sky, rich but restrained colors, elegant European cultural-magazine quality. Fully opaque image, light background reaching every edge. No black background, dark vignette, neon, glossy icons, location pins, globes, labels, writing, logos, watermark, collages or multi-panel layouts. People if included wear simple contemporary casual clothes with visible uncovered hair. This is a conceptual illustration, not a documentary photograph. SUBJECT: Sofia, Bulgaria, international youth volunteering in communication and media. Foreground two young adult volunteers collaborating on a camera and notebook at a cafe table; recognisable pale Alexander Nevsky cathedral golden-green domes and Sofia city greenery gently visible beyond a sunny square. Location atmosphere matters most. Neither envelopes nor generic email symbols. Wide scenic cover, architecture fills upper half, people smaller in lower foreground.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/sofia.png",
+    "web_paths": [
+      "/img/editorial/sofia-640.webp",
+      "/img/editorial/sofia-1200.webp"
+    ]
+  },
+  {
+    "name": "visoko",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-c7073bf8-aaf2-47e2-be87-e31d2cf9ec40.png",
+    "prompt": "Use case: illustration-story. Create ONE landscape 3:2 editorial website illustration. Use the supplied reference ONLY for the refined warm hand-painted paper texture, natural proportions and muted forest green, ochre, terracotta and sky-blue palette; compose a completely different scene for the subject. Light sunlit atmosphere, warm ivory sky, rich but restrained colors, elegant European cultural-magazine quality. Fully opaque image, light background reaching every edge. No black background, dark vignette, neon, glossy icons, location pins, globes, labels, writing, logos, watermark, collages or multi-panel layouts. People if included wear simple contemporary casual clothes with visible uncovered hair. This is a conceptual illustration, not a documentary photograph. SUBJECT: Visoko, Bosnia and Herzegovina, social volunteering with children. A small welcoming Bosnian town with terracotta rooftops by a gentle river and green hills; foreground two volunteers help children plant flowers beside a community garden and a modest outdoor table. Human-scale Balkan town, not a grand tourist metropolis, no invented monuments. Airy pale blue sky and green landscape.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/visoko.png",
+    "web_paths": [
+      "/img/editorial/visoko-640.webp",
+      "/img/editorial/visoko-1200.webp"
+    ]
+  },
+  {
+    "name": "braga",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-eee54e12-0c41-4f97-811c-2182e6ce1afa.png",
+    "prompt": "Use case: illustration-story. Create ONE landscape 3:2 editorial website illustration. Use the supplied reference ONLY for the refined warm hand-painted paper texture, natural proportions and muted forest green, ochre, terracotta and sky-blue palette; compose a completely different scene for the subject. Light sunlit atmosphere, warm ivory sky, rich but restrained colors, elegant European cultural-magazine quality. Fully opaque image, light background reaching every edge. No black background, dark vignette, neon, glossy icons, location pins, globes, labels, writing, logos, watermark, collages or multi-panel layouts. People if included wear simple contemporary casual clothes with visible uncovered hair. This is a conceptual illustration, not a documentary photograph. SUBJECT: Braga, Portugal, environment and intergenerational volunteering. A graceful view of Bom Jesus do Monte's white zigzag baroque staircase on a green wooded hillside, gentle Portuguese roofs lower in frame, a young volunteer and an older person tending potted plants in the foreground. Sunny cream and terracotta architectural accents. Graceful wide composition.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/braga.png",
+    "web_paths": [
+      "/img/editorial/braga-640.webp",
+      "/img/editorial/braga-1200.webp"
+    ]
+  },
+  {
+    "name": "skopje",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-49dd33da-ae71-46e1-b128-1582eadc7181.png",
+    "prompt": "Use case: illustration-story. Create ONE landscape 3:2 editorial website illustration. Use the supplied reference ONLY for the refined warm hand-painted paper texture, natural proportions and muted forest green, ochre, terracotta and sky-blue palette; compose a completely different scene for the subject. Light sunlit atmosphere, warm ivory sky, rich but restrained colors, elegant European cultural-magazine quality. Fully opaque image, light background reaching every edge. No black background, dark vignette, neon, glossy icons, location pins, globes, labels, writing, logos, watermark, collages or multi-panel layouts. People if included wear simple contemporary casual clothes with visible uncovered hair. This is a conceptual illustration, not a documentary photograph. SUBJECT: Skopje, North Macedonia, inclusive international volunteering. A scenic sunlit view of the old Stone Bridge across the Vardar River with old-town roofs behind; foreground a young wheelchair user and two other young adults conversing as equals on an accessible riverside path. Small expressive natural figures, genuine participation, no charity cliches, no flags or text.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/skopje.png",
+    "web_paths": [
+      "/img/editorial/skopje-640.webp",
+      "/img/editorial/skopje-1200.webp"
+    ]
+  },
+  {
+    "name": "climate",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-675e4a00-0467-454a-9281-5f3c4191b806.png",
+    "prompt": "Use case: illustration-story. Produce ONE landscape 3:2 illustration for a professional Turkish youth NGO website. Use the supplied reference only for its elegant hand-painted editorial style, fine paper grain, natural proportions and palette of warm ivory, sage, ochre, muted sky blue and terracotta. Make a NEW composition and different characters, not a copy of the reference. Bright natural daylight, fully opaque light scenery to every edge. No black or dark background, no vignette, floating glossy objects, neon, globes, location pins, letters, text, logo, watermark, badges or collages. People wear simple contemporary casual clothing with visible uncovered hair; calm, authentic body language. Conceptual illustration, not documentary photography. SUBJECT: A climate learning field workshop in a sunny Anatolian valley: three university-age volunteers examine seedlings and record observations in a notebook next to a small rainwater collection tank, distant green fields, pale mountains and modest solar panels. Small figures in an expansive landscape; emphasise ecology, practical learning, water and resilience.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/climate.png",
+    "web_paths": [
+      "/img/editorial/climate-640.webp",
+      "/img/editorial/climate-1200.webp"
+    ]
+  },
+  {
+    "name": "children",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-722f8a23-2857-4eb9-a7e9-92ee226b6b02.png",
+    "prompt": "Use case: illustration-story. Produce ONE landscape 3:2 illustration for a professional Turkish youth NGO website. Use the supplied reference only for its elegant hand-painted editorial style, fine paper grain, natural proportions and palette of warm ivory, sage, ochre, muted sky blue and terracotta. Make a NEW composition and different characters, not a copy of the reference. Bright natural daylight, fully opaque light scenery to every edge. No black or dark background, no vignette, floating glossy objects, neon, globes, location pins, letters, text, logo, watermark, badges or collages. People wear simple contemporary casual clothing with visible uncovered hair; calm, authentic body language. Conceptual illustration, not documentary photography. SUBJECT: A welcoming, accessible children's creativity workshop in a sunlit room: two young adult mentors help four children make colorful paper models and paint on a large shared table, shelves of books and simple art materials, a big open window and plants. Different characters from the reference, broad composition with full table, gentle playful colors without cartoon exaggeration.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/children.png",
+    "web_paths": [
+      "/img/editorial/children-640.webp",
+      "/img/editorial/children-1200.webp"
+    ]
+  },
+  {
+    "name": "culture",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-2e5e3cdb-0040-4a32-adc6-8b96da276e88.png",
+    "prompt": "Use case: illustration-story. Produce ONE landscape 3:2 illustration for a professional Turkish youth NGO website. Use the supplied reference only for its elegant hand-painted editorial style, fine paper grain, natural proportions and palette of warm ivory, sage, ochre, muted sky blue and terracotta. Make a NEW composition and different characters, not a copy of the reference. Bright natural daylight, fully opaque light scenery to every edge. No black or dark background, no vignette, floating glossy objects, neon, globes, location pins, letters, text, logo, watermark, badges or collages. People wear simple contemporary casual clothing with visible uncovered hair; calm, authentic body language. Conceptual illustration, not documentary photography. SUBJECT: A serene architectural and cultural illustration of Erzurum's Çifte Minareli Medrese, its two slender brick minarets flanking an ornate Seljuk stone entrance. Include a modest open sketchbook with an architectural pencil sketch in the near foreground and distant pale Palandöken mountains. No people needed. Bright cream stone, warm terracotta brick, pale blue sky; dignified heritage magazine illustration, fully visible building.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/culture.png",
+    "web_paths": [
+      "/img/editorial/culture-640.webp",
+      "/img/editorial/culture-1200.webp"
+    ]
+  },
+  {
+    "name": "cycling",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-6c47ebb5-d052-4462-ac36-8d082d5e27d5.png",
+    "prompt": "Use case: illustration-story. Produce ONE landscape 3:2 illustration for a professional Turkish youth NGO website. Use the supplied reference only for its elegant hand-painted editorial style, fine paper grain, natural proportions and palette of warm ivory, sage, ochre, muted sky blue and terracotta. Make a NEW composition and different characters, not a copy of the reference. Bright natural daylight, fully opaque light scenery to every edge. No black or dark background, no vignette, floating glossy objects, neon, globes, location pins, letters, text, logo, watermark, badges or collages. People wear simple contemporary casual clothing with visible uncovered hair; calm, authentic body language. Conceptual illustration, not documentary photography. SUBJECT: A youth cycling outing on a safe leafy cycle path in Erzurum: three young adults wearing helmets and relaxed sports clothing cycle together, well-drawn believable bicycles with two wheels each, low local stone buildings and a pale mountain ridge in the background, spring green trees. Dynamic wide composition from a three-quarter side angle; joyful active living and clean mobility.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/cycling.png",
+    "web_paths": [
+      "/img/editorial/cycling-640.webp",
+      "/img/editorial/cycling-1200.webp"
+    ]
+  },
+  {
+    "name": "inclusion",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-5d464860-fcbc-4469-a985-913aa09604ad.png",
+    "prompt": "Use case: illustration-story. Produce ONE landscape 3:2 illustration for a professional Turkish youth NGO website. Use the supplied reference only for its elegant hand-painted editorial style, fine paper grain, natural proportions and palette of warm ivory, sage, ochre, muted sky blue and terracotta. Make a NEW composition and different characters, not a copy of the reference. Bright natural daylight, fully opaque light scenery to every edge. No black or dark background, no vignette, floating glossy objects, neon, globes, location pins, letters, text, logo, watermark, badges or collages. People wear simple contemporary casual clothing with visible uncovered hair; calm, authentic body language. Conceptual illustration, not documentary photography. SUBJECT: An inclusive youth dialogue workshop: a young deaf adult and two other young adults seated in a bright community room, communicating face to face with open attentive gestures and visual cards on the table. One person wearing a small hearing aid, all equal participants. Do not attempt alphabet/sign-language instructional graphics. No writing. Emphasise mutual communication and welcoming eye contact, large sunlit windows and a quiet sage wall.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/inclusion.png",
+    "web_paths": [
+      "/img/editorial/inclusion-640.webp",
+      "/img/editorial/inclusion-1200.webp"
+    ]
+  },
+  {
+    "name": "women",
+    "source": "/home/can/.codex/generated_images/01a0bf46-3977-7c12-b4a4-6fdd0d6e9b18/exec-c8f2c5de-a7bd-448b-89a1-78ff46e70683.png",
+    "prompt": "Use case: illustration-story. One landscape 3:2 conceptual illustration for a youth NGO's women's participation and entrepreneurship page. Three young adult women collaborating on an idea in a sunlit modern community studio: a woman with short dark hair stands beside a board of blank colored cards, a woman with a loose blonde braid and glasses uses a laptop, a woman with short auburn curly hair arranges samples on a desk. Respectful, capable, ordinary people, visible uncovered hair, casual contemporary clothes. Different faces from the supplied reference. Match only the reference's sophisticated hand-painted cultural-magazine style, fine paper texture, natural proportions and warm cream, forest green, muted ochre, terracotta and soft blue palette. Airy light windows and plants, large coherent scenic composition. No words, characters on screens, letters, labels, logo, watermark, neon, glossy objects, globes, pins, black background or dark vignette. Opaque scenery fully fills the rectangular canvas.",
+    "mode": "built-in image_gen",
+    "saved_path": "/home/can/sitoded-anket/assets/editorial-2026/women.png",
+    "web_paths": [
+      "/img/editorial/women-640.webp",
+      "/img/editorial/women-1200.webp"
+    ]
+  }
+]

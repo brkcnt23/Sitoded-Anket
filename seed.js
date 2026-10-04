@@ -1,5 +1,6 @@
 const pool = require('./database');
 const bcrypt = require('bcryptjs');
+const { toDateStr, lastSundayStrictlyBefore, candidateSlots, closeTime } = require('./lib/opening');
 
 const seedDatabase = async () => {
   try {
@@ -291,11 +292,36 @@ const seedDatabase = async () => {
     nextMonday.setDate(now.getDate() + daysUntilNextMonday);
     nextMonday.setHours(12, 0, 0, 0);
 
-    // Deadline: bu haftanın Pazar 23:59 (bir sonraki hafta için kayıt kapanışı)
-    const daysUntilThisSunday = todayDay === 0 ? 0 : (7 - todayDay);
-    const thisSunday = new Date(now);
-    thisSunday.setDate(now.getDate() + daysUntilThisSunday);
-    thisSunday.setHours(23, 59, 59, 999);
+    // Açılış slotu: o Pazar için TEK ortak, rastgele 12:00 veya 19:00 (üretimdeki ile aynı mantık).
+    // Seed Pazar 19:00'dan sonra çalıştırılırsa sonraki Pazar 12:00 kullanılır — demo verisi hep canlı kalır.
+    const resolveOpening = async (eventDate) => {
+      const sunday = lastSundayStrictlyBefore(toDateStr(eventDate));
+      const sundayStr = toDateStr(sunday);
+
+      const slotRes = await pool.query(
+        'SELECT open_time FROM weekly_openings WHERE opening_sunday = $1',
+        [sundayStr]
+      );
+      if (slotRes.rows.length > 0) {
+        const open = new Date(slotRes.rows[0].open_time);
+        return { open, deadline: closeTime(open) };
+      }
+
+      const candidates = candidateSlots(sunday);
+      let open;
+      if (candidates.length > 0) {
+        open = candidates[Math.floor(Math.random() * candidates.length)];
+      } else {
+        open = new Date(sunday);
+        open.setDate(sunday.getDate() + 7);
+        open.setHours(12, 0, 0, 0);
+      }
+      await pool.query(
+        'INSERT INTO weekly_openings (opening_sunday, open_time) VALUES ($1, $2) ON CONFLICT (opening_sunday) DO NOTHING',
+        [sundayStr, open]
+      );
+      return { open, deadline: closeTime(open) };
+    };
 
     // Yardımcı: nextMonday'e N gün ekle
     const nextWeekDay = (offset) => {
@@ -461,18 +487,29 @@ const seedDatabase = async () => {
         team_id: teamIds['Organizasyon ve Sponsor Ekibi'],
         leader_id: userIds['burakcan'].id // burakcan tarafından oluşturulmuş
       }
-      // NOT: Pazar = deadline günü, etkinlik eklenmez
+      // NOT: Pazar = açılış günü, etkinlik eklenmez
     ];
 
     const eventIds = [];
     for (const event of events) {
+      let open, deadline;
+      if (event.title === 'Yoklama Test Etkinliği') {
+        // Geçmiş etkinlik: backfill tarzı (open = deadline)
+        deadline = new Date('2026-03-17T23:59:59');
+        open = new Date(deadline);
+      } else {
+        const slot = await resolveOpening(event.event_date);
+        open = slot.open;
+        deadline = slot.deadline;
+      }
+
       const result = await pool.query(
-        `INSERT INTO events (title, description, location, event_date, start_time, end_time, capacity, leader_id, team_id, registration_deadline, status)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'ACTIVE')
+        `INSERT INTO events (title, description, location, event_date, start_time, end_time, capacity, leader_id, team_id, registration_open, registration_deadline, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'ACTIVE')
          RETURNING id`,
         [event.title, event.description, event.location, event.event_date,
          event.start_time, event.end_time, event.capacity,
-         event.leader_id, event.team_id, thisSunday]
+         event.leader_id, event.team_id, open, deadline]
       );
       eventIds.push(result.rows[0].id);
       console.log(`  ✓ ${event.title}`);

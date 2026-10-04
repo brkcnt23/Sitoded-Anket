@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
+  <title>QR Yoklama — Sitoded</title>
+  <link rel="icon" href="/img/site/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px 20px; width: 100%; max-width: 400px; text-align: center;
+      display: flex; flex-direction: column; gap: 12px; align-items: center;
+    }
+    .icon { font-size: 44px; }
+    h1 { font-size: 18px; font-weight: 700; }
+    p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .btn {
+      display: inline-block; padding: 12px 20px; border-radius: 10px; font-size: 14px;
+      font-weight: 700; text-decoration: none; color: white; background: var(--accent);
+      margin-top: 6px; transition: background .15s;
+    }
+    .btn:hover { background: var(--accent2); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border2); }
+    .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+  </style>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-qr">
+  <div class="card"><a href="/" class="workspace-brand"><%- include('../public/brand') %></a>
+    <% if (status === 'success') { %>
+      <div class="icon"><%- include('../shared/icon',{name:status==='success'?'check':'shield'}) %></div>
+      <h1>Katılımın kaydedildi!</h1>
+      <p><%= event_title %> etkinliği için yoklaman işaretlendi, puanın eklendi.</p>
+      <a href="/dashboard" class="btn">Üye paneline dön</a>
+    <% } else if (status === 'need_login') { %>
+      <div class="icon"><%- include('../shared/icon',{name:status==='success'?'check':'shield'}) %></div>
+      <h1>Önce giriş yap</h1>
+      <p><%= event_title %> etkinliği için yoklamanı işaretlemek üzere hesabına giriş yap — girişten sonra otomatik olarak bu sayfaya döneceksin. (Kod 10 dakika geçerlidir.)</p>
+      <a href="/login?next=/y/<%= encodeURIComponent(token) %>" class="btn">Giriş Yap</a>
+    <% } else if (status === 'not_registered') { %>
+      <div class="icon"><%- include('../shared/icon',{name:status==='success'?'check':'shield'}) %></div>
+      <h1>Kaydın bulunamadı</h1>
+      <p><%= event_title %> etkinliğine onaylı kaydın yok. Ekipten bir sorumluya danış.</p>
+      <a href="/dashboard" class="btn btn-ghost">Dashboard</a>
+    <% } else if (status === 'expired') { %>
+      <div class="icon">⏰</div>
+      <h1>Kodun süresi dolmuş</h1>
+      <p>QR kod 10 dakika geçerlidir. Etkinlik liderinden yeni kod iste.</p>
+    <% } else { %>
+      <div class="icon"><%- include('../shared/icon',{name:status==='success'?'check':'shield'}) %></div>
+      <h1>Geçersiz kod</h1>
+      <p>Bu QR kod tanınmadı. Etkinlik liderinden güncel kodu iste.</p>
+    <% } %>
+  </div>
+</body>
+</html>

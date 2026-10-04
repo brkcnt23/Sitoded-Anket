@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
+  <title><%= survey ? survey.title : 'Anket' %> — Sitoded</title>
+  <link rel="icon" href="/img/site/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; }
+    body { --tt-bottom: 92px;
+      font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; padding-bottom: 120px;
+    }
+
+    /* HEADER */
+    .p-header { padding: 20px 16px 14px; display: flex; flex-direction: column; gap: 10px; }
+    .p-logo { height: 40px; width: auto; align-self: flex-start; }
+    .p-title { font-size: 22px; font-weight: 700; letter-spacing: -.3px; line-height: 1.25; }
+    .p-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    .wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* ALERT */
+    .alert-err { padding: 12px 14px; border-radius: 10px; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: var(--red); font-size: 13px; line-height: 1.4; }
+
+    /* QUESTION CARD */
+    .qcard { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .qhead { font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .qreq { color: var(--red); font-weight: 700; }
+    .qhint { font-size: 11px; color: var(--muted); }
+
+    .finput, .ftextarea {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px;
+      padding: 12px 14px; font-size: 15px; color: var(--text); font-family: inherit; outline: none;
+      transition: border-color .15s; -webkit-appearance: none; appearance: none;
+    }
+    .ftextarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+    .finput:focus, .ftextarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
+    .finput::placeholder, .ftextarea::placeholder { color: var(--muted); }
+    input[type="date"].finput { color-scheme: light; }
+
+    /* CHOICES */
+    .opts { display: flex; flex-direction: column; gap: 8px; }
+    .opt-lbl {
+      display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-radius: 8px;
+      border: 1px solid var(--border2); background: var(--surface2); font-size: 14px; cursor: pointer;
+      transition: all .15s; width: 100%;
+    }
+    .opt-lbl:hover { border-color: var(--accent); }
+    .opt-lbl input { width: 18px; height: 18px; accent-color: var(--accent); flex-shrink: 0; }
+    .opt-lbl:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+    /* FILE */
+    .file-btn {
+      display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-radius: 10px;
+      border: 1px dashed var(--border2); background: var(--surface2); color: var(--accent2);
+      font-size: 14px; font-weight: 600; cursor: pointer; text-align: left; width: 100%; min-height: 48px;
+    }
+    .file-btn:hover { border-color: var(--accent); }
+    .file-btn input { display: none; }
+    .file-name { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; word-break: break-all; }
+    .file-preview { width: 100%; max-width: 100%; border-radius: 10px; border: 1px solid var(--border); display: none; }
+    .file-preview.show { display: block; }
+
+    /* KVKK */
+    .kvkk-box { max-height: 120px; overflow-y: auto; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .kvkk-lbl { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; cursor: pointer; }
+    .kvkk-lbl input { width: 18px; height: 18px; accent-color: var(--accent); margin-top: 1px; flex-shrink: 0; }
+
+    /* STATES */
+    .state-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 32px 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .state-icon { font-size: 40px; }
+    .state-title { font-size: 18px; font-weight: 700; }
+    .state-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* STICKY SUBMIT */
+    .submitbar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+      background: var(--surface); border-top: 1px solid var(--border2);
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    }
+    .submitbar-inner { width: 100%; max-width: 640px; margin: 0 auto; display: flex; gap: 10px; align-items: center; }
+    .btn-submit {
+      flex: 1; background: var(--accent); color: var(--on-accent); border: none; border-radius: 10px;
+      padding: 14px; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
+      min-height: 48px; transition: background .15s;
+    }
+    .btn-submit:hover { background: var(--accent2); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+
+    @media (min-width: 720px) {
+      .p-header { max-width: 672px; margin: 0 auto; }
+    }
+  </style>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-survey">
+
+<% if (!survey) { %>
+  <!-- 404 durumu burada oluşmaz (router errors/404 render eder) -->
+<% } else if (done) { %>
+  <div class="wrap" style="padding-top: 48px;">
+    <div class="state-card">
+      <a class="workspace-brand" href="/"><%- include('../public/brand') %></a>
+      <div class="state-icon"><%- include('../shared/icon',{name:'check'}) %></div>
+      <div class="state-title">Yanıtınız alındı</div>
+      <div class="state-sub">Teşekkürler! Anketiniz başarıyla kaydedildi. Bu sayfayı kapatabilirsiniz.</div>
+      <a href="/" class="btn btn-primary">SİTODED ana sayfa →</a>
+    </div>
+  </div>
+<% } else if (survey.status !== 'OPEN') { %>
+  <div class="wrap" style="padding-top: 48px;">
+    <div class="state-card">
+      <a class="workspace-brand" href="/"><%- include('../public/brand') %></a>
+      <div class="state-icon"><%- include('../shared/icon',{name:'shield'}) %></div>
+      <div class="state-title">Bu anket yanıtlara kapalı</div>
+      <div class="state-sub">Anket şu anda yeni yanıt kabul etmiyor. Daha sonra tekrar deneyin.</div>
+      <a href="/" class="btn btn-primary">SİTODED ana sayfa →</a>
+    </div>
+  </div>
+<% } else { %>
+
+  <header class="p-header"><a class="platform-home" href="/">← SİTODED ana sayfa</a>
+    <%- include('../public/brand') %>
+    <h1 class="p-title"><%= survey.title %></h1>
+    <% if (survey.description) { %><p class="p-desc"><%= survey.description %></p><% } %>
+  <div class="survey-cover"><img src="/img/editorial/women-640.webp" width="300" height="200" alt=""></div></header>
+
+  <form class="wrap" method="POST" enctype="multipart/form-data" id="survey-form" novalidate>
+    <% if (error) { %><div class="alert-err"> <%= error %></div><% } %>
+
+    <!-- Honeypot: botlar doldurur, insanlar görmez -->
+    <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
+    <% if (survey.collect_identity) { %>
+    <div class="qcard">
+      <div class="qhead">Üye bilgileri</div>
+      <input type="text" class="finput" name="respondent_name" placeholder="İsim Soyisim *" maxlength="120"
+             value="<%= typeof values !== 'undefined' && values.respondent_name ? values.respondent_name : '' %>">
+      <input type="email" class="finput" name="respondent_email" placeholder="E-posta (opsiyonel)" maxlength="120"
+             value="<%= typeof values !== 'undefined' && values.respondent_email ? values.respondent_email : '' %>">
+    </div>
+    <% } %>
+
+    <% questions.forEach((q, qi) => { %>
+    <div class="qcard">
+      <div class="qhead">
+        <%= q.title %><% if (q.required) { %> <span class="qreq">*</span><% } %>
+      </div>
+
+      <% if (q.type === 'TEXT_SHORT') { %>
+        <input type="text" class="finput" name="q_<%= q.id %>" maxlength="500"
+               value="<%= typeof values !== 'undefined' && values['q_' + q.id] ? values['q_' + q.id] : '' %>">
+      <% } else if (q.type === 'TEXT_LONG') { %>
+        <textarea class="ftextarea" name="q_<%= q.id %>" maxlength="5000"><%= typeof values !== 'undefined' && values['q_' + q.id] ? values['q_' + q.id] : '' %></textarea>
+      <% } else if (q.type === 'SINGLE_CHOICE') { %>
+        <div class="opts">
+          <% q.options.forEach(opt => { %>
+          <label class="opt-lbl">
+            <input type="radio" name="q_<%= q.id %>" value="<%= opt %>"
+                   <%= typeof values !== 'undefined' && values['q_' + q.id] === opt ? 'checked' : '' %>>
+            <%= opt %>
+          </label>
+          <% }); %>
+        </div>
+      <% } else if (q.type === 'MULTI_CHOICE') { %>
+        <div class="opts">
+          <% q.options.forEach(opt => { %>
+          <label class="opt-lbl">
+            <input type="checkbox" name="q_<%= q.id %>" value="<%= opt %>"
+                   <%= typeof values !== 'undefined' && Array.isArray(values['q_' + q.id]) && values['q_' + q.id].includes(opt) ? 'checked' : '' %>>
+            <%= opt %>
+          </label>
+          <% }); %>
+        </div>
+      <% } else if (q.type === 'DATE') { %>
+        <input type="date" class="finput" name="q_<%= q.id %>"
+               value="<%= typeof values !== 'undefined' && values['q_' + q.id] ? values['q_' + q.id] : '' %>">
+      <% } else if (q.type === 'NUMBER') { %>
+        <input type="number" step="any" class="finput" name="q_<%= q.id %>" inputmode="decimal"
+               value="<%= typeof values !== 'undefined' && values['q_' + q.id] ? values['q_' + q.id] : '' %>">
+      <% } else if (q.type === 'PHOTO') { %>
+        <label class="file-btn">
+           <span id="lbl_q_<%= q.id %>">Fotoğraf Seç veya Çek</span>
+          <input type="file" name="q_<%= q.id %>" accept="image/*" capture="environment"
+                 onchange="fileChanged(this, 'q_<%= q.id %>', 'image')">
+        </label>
+        <div class="file-name" id="fn_q_<%= q.id %>"></div>
+        <img class="file-preview" id="fp_q_<%= q.id %>" alt="Önizleme">
+      <% } else if (q.type === 'VIDEO') { %>
+        <label class="file-btn">
+           <span id="lbl_q_<%= q.id %>">Video Seç veya Çek</span>
+          <input type="file" name="q_<%= q.id %>" accept="video/*" capture="environment"
+                 onchange="fileChanged(this, 'q_<%= q.id %>', 'video')">
+        </label>
+        <div class="file-name" id="fn_q_<%= q.id %>"></div>
+        <video class="file-preview" id="fp_q_<%= q.id %>" controls preload="metadata" playsinline></video>
+      <% } %>
+      <% if (q.required) { %><div class="qhint">Zorunlu alan</div><% } %>
+    </div>
+    <% }); %>
+
+    <div class="qcard">
+      <div class="qhead">KVKK Onamı</div>
+      <div class="kvkk-box"><%= survey.kvkk_text %></div>
+      <label class="kvkk-lbl">
+        <input type="checkbox" name="kvkk_consent" id="kvkk-cb">
+        <span>Yukarıdaki metni okudum, kabul ediyorum. <span class="qreq">*</span></span>
+      </label>
+    </div>
+  </form>
+
+  <div class="submitbar">
+    <div class="submitbar-inner">
+      <button class="btn-submit" id="submit-btn" onclick="submitForm()">Anketi Gönder</button>
+    </div>
+  </div>
+<% } %>
+
+<script>
+  function fileChanged(input, qid, kind) {
+    const file = input.files && input.files[0];
+    const lbl = document.getElementById('lbl_' + qid);
+    const fn = document.getElementById('fn_' + qid);
+    const fp = document.getElementById('fp_' + qid);
+    if (!file) return;
+    lbl.textContent = file.name.length > 40 ? file.name.slice(0, 40) + '…' : file.name;
+    fn.textContent = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+    fp.classList.remove('show');
+    if (kind === 'image') {
+      const reader = new FileReader();
+      reader.onload = function (e) { fp.src = e.target.result; fp.classList.add('show'); };
+      reader.readAsDataURL(file);
+    } else {
+      fp.src = URL.createObjectURL(file);
+      fp.classList.add('show');
+    }
+  }
+
+  function submitForm() {
+    const form = document.getElementById('survey-form');
+    const btn = document.getElementById('submit-btn');
+
+    // KVKK kontrolü
+    const kvkk = document.getElementById('kvkk-cb');
+    if (!kvkk.checked) {
+      alert('Anketi gönderebilmek için KVKK onam kutusunu işaretlemelisiniz.');
+      kvkk.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Zorunlu alan kontrolü (client tarafı — sunucu yine de doğrular)
+    const required = form.querySelectorAll('[data-req]');
+    for (const el of required) {
+      if (!el.value) {
+        alert('Lütfen tüm zorunlu alanları doldurun.');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Gönderiliyor…';
+    form.submit();
+  }
+</script>
+</body>
+</html>

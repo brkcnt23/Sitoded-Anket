@@ -4,26 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
     <title>Yoklama - <%= event.title %></title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #0a0a0a;
-            --primary-light: #222222;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --danger: #EF4444;
-            --info: #3B82F6;
-            --bg: #1a1a1a;
-            --bg-white: #2a2a2a;
-            --text-dark: #e0e0e0;
-            --text-gray: #b0b0b0;
-            --border: #404040;
         }
 
         body {
@@ -402,20 +389,39 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
-</head>
 
-<body>
+        /* ── QR MODAL ── */
+        .qr-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 999;
+            display: none; align-items: center; justify-content: center; padding: 16px;
+        }
+        .qr-overlay.open { display: flex; }
+        .qr-modal {
+            background: var(--card-bg, #131318); border: 1px solid rgba(255,255,255,.12);
+            border-radius: 14px; padding: 20px; width: min(320px, 92vw);
+            text-align: center; display: flex; flex-direction: column; gap: 12px;
+        }
+        .qr-modal img { width: 100%; max-width: 100%; border-radius: 10px; }
+        .qr-modal h3 { font-size: 16px; margin: 0; color: var(--text, #e8e8f0); }
+        .qr-modal p { font-size: 12px; color: var(--text-gray, #7070a0); margin: 0; line-height: 1.5; }
+        .qr-count { font-family: monospace; font-size: 13px; color: var(--accent, var(--accent)); font-weight: 700; }
+    </style>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+
+<body data-theme="light" class="workspace ws-attendance">
     <!-- Toast -->
     <div id="toastContainer"></div>
 
     <!-- Navigation -->
     <nav>
         <div class="brand">
-            <img src="/img/beyaz-yatay-logo.png" alt="Sitoded" style="height: 45px; width: auto;">
-            Sitoded Anket
+            <span class="logo-img" role="img" aria-label="SİTODED" style="height:40px;width:40px;"></span>
+            <span>SİTODED <small>Yoklama</small></span>
         </div>
         <div class="nav-actions">
+            <button type="button" class="btn btn-primary" onclick="openQrModal()"> QR Yoklama</button>
             <a href="/dashboard" class="btn btn-secondary">← Geri Dön</a>
         </div>
     </nav>
@@ -430,7 +436,7 @@
         <!-- Event Info -->
         <div class="event-info">
             <div class="info-item">
-                <span class="info-label">📅 Tarih</span>
+                <span class="info-label"> Tarih</span>
                 <span class="info-value"><%= new Date(eventDateStr).toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
             </div>
             <div class="info-item">
@@ -438,37 +444,37 @@
                 <span class="info-value"><%= event.start_time.substring(0, 5) %> - <%= event.end_time.substring(0, 5) %></span>
             </div>
             <div class="info-item">
-                <span class="info-label">📍 Yer</span>
+                <span class="info-label"> Yer</span>
                 <span class="info-value"><%= event.location %></span>
             </div>
             <div class="info-item">
-                <span class="info-label">👥 Kontenjan</span>
+                <span class="info-label"> Kontenjan</span>
                 <span class="info-value"><%= event.capacity %></span>
             </div>
         </div>
 
         <% if (sundayAfterDeadline && !deadlinePassedForEvent) { %>
             <div class="success-box">
-                ✅ Kayıtlar kapatılmıştır. Yoklama listesi final olmuştur. Katılım ve katılmama seçenekleri devre dışı bırakılmıştır.
+                 Başvuru süresi sona erdi. Katılımcı listesi kesinleşti; yeni kayıt alınmaz.
             </div>
         <% } %>
 
-        <% if (!deadlinePassedForEvent) { %>
-            <div class="success-box">
-                ✅ Bu etkinlik için yoklama alınabilir. Katılımcıların katılım durumunu işaretleyip "Yoklama Al" butonuna basın.
-            </div>
-        <% } %>
-
-        <% if (deadlinePassedForEvent && !sundayAfterDeadline) { %>
+        <% if (!deadlinePassedForEvent && !sundayAfterDeadline) { %>
             <div class="warning-box">
-                ⚠️ Pazar saat 12:00'den sonra yoklama listesi kesinleşecek ve kayıtlar kapatılacaktır.
+                 Başvurular hâlâ açık — <%= event.registration_deadline ? new Date(event.registration_deadline).toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' }) + ' saat ' + new Date(event.registration_deadline).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : '' %> kapanınca liste kesinleşir.
+            </div>
+        <% } %>
+
+        <% if (deadlinePassedForEvent) { %>
+            <div class="success-box">
+                 Bu etkinlik için yoklama alınabilir. Katılımcıların katılım durumunu işaretleyip "Yoklama Al" butonuna basın.
             </div>
         <% } %>
 
         <!-- Confirmed List -->
         <div class="section">
             <h2 class="section-title">
-                ✅ Katılımcılar (<%= confirmedList.length %>/<%= event.capacity %>)
+                 Katılımcılar (<%= confirmedList.length %>/<%= event.capacity %>)
             </h2>
 
             <div class="table-container">
@@ -496,9 +502,9 @@
                                     <td><span class="badge badge-confirmed">Katılıyor</span></td>
                                     <td>
                                         <div class="attendance-actions">
-                                            <button type="button" class="attendance-btn yes <%= person.attended ? 'active' : '' %>" 
+                                            <button type="button" class="attendance-btn yes <%= person.attended ? 'active' : '' %>"
                                                     onclick="setAttendance(<%= person.user_id %>, true, this)">✓</button>
-                                            <button type="button" class="attendance-btn no <%= person.attended === false && person.attended !== null ? 'active' : '' %>" 
+                                            <button type="button" class="attendance-btn no <%= person.attended === false && person.attended !== null ? 'active' : '' %>"
                                                     onclick="setAttendance(<%= person.user_id %>, false, this)">✕</button>
                                         </div>
                                     </td>
@@ -552,10 +558,10 @@
         <div class="actions">
             <% if (deadlinePassedForEvent) { %>
                 <button id="takeAttendanceBtn" class="btn btn-primary" onclick="takeAttendance()">
-                    📝 Yoklama Al
+                     Yoklama Al
                 </button>
                 <button id="finishAttendanceBtn" class="btn btn-success" onclick="finishAttendance()" style="display: none;">
-                    ✅ Yoklamayı Bitir
+                     Yoklamayı Bitir
                 </button>
             <% } %>
         </div>
@@ -657,14 +663,59 @@
 
         function finishAttendance() {
             if (!confirm('Yoklamayı bitirmek istediğinizden emin misiniz? Artık değişiklik yapamayacaksınız.')) return;
-            
+
             showToast('Yoklama başarıyla tamamlandı!', 'success');
             // Burada ek işlem yapabiliriz, şimdilik sadece mesaj göster
             setTimeout(() => {
                 window.location.href = '/dashboard';
             }, 2000);
         }
+
+        // ===== QR YOKLAMA =====
+        let qrTimer = null;
+        async function openQrModal() {
+            document.getElementById('qrOverlay').classList.add('open');
+            await loadQr();
+        }
+        function closeQrModal() {
+            document.getElementById('qrOverlay').classList.remove('open');
+            if (qrTimer) clearInterval(qrTimer);
+        }
+        async function loadQr() {
+            const img = document.getElementById('qrImg');
+            const count = document.getElementById('qrCount');
+            try {
+                const res = await fetch('/api/attendance/<%= event.id %>/qr');
+                const data = await res.json();
+                if (!data.success) { showToast(data.error, 'error'); closeQrModal(); return; }
+                img.src = data.data.qr_data_uri;
+                const expiresAt = new Date(data.data.expires_at);
+                if (qrTimer) clearInterval(qrTimer);
+                qrTimer = setInterval(() => {
+                    const left = Math.max(0, Math.round((expiresAt - new Date()) / 1000));
+                    count.textContent = left + ' saniye kaldı';
+                    if (left <= 0) {
+                        clearInterval(qrTimer);
+                        count.textContent = 'Süre doldu — Yenile butonuna basın';
+                    }
+                }, 1000);
+            } catch (e) {
+                showToast('QR yüklenemedi: ' + e.message, 'error');
+            }
+        }
     </script>
+
+    <!-- QR MODAL -->
+    <div class="qr-overlay" id="qrOverlay" onclick="if(event.target===this)closeQrModal()">
+        <div class="qr-modal">
+            <h3> QR Yoklama</h3>
+            <p>Katılımcılar kendi telefonundan bu kodu okutsun — yoklama ve puan otomatik işlenir. Kod 10 dakika geçerlidir.</p>
+            <img id="qrImg" alt="QR Kod" style="background:#fff;padding:8px;">
+            <div class="qr-count" id="qrCount">Yükleniyor…</div>
+            <button type="button" class="btn btn-primary" onclick="loadQr()"> Yenile</button>
+            <button type="button" class="btn btn-secondary" onclick="closeQrModal()">Kapat</button>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,0 +1,556 @@
+[
+  {
+    "no": 1,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_49 (1).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "5f7eff4ac68d65b54a55d5995149d234455fbb29bcf314c07f0de2f71a4f25d7",
+    "file": "orijinaller/01_hero_bg_youth_erzurum.png",
+    "usage": "Hero arka planı"
+  },
+  {
+    "no": 2,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_50 (2).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "72f5f723f8088f37e49922b333edde32474ff17907f5a1bf7247f15233024e37",
+    "file": "orijinaller/02_hero_glow_orange_blue.png",
+    "usage": "Hero kenar ışıkları"
+  },
+  {
+    "no": 3,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_50 (3).png",
+    "width": 1448,
+    "height": 1086,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "064dc9bd3c38b59b4a9ef37f943daeefa88270c892618f1a1b7c63f17f50eebe",
+    "file": "orijinaller/03_hero_illustration_volunteers.png",
+    "usage": "Hero gönüllü ekip illüstrasyonu"
+  },
+  {
+    "no": 4,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_50 (4).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "b03b7391e9a821a8b7d6ad9dbffbac80e72e037f3d334b911e787ff0fabd4c2b",
+    "file": "orijinaller/04_icon_local_to_global.png",
+    "usage": "Hakkımızda: yerelden uluslararasıya"
+  },
+  {
+    "no": 5,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_51 (5).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "309c62402259d8f4a4f20dce393da2df8e10ac10c38f7d0e1e2da3a82dde3fea",
+    "file": "orijinaller/05_icon_ngo_solidarity_color.png",
+    "usage": "Hakkımızda: STK dayanışması, renkli seçenek"
+  },
+  {
+    "no": 6,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_51 (6).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "3ac157420027bd8e26c22fe193a03e7f4e764f7dd4e4ad2cd800a11cca328ddd",
+    "file": "orijinaller/06_icon_participation.png",
+    "usage": "Hakkımızda: katılımcılık"
+  },
+  {
+    "no": 7,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_51 (7).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "299329750bf636afb28f3bc196765b07d4eb27724122ca854491119144da60d5",
+    "file": "orijinaller/07_icon_social_value.png",
+    "usage": "Hakkımızda: katma değer"
+  },
+  {
+    "no": 8,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_51 (8).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "fd8496dd436a3f62a1b7084647f4ed2c50fb99e22e4ca5db3861a275b174b0cd",
+    "file": "orijinaller/08_section_bg_about_dark.png",
+    "usage": "Hakkımızda arka planı"
+  },
+  {
+    "no": 9,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_52 (10).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "01e2f3699e6bc2a3fb38495e2887c1e49cf5d203338e4090021094844871d109",
+    "file": "orijinaller/09_icon_youth_growth.png",
+    "usage": "Gençlik kartı / gelişim simgesi"
+  },
+  {
+    "no": 10,
+    "original": "ChatGPT Image 20 Eyl 2026 17_21_52 (9).png",
+    "width": 2172,
+    "height": 724,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "0eff64072961d6f8e547a2eb6998421bf6aed25f8fdf0631ada284695d241678",
+    "file": "orijinaller/10_vision_lineart_network.png",
+    "usage": "Vizyon kutusu yatay süsü"
+  },
+  {
+    "no": 11,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_33 (1).png",
+    "width": 1536,
+    "height": 1024,
+    "alpha_range": [
+      0,
+      253
+    ],
+    "sha256": "5adb476d49031a4b6978c051ea7013fdb64ea623be1298f15386591403e72caf",
+    "file": "orijinaller/11_section_bg_world_connections.png",
+    "usage": "Uluslararası çalışmalar arka planı"
+  },
+  {
+    "no": 12,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_33 (2).png",
+    "width": 1230,
+    "height": 1278,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "e0a50c63567c419b67498c8299c8490fc058d8266278e5bb25189b108a390d16",
+    "file": "orijinaller/12_icon_community_puzzle.png",
+    "usage": "Topluluk / dayanışma alternatif simgesi"
+  },
+  {
+    "no": 13,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_34 (3).png",
+    "width": 1223,
+    "height": 1286,
+    "alpha_range": [
+      1,
+      252
+    ],
+    "sha256": "c2a698ee5f007987e003286e1f20b415dc00dff133b1c928011fb71a20a59a6e",
+    "file": "orijinaller/13_section_bg_erzurum_towers_portrait.png",
+    "usage": "Dikey bölüm arka planı, Erzurum teması"
+  },
+  {
+    "no": 14,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_34 (4).png",
+    "width": 1203,
+    "height": 1307,
+    "alpha_range": [
+      7,
+      252
+    ],
+    "sha256": "624dc5d6753d8e5ec2527110e8932da438d7a6d83a5ec7acbcd961aa50d85267",
+    "file": "orijinaller/14_section_bg_globe_geometry_portrait.png",
+    "usage": "Dikey soyut arka plan"
+  },
+  {
+    "no": 15,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_34 (5).png",
+    "width": 1768,
+    "height": 890,
+    "alpha_range": [
+      3,
+      252
+    ],
+    "sha256": "3076cc78cb2a8559a4c4190313f03ba6ae43946a2e70137190473a6869785759",
+    "file": "orijinaller/15_banner_global_local_erzurum.png",
+    "usage": "Uluslararası bağlantılar yatay banner; gömülü yazı kontrolü"
+  },
+  {
+    "no": 16,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_36 (7).png",
+    "width": 1145,
+    "height": 1374,
+    "alpha_range": [
+      42,
+      247
+    ],
+    "sha256": "afc5f035f7a2ec569cfb0e8d2e729da197bd4c15991a184b1f3c8d79324fef99",
+    "file": "orijinaller/16_section_bg_mountains_portrait.png",
+    "usage": "Dikey dağ temalı arka plan"
+  },
+  {
+    "no": 17,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_36 (8).png",
+    "width": 1240,
+    "height": 1268,
+    "alpha_range": [
+      42,
+      251
+    ],
+    "sha256": "958a107ef0818579d7737593c4af7a318316e07c24103a14da2224913d45dbba",
+    "file": "orijinaller/17_section_bg_erzurum_network_portrait.png",
+    "usage": "Dikey Erzurum ve dünya ağı"
+  },
+  {
+    "no": 18,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_36 (9).png",
+    "width": 1230,
+    "height": 1278,
+    "alpha_range": [
+      140,
+      249
+    ],
+    "sha256": "aa241a0d7db80dc6836ee12b13c7ddbd6fe112b90e69ca5ef06b74ade0414db0",
+    "file": "orijinaller/18_section_bg_dark_connections_portrait.png",
+    "usage": "Dikey koyu bağlantı dokusu"
+  },
+  {
+    "no": 19,
+    "original": "ChatGPT Image 20 Eyl 2026 17_30_37 (10).png",
+    "width": 1214,
+    "height": 1295,
+    "alpha_range": [
+      103,
+      243
+    ],
+    "sha256": "d32ff8185dcc0b51d068ab47af9a00a8ce4055567afaa6c521e82916f9967204",
+    "file": "orijinaller/19_section_bg_architecture_portrait.png",
+    "usage": "Dikey mimari arka plan"
+  },
+  {
+    "no": 20,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_20 (1).png",
+    "width": 1213,
+    "height": 1296,
+    "alpha_range": null,
+    "sha256": "84da5394f19d8daef0fd41b0375c2cc976925d6a2443905a35dcbe105378c614",
+    "file": "orijinaller/20_illustration_activity_children.png",
+    "usage": "Çocuklar kartı, siyah zeminli"
+  },
+  {
+    "no": 21,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_21 (2).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "a2093801ebc6821aefba01778c6c4b418593e5a0559886e17d3a8303a1fe4613",
+    "file": "orijinaller/21_illustration_youth_erzurum.png",
+    "usage": "Gençlik / birlikte çalışma, siyah zeminli"
+  },
+  {
+    "no": 22,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_21 (3).png",
+    "width": 1214,
+    "height": 1295,
+    "alpha_range": null,
+    "sha256": "9c7f835cca612bde626de7d6fd38512a0a381f0d342ce5b81ef86e641345f75d",
+    "file": "orijinaller/22_poster_global_network.png",
+    "usage": "Dünya ağı posteri; gömülü yazı kontrolü"
+  },
+  {
+    "no": 23,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_22 (4).png",
+    "width": 1199,
+    "height": 1312,
+    "alpha_range": [
+      2,
+      252
+    ],
+    "sha256": "1b929fc05a8bfe8dd7906925328fa8c25f09a19ac02818119a5c0e13aacb87c5",
+    "file": "orijinaller/23_poster_global_local_slogan.png",
+    "usage": "Sloganlı afiş; hero arka planı olarak öncelikli değil"
+  },
+  {
+    "no": 24,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_22 (5).png",
+    "width": 1374,
+    "height": 1145,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "28b56b658af9e13a5b5f35c0bf054c73647899c52d93493750ab14a4b0729e4b",
+    "file": "orijinaller/24_icon_global_routes.png",
+    "usage": "Yerelden uluslararasıya, altın/mavi alternatif"
+  },
+  {
+    "no": 25,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_24 (6).png",
+    "width": 1230,
+    "height": 1278,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "19dd80e20a420c9b0baeb0639730af2f1b78223a1176fabb59ac2e478f7dd63a",
+    "file": "orijinaller/25_collage_partners_sdg_drafts.png",
+    "usage": "Kurum/SDG taslak kolajı; ayrı asset değil, yazı hataları var"
+  },
+  {
+    "no": 26,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_24 (7).png",
+    "width": 1222,
+    "height": 1287,
+    "alpha_range": null,
+    "sha256": "d419f897e3cd236fd57d4ce64fcd0cb0301b0ebdb87266cdfef36e2b8097a4d1",
+    "file": "orijinaller/26_illustration_environment_globe.png",
+    "usage": "Çevre kartı, siyah zeminli"
+  },
+  {
+    "no": 27,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_40 (1).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": null,
+    "sha256": "08d48864800c2cfc39f0c130131f22ed63712d3a74d34c46d54718e8ba02e858",
+    "file": "orijinaller/27_sdg_13_climate_draft.png",
+    "usage": "İklim hedefi taslağı, resmî ikon değil"
+  },
+  {
+    "no": 28,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_40 (2).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "82e168ccbae739c36fbfd9532a123a4b032b4738e7b3338df6f50adceeaf623a",
+    "file": "orijinaller/28_section_bg_sdg_dark.png",
+    "usage": "SKH bölümü arka planı"
+  },
+  {
+    "no": 29,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_40 (3).png",
+    "width": 1086,
+    "height": 1448,
+    "alpha_range": null,
+    "sha256": "3e24bcb5bcd6c920f651c90be8ebf805c1639e3e3243acac66ed1e2b0feae010",
+    "file": "orijinaller/29_cover_vira_concept.png",
+    "usage": "Vira üretilmiş kapak taslağı"
+  },
+  {
+    "no": 30,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_41 (4).png",
+    "width": 1086,
+    "height": 1448,
+    "alpha_range": null,
+    "sha256": "73152b3265fb532b248419c90eee74748c0a8b9e161b019aba7466bf57cfdcfa",
+    "file": "orijinaller/30_cover_nuve_concept.png",
+    "usage": "Nüve üretilmiş kapak taslağı"
+  },
+  {
+    "no": 31,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_41 (5).png",
+    "width": 1122,
+    "height": 1402,
+    "alpha_range": null,
+    "sha256": "79acea5acf45b791a919f2eb412ad95c513fa51e7802c8da8114decead84ee0b",
+    "file": "orijinaller/31_mockup_vira_concept.png",
+    "usage": "Vira üretilmiş dergi mockup taslağı"
+  },
+  {
+    "no": 32,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_41 (6).png",
+    "width": 1122,
+    "height": 1402,
+    "alpha_range": null,
+    "sha256": "482ce71e5bd092e6f0c6065d258135025a746406a30a3c5b998f701f9ee745ca",
+    "file": "orijinaller/32_mockup_nuve_concept.png",
+    "usage": "Nüve üretilmiş dergi mockup taslağı"
+  },
+  {
+    "no": 33,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_42 (7).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "8b7720fa52da814fa924692f50c9e2f4534131c22b1d3d29c9630cd499f01717",
+    "file": "orijinaller/33_section_bg_publications_editorial.png",
+    "usage": "Yayınlar bölümü arka planı"
+  },
+  {
+    "no": 34,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_42 (8).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "5a3f1a856d8ca3614ac48858f4fd611c99fa9b180e60ad64e45a1e321312d9c3",
+    "file": "orijinaller/34_icon_contact_erzurum_location.png",
+    "usage": "İletişim: Erzurum konum simgesi"
+  },
+  {
+    "no": 35,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_42 (9).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      253
+    ],
+    "sha256": "b6a0427173e3c82b83e1b1353455475f6bdbf874424cd40138251b6123f09a00",
+    "file": "orijinaller/35_icon_contact_email.png",
+    "usage": "İletişim: e-posta simgesi"
+  },
+  {
+    "no": 36,
+    "original": "ChatGPT Image 20 Eyl 2026 18_15_43 (10).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "f47888885f04a6ccae65cc69a40a6018fe9e7c56de20d28072474eeb4f43b5f0",
+    "file": "orijinaller/36_icon_social_instagram.png",
+    "usage": "Instagram simgesi"
+  },
+  {
+    "no": 37,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (1).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      254
+    ],
+    "sha256": "6de979d8a798d3cc6078e1238ac03d656c23af65d509ce76f9a402a716484078",
+    "file": "orijinaller/37_icon_social_x.png",
+    "usage": "X simgesi"
+  },
+  {
+    "no": 38,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (2).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      254
+    ],
+    "sha256": "79da969eb5d36dd53b4613e3efd7b3b71bad5ab7c8eb7f74b12d02880b737037",
+    "file": "orijinaller/38_icon_social_facebook.png",
+    "usage": "Facebook simgesi"
+  },
+  {
+    "no": 39,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (3).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      254
+    ],
+    "sha256": "4aa0d43992a2bf0088e6683aeb6ff76c98798dbd6ea28f41d5f5bb9d3ded471f",
+    "file": "orijinaller/39_icon_social_youtube.png",
+    "usage": "YouTube simgesi"
+  },
+  {
+    "no": 40,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (4).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "ddb342b165573484a3169fedeb43e1f5e9b864418246a9574f4e8cca68c4b382",
+    "file": "orijinaller/40_section_bg_contact_map.png",
+    "usage": "İletişim: koyu harita arka planı"
+  },
+  {
+    "no": 41,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (5).png",
+    "width": 1254,
+    "height": 1254,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "cb758eb74510c780b4bdf27bb5ccd6e25697ab94518f9480c5e594df57d9ce00",
+    "file": "orijinaller/41_watermark_erzurum_concept.png",
+    "usage": "Dekoratif Erzurum amblemi; SİTODED logosu olarak kullanılmaz"
+  },
+  {
+    "no": 42,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (6).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "c17e8730b4e0c21b63647ac0f6d72aa5abf12a320b14e6157f5d0e05cb0511e1",
+    "file": "orijinaller/42_footer_bg_geometric_dark.png",
+    "usage": "Footer geometrik doku"
+  },
+  {
+    "no": 43,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_32 (7).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "5f08c6d8b5014f52418b2a9958b693858eac3742fe07c99e02a5173db88c387a",
+    "file": "orijinaller/43_footer_bg_erzurum_skyline.png",
+    "usage": "Footer Erzurum silüeti"
+  },
+  {
+    "no": 44,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_33 (10).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "ea3cc17cfb6fcee2188ae4f272af9a36bd402603c23230e38df4d1f1f952feeb",
+    "file": "orijinaller/44_bg_abstract_blue_magenta.png",
+    "usage": "Mavi/mor ortak arka plan"
+  },
+  {
+    "no": 45,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_33 (8).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "d29716daa2e23f73ce7929dcd7f48f83a4defd5ae9d710ecd7d2b91780e2dcbf",
+    "file": "orijinaller/45_bg_abstract_orange_blue.png",
+    "usage": "Turuncu/mavi ortak arka plan"
+  },
+  {
+    "no": 46,
+    "original": "ChatGPT Image 20 Eyl 2026 18_29_33 (9).png",
+    "width": 1672,
+    "height": 941,
+    "alpha_range": null,
+    "sha256": "9ca0203d1f24e87eb6a90a86eb760794a0000be73e470b3894c089520da44488",
+    "file": "orijinaller/46_bg_abstract_blue_purple_soft.png",
+    "usage": "Sakin mavi/mor ortak arka plan"
+  },
+  {
+    "no": 47,
+    "original": "ChatGPT Image 20 Eyl 2026 18_38_45.png",
+    "width": 1448,
+    "height": 1086,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "585e9fb885c4ced527c55318dd11aca79c17e420dfb8cf6b839e84d04af4d27e",
+    "file": "orijinaller/47_icon_ngo_handshake_gold_blue.png",
+    "usage": "STK dayanışması: altın/mavi el sıkışma"
+  }
+]

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
+  <title>Anket Düzenle — Sitoded</title>
+  <link rel="icon" href="/img/site/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { --tt-bottom: 84px; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* TOPBAR */
+    .topbar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; position: sticky; top: 0; z-index: 100; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .back-btn { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 7px; border: 1px solid var(--border2); color: var(--muted); font-size: 13px; font-weight: 500; text-decoration: none; transition: all .15s; flex-shrink: 0; }
+    .back-btn:hover { background: var(--surface2); color: var(--text); }
+    .topbar-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .topbar-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .tbtn { padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1px solid; text-decoration: none; transition: all .15s; background: transparent; color: var(--muted); border-color: var(--border2); }
+    .tbtn:hover { background: var(--surface2); color: var(--text); }
+    .tbtn-primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+    .tbtn-primary:hover { background: var(--accent2); }
+
+    /* PAGE */
+    .page { width: 100%; max-width: 860px; margin: 0 auto; padding: 24px 16px 130px; }
+    .page-head { margin-bottom: 22px; }
+    .page-head h1 { font-size: 21px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 4px; }
+    .page-head p { font-size: 13px; color: var(--muted); }
+
+    .lock-note { padding: 12px 16px; border-radius: 9px; background: rgba(234,179,8,.1); border: 1px solid rgba(234,179,8,.25); color: var(--yellow); font-size: 13px; margin-bottom: 18px; }
+
+    /* CARD */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+    .card-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .card-header h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); }
+    .card-header .side { margin-left: auto; font-size: 12px; color: var(--muted); }
+    .card-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    .flabel { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .finput, .fselect, .ftextarea {
+      background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px;
+      padding: 10px 13px; font-size: 14px; color: var(--text); font-family: inherit; outline: none;
+      transition: border-color .15s; width: 100%;
+    }
+    .ftextarea { resize: vertical; min-height: 76px; line-height: 1.5; }
+    .finput:focus, .fselect:focus, .ftextarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
+    .finput::placeholder, .ftextarea::placeholder { color: var(--muted); }
+    .fhint { font-size: 11px; color: var(--muted); }
+
+    /* TOGGLE */
+    .switch-row { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 13px; border: 1px solid var(--border2); border-radius: 8px; background: var(--surface2); }
+    .switch-row input { display: none; }
+    .switch-track { width: 40px; height: 22px; border-radius: 11px; background: var(--surface); border: 1px solid var(--border2); position: relative; transition: all .2s; flex-shrink: 0; }
+    .switch-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); transition: all .2s; }
+    .switch-row input:checked + .switch-track { background: color-mix(in srgb, var(--accent) 25%, transparent); border-color: var(--accent); }
+    .switch-row input:checked + .switch-track::after { left: 20px; background: var(--accent2); }
+    .switch-label { font-size: 13px; font-weight: 500; }
+    .switch-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* TYPE CHIPS */
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip {
+      display: flex; align-items: center; gap: 5px; padding: 8px 12px; border-radius: 20px;
+      border: 1px solid var(--border2); background: var(--surface2); color: var(--text);
+      font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; font-family: inherit; min-height: 38px;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--accent2); }
+    .chip:disabled { opacity: .45; cursor: not-allowed; }
+    .chip:disabled:hover { border-color: var(--border2); color: var(--text); }
+
+    /* QUESTION CARDS */
+    .qcard { background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .qcard-head { display: flex; align-items: center; gap: 8px; }
+    .qnum { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent2); background: color-mix(in srgb, var(--accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); border-radius: 6px; padding: 3px 7px; font-weight: 600; flex-shrink: 0; }
+    .qtype-badge { font-size: 11px; font-weight: 600; color: var(--cyan); border: 1px solid rgba(6,182,212,.25); background: rgba(6,182,212,.1); border-radius: 6px; padding: 3px 7px; }
+    .qcard-actions { margin-left: auto; display: flex; gap: 4px; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--border2); background: transparent;
+      color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .icon-btn:hover { background: var(--surface); color: var(--text); }
+    .icon-btn.danger:hover { border-color: rgba(239,68,68,.4); color: var(--red); }
+    .icon-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .icon-btn:disabled:hover { background: transparent; color: var(--muted); }
+    .qreq-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+    .qreq-row input { width: 16px; height: 16px; accent-color: var(--accent); }
+
+    /* OPTIONS EDITOR */
+    .opts { display: flex; flex-direction: column; gap: 6px; }
+    .opt-row { display: flex; gap: 6px; align-items: center; }
+    .opt-row .finput { flex: 1; min-width: 0; }
+    .opt-add { align-self: flex-start; font-size: 12px; }
+
+    .empty-questions { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 13px; }
+
+    /* STICKY BOTTOM BAR */
+    .bottombar {
+      position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface);
+      border-top: 1px solid var(--border2); z-index: 90;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    }
+    .bottombar .linkbox { flex: 1 1 160px; min-width: 0; font-family: 'DM Mono', monospace; font-size: 12px; }
+    .bottombar .resp-count { font-size: 12px; color: var(--muted); }
+
+    #toast-root { position: fixed; top: 68px; left: 50%; transform: translateX(-50%); z-index: 999; display: flex; flex-direction: column; gap: 8px; width: min(92vw, 420px); }
+    .toast { padding: 11px 16px; border-radius: 9px; font-size: 13px; font-weight: 500; text-align: center; animation: tin .2s ease; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+    .toast.success { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+    .toast.error { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+    @keyframes tin { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-survey-builder">
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="/admin" class="back-btn">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Yönetim
+    </a>
+    <span class="logo-img" role="img" aria-label="SİTODED" style="height:30px;width:30px;flex-shrink:0;"></span>
+    <span class="topbar-title" id="topbar-title"><%= survey.title %></span>
+  </div>
+  <div class="topbar-right">
+    <a class="tbtn" href="/admin/surveys/<%= survey.id %>/responses">Yanıtlar</a>
+    <button class="tbtn tbtn-primary" onclick="saveSurvey()">Kaydet</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-head"><span class="workspace-eyebrow">SİTODED / ANKET TASARIMI</span>
+    <h1>Anket Düzenle</h1>
+    <p>Link: <span style="font-family:'DM Mono',monospace; color: var(--accent2);">/a/<%= survey.slug %></span> — katılımcılar bu bağlantıdan anketi doldurabilir.</p>
+  </div>
+
+  <% if (survey.status === 'CLOSED') { %>
+  <div class="lock-note" style="border-color: rgba(239,68,68,.4); background: rgba(239,68,68,.1); color: var(--red);">
+     <strong>Anket şu an KAPALI</strong> — linki açan herkes "yanıtlara kapalı" görür. Yanıt toplamaya başlamak için alttaki
+    <button class="tbtn tbtn-primary" style="padding:4px 10px; font-size:12px; margin:0 4px;" onclick="toggleOpen()">Anketi Aç</button>
+    butonuna bas.
+  </div>
+  <% } %>
+
+  <% if (response_count > 0) { %>
+  <div class="lock-note">&#9888; Bu ankete <strong><%= response_count %></strong> yanıt geldiği için sorular kilitli. Yalnızca başlık, açıklama ve KVKK metni değiştirilebilir. Yeni sorular için yeni anket oluşturun.</div>
+  <% } %>
+
+  <div class="card">
+    <div class="card-header"><h3>Anket Ayarları</h3><span class="side" id="settings-saved"></span></div>
+    <div class="card-body">
+      <div class="fg">
+        <label class="flabel">Başlık</label>
+        <input type="text" class="finput" id="s-title" maxlength="200" value="<%= survey.title %>">
+      </div>
+      <div class="fg">
+        <label class="flabel">Açıklama</label>
+        <textarea class="ftextarea" id="s-desc" placeholder="Anketin amacını kısaca yazın (opsiyonel)"><%= survey.description || '' %></textarea>
+      </div>
+      <label class="switch-row">
+        <input type="checkbox" id="s-identity" <%= survey.collect_identity ? 'checked' : '' %>>
+        <span class="switch-track"></span>
+        <span>
+          <span class="switch-label">İsim soyisim + e-posta iste</span>
+          <div class="switch-sub">Kapalıysa linki alan herkes tamamen anonim doldurur.</div>
+        </span>
+      </label>
+      <div class="fg">
+        <label class="flabel">KVKK Onam Metni</label>
+        <textarea class="ftextarea" id="s-kvkk"><%= survey.kvkk_text %></textarea>
+        <span class="fhint">Bu metin katılımcıya gösterilir; onay kutusu işaretlenmeden anket gönderilemez.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Soru Ekle</h3><span class="side">8 tip</span></div>
+    <div class="card-body">
+      <div class="chips" id="type-chips">
+        <button class="chip" data-type="TEXT_SHORT" <%= response_count > 0 ? 'disabled' : '' %>>✏ Kısa Metin</button>
+        <button class="chip" data-type="TEXT_LONG" <%= response_count > 0 ? 'disabled' : '' %>> Uzun Metin</button>
+        <button class="chip" data-type="SINGLE_CHOICE" <%= response_count > 0 ? 'disabled' : '' %>> Tek Seçim</button>
+        <button class="chip" data-type="MULTI_CHOICE" <%= response_count > 0 ? 'disabled' : '' %>> Çoklu Seçim</button>
+        <button class="chip" data-type="DATE" <%= response_count > 0 ? 'disabled' : '' %>> Tarih</button>
+        <button class="chip" data-type="NUMBER" <%= response_count > 0 ? 'disabled' : '' %>> Sayı</button>
+        <button class="chip" data-type="PHOTO" <%= response_count > 0 ? 'disabled' : '' %>> Fotoğraf</button>
+        <button class="chip" data-type="VIDEO" <%= response_count > 0 ? 'disabled' : '' %>> Video</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Sorular</h3><span class="side" id="q-count"></span></div>
+    <div class="card-body" id="questions-container">
+      <div class="empty-questions">Henüz soru yok. Yukarıdan tip seçerek soru ekleyin.</div>
+    </div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <input type="text" class="finput linkbox" id="link-box" readonly value="/a/<%= survey.slug %>" onclick="this.select()">
+  <button class="tbtn" onclick="copyLink()">Linki Kopyala</button>
+  <button class="tbtn" id="toggle-btn" onclick="toggleOpen()"><%= survey.status === 'OPEN' ? 'Anketi Kapat' : 'Anketi Aç' %></button>
+  <span class="resp-count" id="resp-count"><%= response_count %> yanıt</span>
+  <button class="tbtn tbtn-primary" onclick="saveSurvey()">Kaydet</button>
+</div>
+
+<div id="toast-root"></div>
+
+<script>
+  const SURVEY_ID = <%= survey.id %>;
+  const RESPONSE_COUNT = <%= response_count %>;
+  const LOCKED = RESPONSE_COUNT > 0;
+  const TYPE_LABELS = {
+    TEXT_SHORT: 'Kısa Metin', TEXT_LONG: 'Uzun Metin', SINGLE_CHOICE: 'Tek Seçim',
+    MULTI_CHOICE: 'Çoklu Seçim', DATE: 'Tarih', NUMBER: 'Sayı', PHOTO: 'Fotoğraf', VIDEO: 'Video'
+  };
+
+  // Başlangıç soruları (server'dan)
+  let questions = <%- JSON.stringify(questions.map(q => ({
+    id: q.id, type: q.type, title: q.title, required: q.required, options: q.options || []
+  }))) %>;
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function render() {
+    const container = document.getElementById('questions-container');
+    document.getElementById('q-count').textContent = questions.length + ' soru';
+    if (!questions.length) {
+      container.innerHTML = '<div class="empty-questions">Henüz soru yok. Yukarıdan tip seçerek soru ekleyin.</div>';
+      return;
+    }
+    container.innerHTML = questions.map((q, i) => {
+      const hasOpts = q.type === 'SINGLE_CHOICE' || q.type === 'MULTI_CHOICE';
+      const optRows = hasOpts
+        ? '<div class="fg"><label class="flabel">Seçenekler</label><div class="opts">' +
+          (q.options || []).map((o, oi) =>
+            '<div class="opt-row">' +
+              '<input type="text" class="finput" value="' + escapeHtml(o) + '" oninput="questions[' + i + '].options[' + oi + '] = this.value">' +
+              '<button class="icon-btn danger" onclick="removeOption(' + i + ', ' + oi + ')" ' + (LOCKED ? 'disabled' : '') + '>' +
+                '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
+              '</button>' +
+            '</div>'
+          ).join('') +
+          '<button class="chip opt-add" onclick="addOption(' + i + ')" ' + (LOCKED ? 'disabled' : '') + '>+ Seçenek Ekle</button>' +
+        '</div></div>'
+        : '';
+      return '<div class="qcard">' +
+        '<div class="qcard-head">' +
+          '<span class="qnum">S' + (i + 1) + '</span>' +
+          '<span class="qtype-badge">' + (TYPE_LABELS[q.type] || q.type) + '</span>' +
+          '<div class="qcard-actions">' +
+            '<button class="icon-btn" onclick="moveQuestion(' + i + ', -1)" ' + ((i === 0 || LOCKED) ? 'disabled' : '') + '>' +
+              '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 15l7-7 7 7"/></svg>' +
+            '</button>' +
+            '<button class="icon-btn" onclick="moveQuestion(' + i + ', 1)" ' + ((i === questions.length - 1 || LOCKED) ? 'disabled' : '') + '>' +
+              '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>' +
+            '</button>' +
+            '<button class="icon-btn danger" onclick="removeQuestion(' + i + ')" ' + (LOCKED ? 'disabled' : '') + '>' +
+              '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="fg">' +
+          '<label class="flabel">Soru Metni</label>' +
+          '<textarea class="ftextarea" style="min-height:52px;" oninput="questions[' + i + '].title = this.value" ' + (LOCKED ? 'readonly' : '') + '>' + escapeHtml(q.title) + '</textarea>' +
+        '</div>' +
+        optRows +
+        '<label class="qreq-row"><input type="checkbox" onchange="questions[' + i + '].required = this.checked" ' + (q.required ? 'checked' : '') + (LOCKED ? ' disabled' : '') + '> Zorunlu alan</label>' +
+      '</div>';
+    }).join('');
+  }
+
+  document.getElementById('type-chips').addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if (!chip || chip.disabled) return;
+    const type = chip.getAttribute('data-type');
+    questions.push({ type, title: '', required: false, options: type === 'SINGLE_CHOICE' || type === 'MULTI_CHOICE' ? ['', ''] : [] });
+    render();
+    // Yeni sorunun metnine odaklan
+    const inputs = document.querySelectorAll('#questions-container textarea');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  });
+
+  function moveQuestion(i, dir) {
+    const j = i + dir;
+    if (j < 0 || j >= questions.length) return;
+    [questions[i], questions[j]] = [questions[j], questions[i]];
+    render();
+  }
+  function removeQuestion(i) { questions.splice(i, 1); render(); }
+  function addOption(i) { questions[i].options.push(''); render(); }
+  function removeOption(i, oi) { questions[i].options.splice(oi, 1); render(); }
+
+  async function saveSurvey() {
+    const payload = {
+      title: document.getElementById('s-title').value.trim(),
+      description: document.getElementById('s-desc').value.trim(),
+      kvkk_text: document.getElementById('s-kvkk').value.trim(),
+      collect_identity: document.getElementById('s-identity').checked,
+      questions: questions
+    };
+    if (!payload.title) { toast('Başlık zorunludur', 'error'); return; }
+    if (!payload.kvkk_text) { toast('KVKK onam metni zorunludur', 'error'); return; }
+    for (let i = 0; i < payload.questions.length; i++) {
+      const q = payload.questions[i];
+      if (!q.title.trim()) { toast('Soru ' + (i + 1) + ': soru metni boş', 'error'); return; }
+      if ((q.type === 'SINGLE_CHOICE' || q.type === 'MULTI_CHOICE') && q.options.filter(o => o.trim()).length < 2) {
+        toast('Soru ' + (i + 1) + ': en az 2 seçenek gerekli', 'error'); return;
+      }
+    }
+    try {
+      const res = await fetch('/api/admin/surveys/' + SURVEY_ID + '/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Sunucudan normalize edilmiş halini al
+        if (data.locked) { /* yanıt geldiği için sorular değişmedi */ }
+        toast(data.message || 'Kaydedildi', 'success');
+        const qres = await fetch('/api/admin/surveys/' + SURVEY_ID + '/questions');
+        const qdata = await qres.json();
+        if (qdata.success) {
+          questions = qdata.data.questions.map(q => ({ id: q.id, type: q.type, title: q.title, required: q.required, options: q.options || [] }));
+          render();
+        }
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  async function toggleOpen() {
+    const btn = document.getElementById('toggle-btn');
+    const currentOpen = btn.textContent.includes('Kapat');
+    try {
+      const res = await fetch('/api/admin/surveys/' + SURVEY_ID + '/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_open: !currentOpen })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast(data.message, 'success');
+        btn.textContent = currentOpen ? 'Anketi Aç' : 'Anketi Kapat';
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  function copyLink() {
+    const box = document.getElementById('link-box');
+    box.select();
+    const link = window.location.origin + '/a/<%= survey.slug %>';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(() => toast('Link kopyalandı: ' + link, 'success'))
+        .catch(() => fallbackCopy(link));
+    } else {
+      fallbackCopy(link);
+    }
+  }
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('Link kopyalandı', 'success'); }
+    catch (e) { toast('Elle kopyalayın: ' + text, 'error'); }
+    document.body.removeChild(ta);
+  }
+
+  function toast(msg, type = 'success') {
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    document.getElementById('toast-root').appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  render();
+</script>
+</body>
+</html>

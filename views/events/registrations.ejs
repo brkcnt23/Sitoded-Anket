@@ -3,25 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
     <title>Yoklama - Sitoded Anket</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1F2937;
-            --success: #10B981;
-            --danger: #EF4444;
-            --info: #3B82F6;
-            --bg: #F9FAFB;
-            --bg-white: #FFFFFF;
-            --text-dark: #111827;
-            --text-gray: #6B7280;
-            --border: #E5E7EB;
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -222,10 +210,12 @@
             }
         }
     </style>
-</head>
-<body>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-registrations">
     <div class="nav">
-        <h2>📋 Yoklama Kaydı</h2>
+        <h2> Yoklama Kaydı</h2>
         <a href="/dashboard" style="text-decoration: none; color: var(--info); font-weight: 600;">← Dashboard</a>
     </div>
 
@@ -235,12 +225,12 @@
             <div class="event-title"><%= event.title %></div>
             <div class="event-details">
                 <div class="detail-item">
-                    <span>📅</span>
-                    <span><%= new Date(event.event_date).toLocaleDateString('tr-TR', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
+                    <span></span>
+                    <span><%= new Date(event.event_date).toLocaleDateString('tr-TR', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                     }) %></span>
                 </div>
                 <div class="detail-item">
@@ -248,20 +238,24 @@
                     <span><%= event.start_time %> - <%= event.end_time %></span>
                 </div>
                 <div class="detail-item">
-                    <span>📍</span>
+                    <span></span>
                     <span><%= event.location %></span>
+                </div>
+                <div class="detail-item">
+                    <span></span>
+                    <span>Başvurular: <%= event.registration_open ? new Date(event.registration_open).toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short' }) + ' ' + new Date(event.registration_open).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : '—' %> → <%= event.registration_deadline ? new Date(event.registration_deadline).toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short' }) + ' ' + new Date(event.registration_deadline).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : '—' %></span>
                 </div>
             </div>
         </div>
 
         <!-- Attendance Section -->
         <div class="section">
-            <div class="section-header">👥 Katılımcı Yoklaması (<%= registrations.length %>)</div>
+            <div class="section-header"> Katılımcı Yoklaması (<%= registrations.length %>)</div>
 
             <div class="actions">
                 <button class="btn btn-success" onclick="markAllAttended()">✓ Tümü Katıldı</button>
                 <button class="btn btn-secondary" onclick="clearAll()">↺ Temizle</button>
-                <button class="btn btn-primary" onclick="saveAttendance()">💾 Kaydet</button>
+                <button class="btn btn-primary" onclick="saveAttendance()"> Kaydet</button>
             </div>
 
             <div id="alertContainer"></div>
@@ -274,10 +268,10 @@
             <div class="attendance-list" id="attendanceList">
                 <% registrations.forEach(reg => { %>
                 <div class="attendance-item" id="item-<%= reg.user_id %>">
-                    <input 
-                        type="checkbox" 
-                        name="attendance" 
-                        value="<%= reg.user_id %>" 
+                    <input
+                        type="checkbox"
+                        name="attendance"
+                        value="<%= reg.user_id %>"
                         <%= reg.attended === true ? 'checked' : '' %>
                         onchange="updateItemStyle(this)"
                     >
@@ -321,7 +315,7 @@
         async function saveAttendance() {
             const eventId = <%= event.id %>;
             const checkboxes = document.querySelectorAll('input[name="attendance"]:checked');
-            
+
             const attendances = Array.from(checkboxes).map(cb => ({
                 user_id: parseInt(cb.value),
                 attended: true

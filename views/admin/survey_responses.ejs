@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/theme.css?v=20260921">
+  <title>Yanıtlar — <%= survey.title %></title>
+  <link rel="icon" href="/img/site/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="/vendor/fonts.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { --tt-bottom: 84px; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    .topbar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; position: sticky; top: 0; z-index: 100; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .back-btn { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 7px; border: 1px solid var(--border2); color: var(--muted); font-size: 13px; font-weight: 500; text-decoration: none; transition: all .15s; flex-shrink: 0; }
+    .back-btn:hover { background: var(--surface2); color: var(--text); }
+    .topbar-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .topbar-right { display: flex; gap: 8px; flex-shrink: 0; }
+    .tbtn { padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1px solid var(--border2); text-decoration: none; transition: all .15s; background: transparent; color: var(--muted); }
+    .tbtn:hover { background: var(--surface2); color: var(--text); }
+    .tbtn-primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+    .tbtn-primary:hover { background: var(--accent2); }
+    .tbtn-green { background: rgba(34,197,94,.12); color: var(--green); border-color: rgba(34,197,94,.25); }
+    .tbtn-green:hover { background: rgba(34,197,94,.2); color: var(--green); }
+
+    .page { width: 100%; max-width: 760px; margin: 0 auto; padding: 24px 16px 60px; }
+    .page-head { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .page-head h1 { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
+    .page-head .meta { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .rcard { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+    .rcard-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; cursor: pointer; flex-wrap: wrap; }
+    .rcard-head:hover { background: var(--surface2); }
+    .rcard-num { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; color: var(--accent2); }
+    .rcard-date { font-size: 12px; color: var(--muted); }
+    .rcard-id { font-size: 13px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .rcard-head .chev { margin-left: auto; color: var(--muted); transition: transform .2s; flex-shrink: 0; }
+    .rcard.open .chev { transform: rotate(180deg); }
+
+    .rcard-body { display: none; border-top: 1px solid var(--border); padding: 16px; flex-direction: column; gap: 14px; }
+    .rcard.open .rcard-body { display: flex; }
+    .rpair { display: flex; flex-direction: column; gap: 5px; }
+    .rpair-q { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .rpair-a { font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+    .rpair-a img, .rpair-a video { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+    .rpair-a video { width: 100%; }
+    .rfile-meta { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 4px; word-break: break-all; }
+    .rdel { align-self: flex-start; color: var(--red); border-color: rgba(239,68,68,.3); }
+    .rdel:hover { background: rgba(239,68,68,.12); color: var(--red); }
+
+    .chip-ok { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: rgba(34,197,94,.12); color: var(--green); border: 1px solid rgba(34,197,94,.25); flex-shrink: 0; }
+
+    .empty { text-align: center; color: var(--muted); padding: 40px 16px; font-size: 14px; }
+    .load-more { width: 100%; margin-top: 14px; }
+
+    #toast-root { position: fixed; top: 68px; left: 50%; transform: translateX(-50%); z-index: 999; display: flex; flex-direction: column; gap: 8px; width: min(92vw, 420px); }
+    .toast { padding: 11px 16px; border-radius: 9px; font-size: 13px; font-weight: 500; text-align: center; animation: tin .2s ease; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+    .toast.success { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+    .toast.error { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+    @keyframes tin { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  <script src="/js/theme.js?v=20260921"></script>
+  <link rel="stylesheet" href="/css/platform.css?v=20260921">
+<link rel="stylesheet" href="/css/workspace.css?v=20260921"><script defer src="/js/workspace.js?v=20260921"></script></head>
+<body data-theme="light" class="workspace ws-survey-responses">
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="/admin" class="back-btn">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Yönetim
+    </a>
+    <span class="logo-img" role="img" aria-label="SİTODED" style="height:30px;width:30px;flex-shrink:0;"></span>
+    <span class="topbar-title">Yanıtlar</span>
+  </div>
+  <div class="topbar-right">
+    <a class="tbtn" href="/admin/surveys/<%= survey.id %>">Düzenle</a>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-head"><span class="workspace-eyebrow">SİTODED / YANIT MERKEZİ</span>
+    <h1><%= survey.title %></h1>
+    <div class="meta">/a/<%= survey.slug %></div>
+    <div class="head-actions">
+      <a class="tbtn tbtn-green" href="/api/admin/surveys/<%= survey.id %>/export">⬇ Excel İndir</a>
+      <button class="tbtn" id="toggle-btn" onclick="toggleOpen()"><%= survey.status === 'OPEN' ? 'Anketi Kapat' : 'Anketi Aç' %></button>
+    </div>
+  </div>
+
+  <div id="responses-list">
+    <div class="empty">Yükleniyor…</div>
+  </div>
+  <button class="tbtn load-more" id="load-more" style="display:none;" onclick="loadResponses(true)">Daha Fazla Yükle</button>
+</div>
+
+<div id="toast-root"></div>
+
+<script>
+  const SURVEY_ID = <%= survey.id %>;
+  const QUESTIONS = <%- JSON.stringify(questions.map(q => ({ id: q.id, type: q.type, title: q.title }))) %>;
+  const COLLECT_IDENTITY = <%= survey.collect_identity %>;
+  let page = 0;
+  let hasMore = false;
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function fmtDate(d) {
+    return new Date(d).toLocaleString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  async function loadResponses(append) {
+    const container = document.getElementById('responses-list');
+    try {
+      const res = await fetch('/api/admin/surveys/' + SURVEY_ID + '/responses?page=' + page);
+      const data = await res.json();
+      if (!data.success) { toast(data.error, 'error'); return; }
+
+      hasMore = data.has_more;
+      document.getElementById('load-more').style.display = hasMore ? '' : 'none';
+      if (data.total === 0) {
+        container.innerHTML = '<div class="empty">Henüz yanıt yok. Anketi açıp linki paylaşın.</div>';
+        return;
+      }
+
+      const html = data.responses.map((r, i) => {
+        const globalNum = data.total - (page * data.page_size + i);
+        const identity = COLLECT_IDENTITY && (r.respondent_name || r.respondent_email)
+          ? '<span class="rcard-id">' + escapeHtml(r.respondent_name || r.respondent_email) + '</span>'
+          : '<span class="rcard-id" style="color:var(--muted);">Anonim yanıt</span>';
+        return '<div class="rcard" id="rcard-' + r.id + '">' +
+          '<div class="rcard-head" onclick="toggleDetail(' + r.id + ')">' +
+            '<span class="rcard-num">#' + globalNum + '</span>' +
+            identity +
+            (r.kvkk_consent ? '<span class="chip-ok">KVKK ✓</span>' : '') +
+            '<span class="rcard-date">' + fmtDate(r.submitted_at) + '</span>' +
+            '<span class="chev">▾</span>' +
+          '</div>' +
+          '<div class="rcard-body" id="rcard-body-' + r.id + '">Yükleniyor…</div>' +
+        '</div>';
+      }).join('');
+
+      if (append) container.insertAdjacentHTML('beforeend', html);
+      else container.innerHTML = html;
+      page++;
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  async function toggleDetail(rid) {
+    const card = document.getElementById('rcard-' + rid);
+    const body = document.getElementById('rcard-body-' + rid);
+    if (!card || !body) return;
+    if (card.classList.contains('open')) { card.classList.remove('open'); return; }
+    card.classList.add('open');
+    if (body.textContent === 'Yükleniyor…' || body.textContent === '') {
+      try {
+        const res = await fetch('/api/admin/responses/' + rid);
+        const data = await res.json();
+        if (!data.success) { body.textContent = data.error; return; }
+        const ans = data.data.answers;
+        const ansMap = {};
+        ans.forEach(a => { ansMap[a.question_id] = a; });
+        body.innerHTML = QUESTIONS.map(q => {
+          const a = ansMap[q.id];
+          let valueHtml = '<span style="color:var(--muted);">(boş)</span>';
+          if (a) {
+            if (q.type === 'PHOTO' || q.type === 'VIDEO') {
+              if (a.file_path) {
+                const isImg = a.file_mime && a.file_mime.startsWith('image/');
+                valueHtml = (isImg
+                  ? '<img src="/api/surveys/media/' + a.answer_id + '" alt="' + escapeHtml(a.file_name) + '" loading="lazy">'
+                  : '<video src="/api/surveys/media/' + a.answer_id + '" controls preload="metadata" playsinline></video>') +
+                  '<div class="rfile-meta">' + escapeHtml(a.file_name) + ' · ' + (a.file_size ? (a.file_size / 1024 / 1024).toFixed(1) + ' MB' : '') + '</div>';
+              } else {
+                valueHtml = '<span style="color:var(--muted);">(dosya yok)</span>';
+              }
+            } else if (q.type === 'MULTI_CHOICE' && a.value) {
+              try { valueHtml = escapeHtml(JSON.parse(a.value).join(', ')); } catch (e) { valueHtml = escapeHtml(a.value); }
+            } else {
+              valueHtml = escapeHtml(a.value);
+            }
+          }
+          return '<div class="rpair">' +
+            '<div class="rpair-q">' + escapeHtml(q.title) + '</div>' +
+            '<div class="rpair-a">' + valueHtml + '</div>' +
+          '</div>';
+        }).join('') +
+        '<button class="tbtn rdel" onclick="deleteResponse(' + rid + ')">Bu Yanıtı Sil</button>';
+      } catch (e) {
+        body.textContent = 'Yüklenemedi: ' + e.message;
+      }
+    }
+  }
+
+  async function deleteResponse(rid) {
+    if (!confirm('Bu yanıt ve ekli dosyalar silinecek. Emin misin?')) return;
+    try {
+      const res = await fetch('/api/admin/responses/' + rid + '/delete', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        toast(data.message, 'success');
+        page = 0;
+        loadResponses(false);
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      toast('Hata: ' + e.message, 'error');
+    }
+  }
+
+  async function toggleOpen() {
+    const btn = document.getElementById('toggle-btn');
+    const currentOpen = btn.textContent.includes('Kapat');
+    try {
+      const res = await fetch('/api/admin/surveys/' + SURVEY_ID + '/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_open: !currentOpen })
+      });
+      const data = await res.json();
+      if (data.success) { toast(data.message, 'success'); btn.textContent = currentOpen ? 'Anketi Aç' : 'Anketi Kapat'; }
+      else toast(data.error, 'error');
+    } catch (e) { toast('Hata: ' + e.message, 'error'); }
+  }
+
+  function toast(msg, type = 'success') {
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    document.getElementById('toast-root').appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  loadResponses(false);
+</script>
+</body>
+</html>
