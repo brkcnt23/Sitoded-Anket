@@ -1101,6 +1101,16 @@
       </div>
 
       <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3> Etkinlik Raporu (Bülten — PDF)</h3></div>
+        <div class="survey-create-row">
+          <input type="date" id="rp-nl-from" class="form-control" aria-label="Başlangıç">
+          <input type="date" id="rp-nl-to" class="form-control" aria-label="Bitiş">
+          <button class="btn btn-primary" onclick="downloadNewsletter()">PDF İndir</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);padding:0 0 12px;">Bültenlerde yayınlanmak üzere logo + "RAPOR" başlıklı düzgün PDF. Tarih boş bırakılırsa son 30 gün alınır.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
         <div class="card-header"><h3> DERBİS — Üye Hareketleri (45 gün kuralı)</h3></div>
         <div class="survey-create-row">
           <input type="date" id="drp-from" class="form-control" value="<%= thisMonth %>-01">
@@ -1503,6 +1513,12 @@
   }
   function openReport(url) { if (url) window.open(url, '_blank'); }
   function downloadMonthly() { const p = monthlyParams(); if (p) window.location.href = '/api/admin/reports/events-monthly' + p; }
+  function downloadNewsletter() {
+    const f = document.getElementById('rp-nl-from').value;
+    const t = document.getElementById('rp-nl-to').value;
+    const p = (f ? 'from=' + f : '') + (t ? ((f ? '&' : '') + 'to=' + t) : '');
+    window.location.href = '/api/admin/reports/events-newsletter' + (p ? '?' + p : '');
+  }
   function viewMonthly() { const p = monthlyParams(); openReport(p && ('/api/admin/reports/events-monthly' + p + '&format=html')); }
   function downloadVolunteer() { window.location.href = '/api/admin/reports/volunteer' + volunteerParams(); }
   function viewVolunteer() { openReport('/api/admin/reports/volunteer' + volunteerParams() + (volunteerParams() ? '&' : '?') + 'format=html'); }
