@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Türkiye saat dilimi (tüm zaman hesapları TR duvar saatiyle çalışır)
 ENV TZ=Europe/Istanbul
